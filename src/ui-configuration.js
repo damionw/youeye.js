@@ -59,7 +59,6 @@ class ConfigurationSettings extends HTMLElement {
                 self.attributeChangedCallback(_attr);
             }
         );
-
     }
 
     disconnectedCallback() {

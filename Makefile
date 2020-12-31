@@ -3,7 +3,7 @@
 all: build/static/youeye.js
 
 build/static/youeye.js: src/*.js build/static
-	@cat src/*.js > $@
+	@find src/*.js -exec cat {} \; -printf "\n" > $@
 
 build/static:
 	@mkdir -p $@

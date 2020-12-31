@@ -109,6 +109,7 @@ class Button extends HTMLElement {
 
     mouseclickCallback(ev) {
         console.log("CLICKED " + this.childNodes[0].html); // DEBUG
+        MessageHandling.messaging.send("one", "this is a test"); // DEBUG
     }
 }
 

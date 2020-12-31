@@ -30,6 +30,7 @@ class Pane extends HTMLElement {
 
     static get defaultAttributes() {
         return {
+            "listen": null,
             "foreground": null,
             "background": null,
             "width": "100%",
@@ -49,6 +50,8 @@ class Pane extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
+        var self = this;
+
         if (name == "width") {
             this.style.width = this.getAttribute("width");
         }
@@ -69,6 +72,10 @@ class Pane extends HTMLElement {
                 this.getAttribute("foreground")
             );
         }
+    }
+
+    receive(topic, payload) {
+        console.log("GOT MESSAGE: " + topic + " -> " + payload);
     }
 
     setDefaults() {
@@ -101,6 +108,12 @@ class Pane extends HTMLElement {
         this.constructor.observedAttributes.forEach(
             function(_attr) {
                 self.attributeChangedCallback(_attr);
+            }
+        );
+
+        this.getAttribute("listen").split(",").forEach(
+            function(topic) {
+                MessageHandling.messaging.register(self, topic);
             }
         );
     }
