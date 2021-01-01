@@ -1,31 +1,13 @@
-'use strict';
-
-class Frame extends HTMLElement {
+class uiFrame extends uiBase {
     constructor() {
         super();
 
-        // Options for the observer (which mutations to observe)
-        const config = {
-            // attributes: true,
-            // subtree: true,
-            childList: true
-        };
-
-        var self = this;
-
-        // Create an observer instance linked to the callback function
-        const observer = new MutationObserver(
-            function(mutationsList, observer) {
-                for (const mutation of mutationsList) {
-                    if (mutation.type === 'childList') {
-                        self.elementsChanged(mutation.addedNodes);
-                    }
-                }
-            }
-        );
-
         // Start observing the target node for configured mutations
-        observer.observe(this, config);
+        this.observer.observe(this, this.observer_config);
+    }
+
+    static get tagname() {
+        return "UI-FRAME";
     }
 
     static get defaultAttributes() {
@@ -38,10 +20,6 @@ class Frame extends HTMLElement {
         };
     }
 
-    static get observedAttributes() {
-        return Object.keys(this.defaultAttributes);
-    }
-
     get rowOriented() {
         return (this.getAttribute("orientation") == "row");
     }
@@ -52,10 +30,6 @@ class Frame extends HTMLElement {
 
     get padded() {
         return (this.getAttribute("pad") == "true");
-    }
-
-    get configuration() {
-        return window.ConfigurationSettings.activeConfiguration;
     }
 
     elementsChanged(newElements) {
@@ -132,23 +106,7 @@ class Frame extends HTMLElement {
         }
     }
 
-    setDefaults() {
-        var self = this;
-
-        Object.entries(this.constructor.defaultAttributes).forEach(
-            function(pair) {
-                const [attribute_name, default_value] = pair;
-
-                if (!self.hasAttribute(attribute_name)) {
-                    self.setAttribute(attribute_name, default_value);
-                }
-            }
-        );
-    }
-
     connectedCallback() {
-        var self = this;
-
         this.setDefaults();
 
         if (this.parentNode.nodeName == "BODY") {
@@ -166,15 +124,9 @@ class Frame extends HTMLElement {
         this.style.margin = "0px";
         this.style.flexDirection = (this.rowOriented ? "column" : "row");
 
-        this.constructor.observedAttributes.forEach(
-            function(_attr) {
-                self.attributeChangedCallback(_attr);
-            }
-        );
-    }
-
-    disconnectedCallback() {
+        this.initAttributes();
+        this.setTopics();
     }
 }
 
-customElements.define("ui-frame", Frame);
+customElements.define(uiFrame.tagname.toLowerCase(), uiFrame);

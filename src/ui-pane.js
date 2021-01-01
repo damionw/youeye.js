@@ -1,31 +1,13 @@
-'use strict';
-
-class Pane extends HTMLElement {
+class uiPane extends uiBase {
     constructor() {
         super();
 
-        // Options for the observer (which mutations to observe)
-        const config = {
-            // attributes: true,
-            // subtree: true,
-            childList: true
-        };
-
-        var self = this;
-
-        // Create an observer instance linked to the callback function
-        const observer = new MutationObserver(
-            function(mutationsList, observer) {
-                for (const mutation of mutationsList) {
-                    if (mutation.type === 'childList') {
-                        self.elementsChanged(mutation.addedNodes);
-                    }
-                }
-            }
-        );
-
         // Start observing the target node for configured mutations
-        observer.observe(this, config);
+        this.observer.observe(this, this.observer_config);
+    }
+
+    static get tagname() {
+        return "UI-PANE";
     }
 
     static get defaultAttributes() {
@@ -36,17 +18,6 @@ class Pane extends HTMLElement {
             "width": "100%",
             "height": "100%",
         };
-    }
-
-    static get observedAttributes() {
-        return Object.keys(this.defaultAttributes);
-    }
-
-    get configuration() {
-        return window.ConfigurationSettings.activeConfiguration;
-    }
-
-    elementsChanged(newElements) {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -74,27 +45,8 @@ class Pane extends HTMLElement {
         }
     }
 
-    receive(topic, payload) {
-        console.log("GOT MESSAGE: " + topic + " -> " + payload);
-    }
-
-    setDefaults() {
-        var self = this;
-
-        Object.entries(this.constructor.defaultAttributes).forEach(
-            function(pair) {
-                const [attribute_name, default_value] = pair;
-
-                if (!self.hasAttribute(attribute_name)) {
-                    self.setAttribute(attribute_name, default_value);
-                }
-            }
-        );
-    }
-
     connectedCallback() {
         var padding_value = this.configuration.getAttribute("padding");
-        var self = this;
 
         this.setDefaults();
 
@@ -105,21 +57,9 @@ class Pane extends HTMLElement {
         this.style.boxShadow = "3px 3px 10px " + this.configuration.alterRGB(this.parentNode.style.backgroundColor, -64);
         this.style.borderRadius = "8px";
 
-        this.constructor.observedAttributes.forEach(
-            function(_attr) {
-                self.attributeChangedCallback(_attr);
-            }
-        );
-
-        this.getAttribute("listen").split(",").forEach(
-            function(topic) {
-                MessageHandling.messaging.register(self, topic);
-            }
-        );
-    }
-
-    disconnectedCallback() {
+        this.initAttributes();
+        this.setTopics();
     }
 }
 
-customElements.define("ui-pane", Pane);
+customElements.define(uiPane.tagname.toLowerCase(), uiPane);

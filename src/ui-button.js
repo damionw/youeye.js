@@ -1,8 +1,10 @@
-'use strict';
-
-class Button extends HTMLElement {
+class uiButton extends uiBase {
     constructor() {
         super();
+    }
+
+    static get tagname() {
+        return "UI-BUTTON";
     }
 
     static get defaultAttributes() {
@@ -15,19 +17,9 @@ class Button extends HTMLElement {
         };
     }
 
-    static get observedAttributes() {
-        return Object.keys(this.defaultAttributes);
-    }
-
-    get configuration() {
-        return window.ConfigurationSettings.activeConfiguration;
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
             this.style.width = this.getAttribute("width");
-        }
-        else if (name == "highlight") {
         }
         else if (name == "height") {
             this.style.height = (
@@ -52,20 +44,6 @@ class Button extends HTMLElement {
         }
     }
 
-    setDefaults() {
-        var self = this;
-
-        Object.entries(this.constructor.defaultAttributes).forEach(
-            function(pair) {
-                const [attribute_name, default_value] = pair;
-
-                if (!self.hasAttribute(attribute_name)) {
-                    self.setAttribute(attribute_name, default_value);
-                }
-            }
-        );
-    }
-
     connectedCallback() {
         var self = this;
 
@@ -77,25 +55,19 @@ class Button extends HTMLElement {
         this.style.marginTop = "2px";
         this.style.borderRadius = "8px";
 
-        this.constructor.observedAttributes.forEach(
-            function(_attr) {
-                self.attributeChangedCallback(_attr);
-            }
-        );
+        this.initAttributes();
+        this.setTopics();
 
         this.addEventListener("mouseover", function(ev){self.mouseoverCallback(ev);});
         this.addEventListener("mouseout", function(ev){self.mouseoutCallback(ev);});
         this.addEventListener("click", function(ev){self.mouseclickCallback(ev);});
     }
 
-    disconnectedCallback() {
-    }
-
     mouseoverCallback(ev) {
         this.attributeChangedCallback("background");
 
         this.style.backgroundColor = (
-            this.configuration.alterRGB(
+            this.alterRGB(
                 window.getComputedStyle(this).backgroundColor,
                 parseInt(this.getAttribute("highlight"))
             )
@@ -108,9 +80,8 @@ class Button extends HTMLElement {
     }
 
     mouseclickCallback(ev) {
-        console.log("CLICKED " + this.childNodes[0].html); // DEBUG
-        MessageHandling.messaging.send("one", "this is a test"); // DEBUG
+        this.send("one", "this is a test"); // DEBUG
     }
 }
 
-customElements.define("ui-button", Button);
+customElements.define(uiButton.tagname.toLowerCase(), uiButton);
