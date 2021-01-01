@@ -25,7 +25,6 @@ class uiConfiguration extends uiBase {
             return elements[i];
         }
 
-        console.log ("Creating new " + self.tagname);
         return this.attachSingleton(document.createElement(this.tagname));
     }
 

@@ -19,7 +19,6 @@ class uiMessenger extends uiBase {
             return elements[i];
         }
 
-        console.log ("Creating new " + this.tagname);
         return this.attachSingleton(document.createElement(this.tagname));
     }
 
@@ -53,6 +52,7 @@ class uiMessenger extends uiBase {
         if (this._registrations[topic] == null) {
             return;
         }
+
         if (! (topic in this._registrations)) {
             return;
         }

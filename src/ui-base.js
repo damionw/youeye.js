@@ -3,6 +3,7 @@ class uiBase extends HTMLElement {
         super();
 
         this._observer = null;
+        this._message_handler = null;
     }
 
     get observer_config() {
@@ -51,16 +52,27 @@ class uiBase extends HTMLElement {
     }
 
     send(topic, payload) {
-        console.log("SEND MESSAGE: " + topic + " -> " + payload);
         this.messenger.broadcast(topic, payload);
     }
 
     receive(topic, payload) {
-        console.log("GOT MESSAGE: " + topic + " -> " + payload);
+        if (this._message_handler != null) {
+            return this._message_handler(topic, payload);
+        }
+
+        console.log("RECEIVED: id=" + this.id + "topic=" + topic + " payload=" + payload);
+    }
+
+    setMessageHandler() {
+        this._message_handler = new Function(
+            "topic",
+            "payload",
+            this.getAttribute("listener") || "return 0;"
+        );
     }
 
     setTopics() {
-        var topics = (this.getAttribute("listen") || "").split(",");
+        var topics = (this.getAttribute("consume") || "").split(",");
 
         for (var i=0; i < topics.length; ++i) {
             this.messenger.register(this, topics[i]);
@@ -96,7 +108,16 @@ class uiBase extends HTMLElement {
 
         for (var i=0; i < attribute_collection.length; ++i) {
             var attribute_name = attribute_collection[i];
-            this.attributeChangedCallback(attribute_name);
+
+            if (attribute_name == "consume") {
+                this.setTopics();
+            }
+            else if (attribute_name == "listener") {
+                this.setMessageHandler();
+            }
+            else {
+                this.attributeChangedCallback(attribute_name);
+            }
         }
     }
 

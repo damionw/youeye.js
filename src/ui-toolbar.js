@@ -1,4 +1,4 @@
-class uiFrame extends uiBase {
+class uiToolBar extends uiBase {
     constructor() {
         super();
 
@@ -7,7 +7,7 @@ class uiFrame extends uiBase {
     }
 
     static get tagname() {
-        return "UI-FRAME";
+        return "UI-TOOLBAR";
     }
 
     static get defaultAttributes() {
@@ -15,28 +15,13 @@ class uiFrame extends uiBase {
             "consume": null,
             "listener": null,
             "background": null,
-            "orientation": "row",
             "width": "100%",
-            "height": "100%",
-            "pad": "false",
+            "height": null,
         };
-    }
-
-    get rowOriented() {
-        return (this.getAttribute("orientation") == "row");
-    }
-
-    get columnOriented() {
-        return (this.getAttribute("orientation") == "columnar");
-    }
-
-    get padded() {
-        return (this.getAttribute("pad") == "true");
     }
 
     elementsChanged(newElements) {
         var padding_value = this.configuration.getAttribute("padding");
-        var row_oriented = this.rowOriented;
         var style_elements = [];
 
         for (var i=0; i < this.childNodes.length; ++i){
@@ -49,10 +34,7 @@ class uiFrame extends uiBase {
 
         for (var i=0; i < style_elements.length; ++i){
             var elem = style_elements[i];
-
-            var flex_attribute = (
-                row_oriented ? elem.style.height : elem.style.width
-            );
+            var flex_attribute = elem.style.width;
 
             elem.style.flex = (
                 flex_attribute[flex_attribute.length - 1] == "%" ?
@@ -60,18 +42,8 @@ class uiFrame extends uiBase {
                 ("0 0 " + flex_attribute)
             );
 
-            if (row_oriented) {
-                elem.style.width = "100%";
-            }
-            else {
-                elem.style.height = "100%";
-            }
-
-            elem.style.margin = "0px";
-
-            if (this.padded && i < (style_elements.length - 1)) {
-                elem.style.marginBottom = padding_value;
-            }
+            elem.style.height = "100%";
+            elem.style.margin = "2px";
         }
     }
 
@@ -80,7 +52,11 @@ class uiFrame extends uiBase {
             this.style.width = this.getAttribute("width");
         }
         else if (name == "height") {
-            this.style.height = this.getAttribute("height");
+            this.style.height = (
+                this.getAttribute("height") in {"null": 0, null: 0} ?
+                this.configuration.getAttribute("button_height") :
+                this.getAttribute("height")
+            );
         }
         else if (name == "background") {
             this.style.backgroundColor = (
@@ -95,16 +71,6 @@ class uiFrame extends uiBase {
                 this.configuration.getAttribute("application_foreground") :
                 this.getAttribute("foreground")
             );
-        }
-        else if (name == "pad") {
-            this.style.padding = (
-                this.padded ?
-                this.configuration.getAttribute("padding") :
-                "0px"
-            );
-        }
-        else if (name == "orientation") {
-            this.elementsChanged([]);
         }
     }
 
@@ -124,11 +90,11 @@ class uiFrame extends uiBase {
         this.style.display = "inline-flex";
         this.style.boxSizing = "border-box";
         this.style.margin = "0px";
-        this.style.flexDirection = (this.rowOriented ? "column" : "row");
+        this.style.flexDirection = "row";
 
         this.initAttributes();
         this.setTopics();
     }
 }
 
-customElements.define(uiFrame.tagname.toLowerCase(), uiFrame);
+customElements.define(uiToolBar.tagname.toLowerCase(), uiToolBar);

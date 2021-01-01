@@ -9,6 +9,8 @@ class uiButton extends uiBase {
 
     static get defaultAttributes() {
         return {
+            "consume": null,
+            "listener": null,
             "foreground": null,
             "background": null,
             "highlight": 16,

@@ -12,7 +12,8 @@ class uiPane extends uiBase {
 
     static get defaultAttributes() {
         return {
-            "listen": null,
+            "consume": null,
+            "listener": null,
             "foreground": null,
             "background": null,
             "width": "100%",
