@@ -14,7 +14,7 @@ class uiFrame extends uiBase {
         return {
             "consume": null,
             "listener": null,
-            "background": null,
+            "background": "inherit",
             "orientation": "row",
             "width": "100%",
             "height": "100%",
@@ -84,14 +84,14 @@ class uiFrame extends uiBase {
         }
         else if (name == "background") {
             this.style.backgroundColor = (
-                this.getAttribute("background") in {"null": 0, null: 0} ?
+                this.getAttribute("background") == "default" ?
                 this.configuration.getAttribute("application_background") :
                 this.getAttribute("background")
             );
         }
         else if (name == "foreground") {
             this.style.color = (
-                this.getAttribute("foreground") in {"null": 0, null: 0} ?
+                this.getAttribute("foreground") == "default" ?
                 this.configuration.getAttribute("application_foreground") :
                 this.getAttribute("foreground")
             );
