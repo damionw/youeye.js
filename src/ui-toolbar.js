@@ -9,13 +9,30 @@ class uiToolBar extends uiFrame {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiFrame.defaultAttributes(), {
+            uiFrame.defaultAttributes, {
                 "orientation": "column",
                 "width": "100%",
                 "height": "default",
                 "pad": true,
             }
         );
+    }
+
+    elementsChanged(newElements) {
+        var padding_value = this.configuration.getAttribute("padding");
+        var style_elements = [];
+
+        for (var i=0; i < this.childNodes.length; ++i){
+            var elem = this.childNodes[i];
+
+            if (elem.style == null) {
+                continue;
+            }
+
+            elem.style.margin = "0px";
+            elem.style.marginTop = padding_value;
+            elem.style.marginLeft = padding_value;
+        }
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
