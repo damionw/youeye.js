@@ -13,6 +13,7 @@ class uiConfiguration extends uiBase {
             "application_foreground": "blue",
             "application_typeface": "Arial",
             "application_typesize": "14px",
+            "toolbar_height": "50px",
             "padding": "5px",
         };
     }

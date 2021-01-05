@@ -14,7 +14,8 @@ class uiFrame extends uiBase {
         return {
             "consume": null,
             "listener": null,
-            "background": "inherit",
+            "background": "default",
+            "foreground": "default",
             "orientation": "row",
             "width": "100%",
             "height": "100%",
