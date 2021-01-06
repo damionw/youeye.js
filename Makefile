@@ -7,6 +7,7 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-frame.js \
 	src/ui-button.js \
 	src/ui-pane.js \
+	src/ui-transient.js \
 	src/ui-toolbar.js
 
 all: build/static/youeye.js
