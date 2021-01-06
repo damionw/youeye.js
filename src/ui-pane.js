@@ -11,19 +11,17 @@ class uiPane extends uiBase {
     }
 
     static get defaultAttributes() {
-        return {
-            "consume": null,
-            "listener": null,
-            "foreground": "inherit",
-            "background": "inherit",
-            "width": "100%",
-            "height": "100%",
-        };
+        return Object.assign(
+            uiFrame.defaultAttributes, {
+                "foreground": "inherit",
+                "background": "inherit",
+                "width": "100%",
+                "height": "100%",
+            }
+        );
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        var self = this;
-
         if (name == "width") {
             this.style.width = this.getAttribute("width");
         }
@@ -35,6 +33,9 @@ class uiPane extends uiBase {
         }
         else if (name == "foreground") {
             this.style.color = this.getAttribute("foreground");
+        }
+        else {
+            uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
         }
     }
 
@@ -53,7 +54,7 @@ class uiPane extends uiBase {
             -64
         );
 
-        this.style.borderRadius = "8px";
+        this.style.borderRadius = "4px";
 
         this.initAttributes();
         this.setTopics();

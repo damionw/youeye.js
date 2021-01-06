@@ -36,6 +36,8 @@ class uiBase extends HTMLElement {
 
     static get defaultAttributes() {
         return {
+            "consume": null,
+            "listener": null,
         };
     }
 
@@ -51,7 +53,7 @@ class uiBase extends HTMLElement {
         return uiMessenger.singleton;
     }
 
-    send(topic, payload) {
+    emit(topic, payload) {
         this.messenger.broadcast(topic, payload);
     }
 

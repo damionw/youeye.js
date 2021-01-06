@@ -1,10 +1,10 @@
 class uiToolBar extends uiFrame {
-    constructor() {
-        super();
-    }
-
     static get tagname() {
         return "UI-TOOLBAR";
+    }
+
+    constructor() {
+        super();
     }
 
     static get defaultAttributes() {
@@ -19,20 +19,13 @@ class uiToolBar extends uiFrame {
     }
 
     elementsChanged(newElements) {
-        var padding_value = this.configuration.getAttribute("padding");
-        var style_elements = [];
-
-        for (var i=0; i < this.childNodes.length; ++i){
-            var elem = this.childNodes[i];
-
-            if (elem.style == null) {
-                continue;
-            }
-
-            elem.style.margin = "0px";
-            elem.style.marginTop = padding_value;
-            elem.style.marginLeft = padding_value;
-        }
+//         for (var i=0; i < this.childNodes.length; ++i){
+//             var elem = this.childNodes[i];
+// 
+//             if (elem.style == null) {
+//                 continue;
+//             }
+//         }
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -46,6 +39,10 @@ class uiToolBar extends uiFrame {
         else {
             uiFrame.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
         }
+    }
+
+    connectedCallback() {
+        uiFrame.prototype.connectedCallback.call(this);
     }
 }
 

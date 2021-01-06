@@ -1,4 +1,8 @@
 class uiFrame extends uiBase {
+    static get tagname() {
+        return "UI-FRAME";
+    }
+
     constructor() {
         super();
 
@@ -6,21 +10,19 @@ class uiFrame extends uiBase {
         this.observer.observe(this, this.observer_config);
     }
 
-    static get tagname() {
-        return "UI-FRAME";
-    }
-
     static get defaultAttributes() {
-        return {
-            "consume": null,
-            "listener": null,
-            "background": "default",
-            "foreground": "default",
-            "orientation": "row",
-            "width": "100%",
-            "height": "100%",
-            "pad": "false",
-        };
+        return Object.assign(
+            uiBase.defaultAttributes, {
+                "background": "default",
+                "foreground": "default",
+                "orientation": "row",
+                "width": "100%",
+                "height": "100%",
+                "pad": "false",
+                "justify": "left",
+                "show": "true",
+            }
+        );
     }
 
     get rowOriented() {
@@ -83,6 +85,13 @@ class uiFrame extends uiBase {
         else if (name == "height") {
             this.style.height = this.getAttribute("height");
         }
+        else if (name == "show") {
+            this.style.display = (
+                this.getAttribute(name) == "true" ?
+                "inline-flex" :
+                "none"
+            );
+        }
         else if (name == "background") {
             this.style.backgroundColor = (
                 this.getAttribute("background") == "default" ?
@@ -106,6 +115,24 @@ class uiFrame extends uiBase {
         }
         else if (name == "orientation") {
             this.elementsChanged([]);
+        }
+        else if (name == "justify") {
+            var justification = this.getAttribute(name);
+
+            this.style.alignItems = "safe stretch";
+
+            if (justification == "left" || justification == "top") {
+                this.style.justifyContent = "safe flex-start";
+            }
+            else if (justification == "right" || justification == "bottom") {
+                this.style.justifyContent = "safe flex-end";
+            }
+            else if (justification == "center" || justification == "middle") {
+                this.style.justifyContent = "safe center";
+            }
+        }
+        else {
+            uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
         }
     }
 

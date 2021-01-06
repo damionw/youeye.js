@@ -1,22 +1,22 @@
 class uiButton extends uiBase {
-    constructor() {
-        super();
-    }
-
     static get tagname() {
         return "UI-BUTTON";
     }
 
+    constructor() {
+        super();
+    }
+
     static get defaultAttributes() {
-        return {
-            "consume": null,
-            "listener": null,
-            "foreground": "inherited",
-            "background": "inherited",
-            "highlight": 16,
-            "width": "auto",
-            "height": "auto",
-        };
+        return Object.assign(
+            uiFrame.defaultAttributes, {
+                "foreground": "inherit",
+                "background": "inherit",
+                "highlight": 16,
+                "width": "auto",
+                "height": "default",
+            }
+        );
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -24,21 +24,22 @@ class uiButton extends uiBase {
             this.style.width = this.getAttribute("width");
         }
         else if (name == "height") {
-            this.style.height = this.getAttribute("height");
+            this.style.height = (
+                this.getAttribute("height") == "default" ?
+                this.configuration.getAttribute("toolbar_height") :
+                this.getAttribute("height")
+            );
         }
         else if (name == "background") {
-            this.style.backgroundColor = (
-                this.getAttribute("background") == "default" ?
-                this.configuration.getAttribute("application_background") :
-                this.getAttribute("background")
-            );
+            this.style.backgroundColor = this.getAttribute("background");
         }
         else if (name == "foreground") {
-            this.style.color = (
-                this.getAttribute("foreground") == "default" ?
-                this.configuration.getAttribute("application_foreground") :
-                this.getAttribute("foreground")
-            );
+            this.style.color = this.getAttribute("foreground");
+        }
+        else if (name == "highlight") {
+        }
+        else {
+            uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
         }
     }
 
@@ -78,7 +79,7 @@ class uiButton extends uiBase {
     }
 
     mouseclickCallback(ev) {
-        this.send("one", "this is a test"); // DEBUG
+        this.emit("one", "this is a test"); // DEBUG
     }
 }
 
