@@ -14,8 +14,8 @@ class uiTransient extends uiFrame {
                 "width": "auto",
                 "height": "auto",
                 "show": "false",
-                "x": 100px,
-                "y": 100px,
+                "x": "100px",
+                "y": "100px",
             }
         );
     }
