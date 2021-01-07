@@ -1,15 +1,13 @@
 class uiMessenger extends uiBase {
+    static get tagname() {
+        return "UI-MESSENGER";
+    }
+
     constructor() {
         super();
 
+        this.registrations = {};
         this.idcount = 0;
-
-        this._registrations = {
-        };
-    }
-
-    static get tagname() {
-        return "UI-MESSENGER";
     }
 
     static get singleton() {
@@ -33,13 +31,13 @@ class uiMessenger extends uiBase {
 
         var topic = topic.toLowerCase();
 
-        if (this._registrations[topic] == null) {
-            this._registrations[topic] = {};
+        if (this.registrations[topic] == null) {
+            this.registrations[topic] = {};
         }
 
-        this._registrations[topic][element.id] = 1;
+        this.registrations[topic][element.id] = 1;
 
-        console.log("REGISTER: topic=" + topic + " elements=" + Object.keys(this._registrations[topic]).join(",") + "]");
+//         console.log("REGISTER: topic=" + topic + " elements=" + Object.keys(this.registrations[topic]).join(",") + "]");
     }
 
     deregister(element, topic) {
@@ -49,21 +47,21 @@ class uiMessenger extends uiBase {
 
         var topic = topic.toLowerCase();
 
-        if (this._registrations[topic] == null) {
+        if (this.registrations[topic] == null) {
             return;
         }
 
-        if (! (topic in this._registrations)) {
+        if (! (topic in this.registrations)) {
             return;
         }
 
-        this._registrations[topic][element.id] == 0;
+        this.registrations[topic][element.id] == 0;
     }
 
     broadcast(topic, payload) {
         var topic = topic.toLowerCase();
 
-        var registered_elements = Object.entries(this._registrations[topic] || {}).filter(
+        var registered_elements = Object.entries(this.registrations[topic] || {}).filter(
             function(pair) {
                 const [_id, _bool] = pair;
                 return _bool;
@@ -85,7 +83,7 @@ class uiMessenger extends uiBase {
     }
 
     report() {
-        var l = Object.entries(this._registrations).map(
+        var l = Object.entries(this.registrations).map(
             function(p1) {
                 return Object.entries(p1[1]).map(
                     function(p2) {

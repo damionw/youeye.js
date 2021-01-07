@@ -4,6 +4,14 @@ class uiBase extends HTMLElement {
 
         this._observer = null;
         this._message_handler = null;
+
+        this.defaults = {
+            "border_radius": "4px",
+        };
+    }
+
+    get border_radius() {
+        return this.defaults.border_radius;
     }
 
     get observer_config() {
@@ -38,6 +46,7 @@ class uiBase extends HTMLElement {
         return {
             "consume": null,
             "listener": null,
+            "enabled": "true",
         };
     }
 
@@ -61,8 +70,6 @@ class uiBase extends HTMLElement {
         if (this._message_handler != null) {
             return this._message_handler(topic, payload);
         }
-
-        console.log("RECEIVED: id=" + this.id + "topic=" + topic + " payload=" + payload);
     }
 
     setMessageHandler() {
@@ -74,11 +81,13 @@ class uiBase extends HTMLElement {
     }
 
     setTopics() {
-        var topics = (this.getAttribute("consume") || "").split(",");
+        var self = this;
 
-        for (var i=0; i < topics.length; ++i) {
-            this.messenger.register(this, topics[i]);
-        }
+        (this.getAttribute("consume") || "").split(",").forEach(
+            function(topic) {
+                self.messenger.register(self, topic);
+            }
+        );
     }
 
     elementsChanged(newElements) {

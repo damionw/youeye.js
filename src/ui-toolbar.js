@@ -10,7 +10,7 @@ class uiToolBar extends uiFrame {
     static get defaultAttributes() {
         return Object.assign(
             uiFrame.defaultAttributes, {
-                "orientation": "column",
+                "orientation": "horizontal",
                 "width": "100%",
                 "height": "default",
                 "pad": true,
@@ -19,13 +19,15 @@ class uiToolBar extends uiFrame {
     }
 
     elementsChanged(newElements) {
-//         for (var i=0; i < this.childNodes.length; ++i){
-//             var elem = this.childNodes[i];
-// 
-//             if (elem.style == null) {
-//                 continue;
-//             }
-//         }
+        var padding_value = this.configuration.getAttribute("padding");
+        var style_elements = this.styled_children;
+
+        for (var i=0; i < style_elements.length; ++i){
+            var elem = style_elements[i];
+
+            elem.style.height = "auto";
+            elem.style.margin = padding_value;
+        }
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

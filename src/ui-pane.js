@@ -49,13 +49,12 @@ class uiPane extends uiBase {
         this.style.padding = padding_value;
         this.style.margin = "0px";
 
-        this.style.boxShadow = "3px 3px 10px " + this.configuration.alterRGB(
-            this.parentNode.style.backgroundColor,
+        this.style.boxShadow = "3px 3px 10px " + this.alterRGB(
+            this.style.backgroundColor,
             -64
         );
 
-        this.style.borderRadius = "4px";
-
+        this.style.borderRadius = this.border_radius;
         this.initAttributes();
         this.setTopics();
     }

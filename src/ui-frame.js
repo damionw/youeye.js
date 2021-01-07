@@ -15,7 +15,7 @@ class uiFrame extends uiBase {
             uiBase.defaultAttributes, {
                 "background": "default",
                 "foreground": "default",
-                "orientation": "row",
+                "orientation": "vertical",
                 "width": "100%",
                 "height": "100%",
                 "pad": "false",
@@ -25,36 +25,32 @@ class uiFrame extends uiBase {
         );
     }
 
-    get rowOriented() {
-        return (this.getAttribute("orientation") == "row");
-    }
-
-    get columnOriented() {
-        return (this.getAttribute("orientation") == "columnar");
+    get verticallyOriented() {
+        return (this.getAttribute("orientation") == "vertical");
     }
 
     get padded() {
         return (this.getAttribute("pad") == "true");
     }
 
+    get styled_children() {
+        return Array.from(this.childNodes).filter(
+            function(elem) {
+                return (elem.style != null);
+            }
+        );
+    }
+
     elementsChanged(newElements) {
         var padding_value = this.configuration.getAttribute("padding");
-        var row_oriented = this.rowOriented;
-        var style_elements = [];
-
-        for (var i=0; i < this.childNodes.length; ++i){
-            var elem = this.childNodes[i];
-
-            if (elem.style != null) {
-                style_elements.push(elem);
-            }
-        }
+        var vertically_arranged = this.verticallyOriented;
+        var style_elements = this.styled_children;
 
         for (var i=0; i < style_elements.length; ++i){
             var elem = style_elements[i];
 
             var flex_attribute = (
-                row_oriented ? elem.style.height : elem.style.width
+                vertically_arranged ? elem.style.height : elem.style.width
             );
 
             elem.style.flex = (
@@ -63,17 +59,22 @@ class uiFrame extends uiBase {
                 ("0 0 " + flex_attribute)
             );
 
-            if (row_oriented) {
+            if (vertically_arranged) {
                 elem.style.width = "100%";
             }
             else {
                 elem.style.height = "100%";
             }
 
-            elem.style.margin = "0px";
+            elem.style.margin = "0px"; // Must be 0 !!!
 
             if (this.padded && i < (style_elements.length - 1)) {
-                elem.style.marginBottom = padding_value;
+                if (vertically_arranged) {
+                    elem.style.marginBottom = padding_value;
+                }
+                else {
+                    elem.style.marginRight = padding_value;
+                }
             }
         }
     }
@@ -107,11 +108,7 @@ class uiFrame extends uiBase {
             );
         }
         else if (name == "pad") {
-            this.style.padding = (
-                this.padded ?
-                this.configuration.getAttribute("padding") :
-                "0px"
-            );
+            this.elementsChanged();
         }
         else if (name == "orientation") {
             this.elementsChanged([]);
@@ -152,7 +149,7 @@ class uiFrame extends uiBase {
         this.style.display = "inline-flex";
         this.style.boxSizing = "border-box";
         this.style.margin = "0px";
-        this.style.flexDirection = (this.rowOriented ? "column" : "row");
+        this.style.flexDirection = (this.verticallyOriented ? "column" : "row");
 
         this.initAttributes();
         this.setTopics();

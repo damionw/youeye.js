@@ -9,12 +9,13 @@ class uiButton extends uiBase {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiFrame.defaultAttributes, {
+            uiBase.defaultAttributes, {
                 "foreground": "inherit",
                 "background": "inherit",
                 "highlight": 16,
                 "width": "auto",
                 "height": "default",
+                "emit": "",
             }
         );
     }
@@ -50,9 +51,10 @@ class uiButton extends uiBase {
 
         this.style.display = "block";
         this.style.boxSizing = "border-box";
-        this.style.padding = "2px";
-        this.style.marginTop = "2px";
-        this.style.borderRadius = "8px";
+        this.style.padding = "4px";
+        this.style.borderRadius = this.border_radius;
+        this.style.fontFamily = this.configuration.getAttribute("application_typeface");
+        this.style.fontSize = this.configuration.getAttribute("application_typesize");
 
         this.initAttributes();
         this.setTopics();
@@ -65,6 +67,8 @@ class uiButton extends uiBase {
     mouseoverCallback(ev) {
         this.attributeChangedCallback("background");
 
+        this.style.cursor = "pointer";
+
         this.style.backgroundColor = (
             this.alterRGB(
                 window.getComputedStyle(this).backgroundColor,
@@ -76,10 +80,15 @@ class uiButton extends uiBase {
     mouseoutCallback(ev) {
         this.attributeChangedCallback("background");
         this.attributeChangedCallback("foreground");
+        this.style.cursor = "default";
     }
 
     mouseclickCallback(ev) {
-        this.emit("one", "this is a test"); // DEBUG
+        var topic = this.getAttribute("emit");
+
+        if (topic.length && topic != "null") {
+            this.emit(topic, null);
+        }
     }
 }
 
