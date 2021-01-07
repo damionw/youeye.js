@@ -83,7 +83,14 @@ class uiBase extends HTMLElement {
     setTopics() {
         var self = this;
 
-        (this.getAttribute("consume") || "").split(",").forEach(
+        (this.getAttribute("consume") || "").
+        split(",").
+        map(
+            function(term) {
+                return term.trim();
+            }
+        ).
+        forEach(
             function(topic) {
                 self.messenger.register(self, topic);
             }
