@@ -48,6 +48,7 @@ class uiFrame extends uiBase {
 
         for (var i=0; i < style_elements.length; ++i){
             var elem = style_elements[i];
+            var is_lastelement = (i >= (style_elements.length - 1));
 
             var flex_attribute = (
                 vertically_arranged ? elem.style.height : elem.style.width
@@ -59,22 +60,15 @@ class uiFrame extends uiBase {
                 ("0 0 " + flex_attribute)
             );
 
-            if (vertically_arranged) {
-                elem.style.width = "100%";
+            if (is_lastelement) {
+            }
+            else if (! this.padded) {
+            }
+            else if (vertically_arranged) {
+                elem.style.marginBottom = padding_value;
             }
             else {
-                elem.style.height = "100%";
-            }
-
-            elem.style.margin = "0px"; // Must be 0 !!!
-
-            if (this.padded && i < (style_elements.length - 1)) {
-                if (vertically_arranged) {
-                    elem.style.marginBottom = padding_value;
-                }
-                else {
-                    elem.style.marginRight = padding_value;
-                }
+                elem.style.marginRight = padding_value;
             }
         }
     }

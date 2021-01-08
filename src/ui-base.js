@@ -68,16 +68,25 @@ class uiBase extends HTMLElement {
 
     receive(topic, payload) {
         if (this._message_handler != null) {
-            return this._message_handler(topic, payload);
+            return this._message_handler.call(this, topic, payload);
         }
     }
 
     setMessageHandler() {
-        this._message_handler = new Function(
-            "topic",
-            "payload",
-            this.getAttribute("listener") || "return 0;"
-        );
+        var code = this.getAttribute("listener");
+
+        if (code == "" || code == "null") {
+            this._message_handler = new Function("return;");
+        }
+        else if (window[code] != null) {
+            this._message_handler = window[code];
+        }
+        else if (code.search(";") == -1) {
+            this._message_handler = new Function("topic", "payload", code + ".call(this, topic, payload);");
+        }
+        else {
+            this._message_handler = new Function("topic", "payload", code);
+        }
     }
 
     setTopics() {
