@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Custom Elements Transient Demo</title>
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+        <script type="application/javascript">
+            function event_handler(topic, payload) {
+                if (topic == "toggle_window") {
+                    this.setAttribute(
+                        "show", (
+                            this.getAttribute("show") == "true" ?
+                            "false" :
+                            "true"
+                        )
+                    );
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <ui-configuration
+            application_background="#e0e0e0"
+            application_foreground="black"
+            toolbar_height=40px
+            padding="4px"
+        ></ui-configuration>
+
+        <ui-transient relative=true pad=true width="300px" height="100px" consume="toggle_window" listener="event_handler.call(this, topic, payload);">
+            Go for it
+        </ui-transient>
+
+        <ui-frame orientation="vertical">
+            <ui-frame orientation="vertical" pad=true>
+                <ui-button background=green emit="toggle_window">
+                Press it
+                </ui-button>
+
+                <ui-pane width="100%" height="100%" background="white">
+                    This is a test
+                </ui-pane>
+            </ui-frame>
+        </ui-frame>
+    </body>
+</html>

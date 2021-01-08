@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Custom Elements Toolbar Demo</title>
+        <link rel="stylesheet" href="font-awesome.min.css">
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+    </head>
+
+    <body>
+        <ui-configuration
+            application_background="#e0e0e0"
+            application_foreground="black"
+            toolbar_height=40px
+            padding="4px"
+        ></ui-configuration>
+
+        <ui-frame orientation="vertical">
+            <ui-toolbar background=blue>
+                <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
+                    <ui-button emit="menu_toggle">
+                        <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+                </ui-toolbar>
+
+                <ui-toolbar width=100px foreground=white background="inherit" justify=right pad=true>
+                    <ui-button emit="search_toggle">
+                    <i class="fa fa-search fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+
+                    <ui-textfield>
+                    </ui-textfield>
+                </ui-toolbar>
+            </ui-toolbar>
+
+            <ui-frame orientation="vertical" pad=true>
+                <ui-pane width="100%" height="100%" background="white">
+                    This is a test
+                </ui-pane>
+            </ui-frame>
+        </ui-frame>
+    </body>
+</html>
