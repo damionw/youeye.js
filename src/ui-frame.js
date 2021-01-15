@@ -8,6 +8,7 @@ class uiFrame extends uiBase {
 
         // Start observing the target node for configured mutations
         this.observer.observe(this, this.observer_config);
+        this,transition = null;
     }
 
     static get defaultAttributes() {
@@ -31,6 +32,18 @@ class uiFrame extends uiBase {
 
     get padded() {
         return (this.getAttribute("pad") == "true");
+    }
+
+
+    get scale() {
+        return float(
+            this.style.transform.split("(")[1].split(")")[0]
+        );
+    }
+
+    set scale(scale) {
+        this.style.WebkitTransform = "scale(" + scale + ")";
+        this.style.transform = "scale(" + scale + ")";
     }
 
     get styled_children() {
@@ -73,6 +86,39 @@ class uiFrame extends uiBase {
         }
     }
 
+    show(showing) {
+        var visible = "inline-flex";
+        var hidden = "none";
+        var self = this;
+        var scale = this.scale;
+
+        if (showing) {
+            if (scale >= 1.0) {
+                return;
+            }
+
+            this.style.display == visible;
+            this.scale = scale + 0.1;
+        }
+        else {
+            if (scale <= 0.0) {
+                this.style.display == hidden;
+                return;
+            }
+
+            this.style.display == visible;
+            this.scale = scale - 0.1;
+        }
+
+        setTimeout(
+            function() {
+                self.show(showit);
+            },
+
+            500
+        )
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
             this.style.width = this.getAttribute("width");
@@ -80,12 +126,8 @@ class uiFrame extends uiBase {
         else if (name == "height") {
             this.style.height = this.getAttribute("height");
         }
-        else if (name == "show") {
-            this.style.display = (
-                this.getAttribute(name) == "true" ?
-                "inline-flex" :
-                "none"
-            );
+        else if (name == "show" && oldValue != newValue) {
+            this.show(this.getAttribute(name) == "true");
         }
         else if (name == "background") {
             this.style.backgroundColor = (
@@ -144,6 +186,7 @@ class uiFrame extends uiBase {
         this.style.boxSizing = "border-box";
         this.style.margin = "0px";
         this.style.flexDirection = (this.verticallyOriented ? "column" : "row");
+        this.scale = 1.0;
 
         this.initAttributes();
         this.setTopics();
