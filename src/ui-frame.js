@@ -8,7 +8,6 @@ class uiFrame extends uiBase {
 
         // Start observing the target node for configured mutations
         this.observer.observe(this, this.observer_config);
-        this,transition = null;
     }
 
     static get defaultAttributes() {
@@ -36,14 +35,21 @@ class uiFrame extends uiBase {
 
 
     get scale() {
-        return float(
-            this.style.transform.split("(")[1].split(")")[0]
+        var transform = this.style.transform;
+
+        if (transform == "") {
+            return 1.0;
+        }
+
+        return parseFloat(
+            transform.split("(")[1].split(")")[0]
         );
     }
 
     set scale(scale) {
-        this.style.WebkitTransform = "scale(" + scale + ")";
-        this.style.transform = "scale(" + scale + ")";
+        this.style.WebkitTransform = "scaleX(" + scale + ")";
+        this.style.transform = "scaleX(" + scale + ")";
+        this.style.transformOrigin = "0% 100%";
     }
 
     get styled_children() {
@@ -97,25 +103,25 @@ class uiFrame extends uiBase {
                 return;
             }
 
-            this.style.display == visible;
+            this.style.display = visible;
             this.scale = scale + 0.1;
         }
         else {
             if (scale <= 0.0) {
-                this.style.display == hidden;
+                this.style.display = hidden;
                 return;
             }
 
-            this.style.display == visible;
+            this.style.display = visible;
             this.scale = scale - 0.1;
         }
 
         setTimeout(
             function() {
-                self.show(showit);
+                self.show(showing);
             },
 
-            500
+            this.configuration.getAttribute("animation_milliseconds")
         )
     }
 
