@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Custom Elements Edge Frame Demo</title>
+        <link rel="stylesheet" href="font-awesome.min.css">
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+    </head>
+
+    <ui-configuration
+        application_background="#e7e7e7"
+        application_foreground="black"
+        application_typeface="Tahoma, sans-serif"
+        application_typesize="18px"
+        toolbar_height="40px"
+        padding="4px"
+        animation_milliseconds="22"
+    ></ui-configuration>
+
+    <body>
+        <ui-frame orientation="vertical">
+            <ui-toolbar background="#00a0ff">
+                <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
+                    <ui-button emit=menu_toggle>
+                        <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+
+                    <ui-button emit=settings_toggle>
+                        Settings
+                    </ui-button>
+                </ui-toolbar>
+
+                <ui-toolbar width=200px foreground=white background="inherit" justify=right pad=true>
+                    <ui-button emit=search_toggle>
+                        <i class="fa fa-search fa-lg" aria-hidden="true">
+                        </i>
+                    </ui-button>
+                </ui-toolbar>
+            </ui-toolbar>
+
+            <ui-frame orientation="horizontal" pad=true>
+                <ui-edgeframe
+                    relative=false
+                    pad=true
+                    width="400px"
+                    height="120px"
+                    consume="menu_toggle, menu_open, menu_close"
+                    listener="menu_event"
+                >
+                    <ui-button emit=menu_close>
+                        <i class="fa fa-window-close fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+                </ui-edgeframe>
+
+                <ui-frame
+                    orientation="vertical"
+                    width="140px"
+                    show=false
+                    pad=true
+                    background="#efefef"
+                >
+                    <ui-button foreground="white" highlight="+72" emit="menu_close">
+                        One
+                    </ui-button>
+
+                    <ui-button foreground="white" highlight="+48" background="orange" emit="menu_close">
+                        Two
+                    </ui-button>
+                </ui-frame>
+
+                <ui-frame orientation="vertical" pad=true>
+                    <h1>Didn't melt fairer keepsakes since Fellowship elsewhere.</h1>
+                    <p>Woodlands payment Osgiliath tightening. Barad-dur follow belly comforts tender tough bell? Many that live deserve death. Some that die deserve life. Outwitted teatime grasp defeated before stones reflection corset seen animals Saruman's call?</p>
+                    <h2>Tad survive ensnare joy mistake courtesy Bagshot Row.</h2>
+                    <p>Ligulas step drops both? You shall not pass! Tender respectable success Valar impressive unfriendly bloom scraped? Branch hey-diddle-diddle pony trouble'll sleeping during jump Narsil.</p>
+                    <h3>North valor overflowing sort Iáve mister kingly money?</h3>
+                    <p>Curse you and all the halflings! Deserted anytime Lake-town burned caves balls. Smoked lthilien forbids Thrain?</p>
+                    <ul>
+                    <li>Adamant.</li>
+                    <li>Southfarthing!</li>
+                    <li>Witch-king.</li>
+                    <li>Precious.</li>
+                    <li>Gaffer's!</li>
+                    </ul>
+                    <ul>
+                    <li>Excuse tightening yet survives two cover Undómiel city ablaze.</li>
+                    <li>Keepsakes deeper clouds Buckland position 21 lied bicker fountains ashamed.</li>
+                    <li>Women rippling cold steps rules Thengel finer.</li>
+                    <li>Portents close Havens endured irons hundreds handle refused sister?</li>
+                    <li>Harbor Grubbs fellas riddles afar!</li>
+                    </ul>
+                </ui-frame>
+            </ui-frame>
+        </ui-frame>
+    </body>
+
+    <script type="application/javascript">
+        function menu_event(topic, payload) {
+            if (topic == "menu_open") {
+                this.setAttribute("show", "true");
+            }
+            else if (topic == "menu_close") {
+                this.setAttribute("show", "false");
+            }
+            else if (topic == "menu_toggle") {
+                this.setAttribute(
+                    "show", (
+                        this.getAttribute("show") == "true" ?
+                        "false" :
+                        "true"
+                    )
+                );
+            }
+        }
+    </script>
+</html>
