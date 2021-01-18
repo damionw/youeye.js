@@ -6,6 +6,8 @@
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
         <script type="application/javascript">
             function event_handler(topic, payload) {
+                console.log("MESSAGE: " + topic);
+
                 if (topic == "toggle_window") {
                     this.setAttribute(
                         "show", (
@@ -27,13 +29,38 @@
             padding="4px"
         ></ui-configuration>
 
-        <ui-transient relative=true pad=true width="300px" height="100px" consume="toggle_window" listener="event_handler.call(this, topic, payload);">
-            Go for it
+        <ui-transient
+            relative=true
+            pad=true
+            background="#fefefe"
+            consume="toggle_window"
+            listener="event_handler"
+        >
+            <h1>Didn't melt fairer keepsakes since Fellowship elsewhere.</h1>
+            <p>Woodlands payment Osgiliath tightening. Barad-dur follow belly comforts tender tough bell? Many that live deserve death. Some that die deserve life. Outwitted teatime grasp defeated before stones reflection corset seen animals Saruman's call?</p>
+            <h2>Tad survive ensnare joy mistake courtesy Bagshot Row.</h2>
+            <p>Ligulas step drops both? You shall not pass! Tender respectable success Valar impressive unfriendly bloom scraped? Branch hey-diddle-diddle pony trouble'll sleeping during jump Narsil.</p>
+            <h3>North valor overflowing sort Iáve mister kingly money?</h3>
+            <p>Curse you and all the halflings! Deserted anytime Lake-town burned caves balls. Smoked lthilien forbids Thrain?</p>
+            <ul>
+            <li>Adamant.</li>
+            <li>Southfarthing!</li>
+            <li>Witch-king.</li>
+            <li>Precious.</li>
+            <li>Gaffer's!</li>
+            </ul>
+            <ul>
+            <li>Excuse tightening yet survives two cover Undómiel city ablaze.</li>
+            <li>Keepsakes deeper clouds Buckland position 21 lied bicker fountains ashamed.</li>
+            <li>Women rippling cold steps rules Thengel finer.</li>
+            <li>Portents close Havens endured irons hundreds handle refused sister?</li>
+            <li>Harbor Grubbs fellas riddles afar!</li>
+            </ul>
         </ui-transient>
 
         <ui-frame orientation="vertical">
             <ui-frame orientation="vertical" pad=true>
-                <ui-button background=green emit="toggle_window">
+                <ui-button background="#bcbcff" emit="toggle_window">
                 Press it
                 </ui-button>
 

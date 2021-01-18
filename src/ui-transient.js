@@ -21,6 +21,18 @@ class uiTransient extends uiFrame {
         );
     }
 
+    show(showing) {
+        var visible = "inline-block";
+        var hidden = "none";
+
+        if (showing) {
+            this.style.display = visible;
+        }
+        else {
+            this.style.display = hidden;
+        }
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "x") {
             this.style.left = this.getAttribute(name);
@@ -43,12 +55,19 @@ class uiTransient extends uiFrame {
     connectedCallback() {
         uiFrame.prototype.connectedCallback.call(this);
 
-        this.style.boxShadow = "3px 3px 10px " + this.alterRGB(
+        this.style.boxShadow = "0px 0px 12px " + this.alterRGB(
             this.style.backgroundColor,
             -64
         );
 
-        this.style.borderRadius = "4px";
+        this.style.borderRadius = "7px";
+        this.style.zIndex = 1;
+        this.style.top = this.configuration.getAttribute("toolbar_height");
+        this.style.overflow = "auto";
+        this.style.maxWidth = "90%";
+        this.style.maxHeight = "90%";
+
+        this.show(0);
     }
 }
 
