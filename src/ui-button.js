@@ -3,10 +3,6 @@ class uiButton extends uiBase {
         return "UI-BUTTON";
     }
 
-    constructor() {
-        super();
-    }
-
     static get defaultAttributes() {
         return Object.assign(
             uiBase.defaultAttributes, {
@@ -18,6 +14,10 @@ class uiButton extends uiBase {
                 "emit": "",
             }
         );
+    }
+
+    constructor() {
+        super();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -51,7 +51,10 @@ class uiButton extends uiBase {
 
         this.style.display = "block";
         this.style.boxSizing = "border-box";
-        this.style.padding = "4px";
+        this.style.padding = "3px";
+        this.style.margin = "0px";
+        this.style.marginLeft = "6px";
+        this.style.marginRight = "6px";
         this.style.borderRadius = this.border_radius;
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
         this.style.fontSize = this.configuration.getAttribute("application_typesize");

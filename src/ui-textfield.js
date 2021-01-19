@@ -3,6 +3,18 @@ class uiTextField extends uiBase {
         return "UI-TEXTFIELD";
     }
 
+    static get defaultAttributes() {
+        return Object.assign(
+            uiBase.defaultAttributes, {
+                "foreground": "inherit",
+                "background": "inherit",
+                "width": "auto",
+                "height": "default",
+                "emit": "",
+            }
+        );
+    }
+
     constructor() {
         super();
 
@@ -27,18 +39,6 @@ class uiTextField extends uiBase {
 
     get text() {
         return this.editor_element.textContent;
-    }
-
-    static get defaultAttributes() {
-        return Object.assign(
-            uiBase.defaultAttributes, {
-                "foreground": "inherit",
-                "background": "inherit",
-                "width": "auto",
-                "height": "default",
-                "emit": "",
-            }
-        );
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -86,6 +86,7 @@ class uiTextField extends uiBase {
         this.setDefaults();
 
         this.style.display = "block";
+        this.margin = "4px";
         this.style.boxSizing = "border-box";
         this.style.borderRadius = this.border_radius;
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
@@ -93,6 +94,18 @@ class uiTextField extends uiBase {
 
         this.initAttributes();
         this.setTopics();
+
+        this.editor_element.addEventListener("keydown", function(ev){self.keyPressCallback(ev);});
+    }
+
+    keyPressCallback(event) {
+        if (event.keyCode == 13) {
+            var topic = this.getAttribute("emit");
+
+            if (topic.length && topic != "null") {
+                this.emit(topic, this.text);
+            }
+        }
     }
 }
 

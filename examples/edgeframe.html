@@ -8,7 +8,7 @@
     </head>
 
     <ui-configuration
-        application_background="#e7e7e7"
+        application_background="#fefefe"
         application_foreground="black"
         application_typeface="Tahoma, sans-serif"
         application_typesize="18px"
@@ -19,14 +19,10 @@
 
     <body>
         <ui-frame orientation="vertical">
-            <ui-toolbar background="#00a0ff">
+            <ui-toolbar background="#00c0ff">
                 <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
                     <ui-button emit=menu_toggle>
                         <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
-                    </ui-button>
-
-                    <ui-button emit=settings_toggle>
-                        Settings
                     </ui-button>
                 </ui-toolbar>
 
@@ -40,34 +36,28 @@
 
             <ui-frame orientation="horizontal" pad=true>
                 <ui-edgeframe
-                    relative=false
                     pad=true
-                    width="400px"
-                    height="120px"
                     consume="menu_toggle, menu_open, menu_close"
                     listener="menu_event"
                 >
                     <ui-button emit=menu_close>
                         <i class="fa fa-window-close fa-lg" aria-hidden="true"></i>
                     </ui-button>
+
+                    <p>
+                    This is not a very long test
+                    </p>
+
+                    <ui-button highlight="-32">
+                        Help
+                    </ui-button>
+
+                    <br/>
+                    <p>
+                    This isn't one either
+                    </p>
                 </ui-edgeframe>
-
-                <ui-frame
-                    orientation="vertical"
-                    width="140px"
-                    show=false
-                    pad=true
-                    background="#efefef"
-                >
-                    <ui-button foreground="white" highlight="+72" emit="menu_close">
-                        One
-                    </ui-button>
-
-                    <ui-button foreground="white" highlight="+48" background="orange" emit="menu_close">
-                        Two
-                    </ui-button>
-                </ui-frame>
-
+            
                 <ui-frame orientation="vertical" pad=true>
                     <h1>Didn't melt fairer keepsakes since Fellowship elsewhere.</h1>
                     <p>Woodlands payment Osgiliath tightening. Barad-dur follow belly comforts tender tough bell? Many that live deserve death. Some that die deserve life. Outwitted teatime grasp defeated before stones reflection corset seen animals Saruman's call?</p>

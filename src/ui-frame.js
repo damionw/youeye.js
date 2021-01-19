@@ -3,13 +3,6 @@ class uiFrame extends uiBase {
         return "UI-FRAME";
     }
 
-    constructor() {
-        super();
-
-        // Start observing the target node for configured mutations
-        this.observer.observe(this, this.observer_config);
-    }
-
     static get defaultAttributes() {
         return Object.assign(
             uiBase.defaultAttributes, {
@@ -25,6 +18,25 @@ class uiFrame extends uiBase {
         );
     }
 
+    constructor() {
+        super();
+
+        // Start observing the target node for configured mutations
+        this.observer.observe(this, this.observer_config);
+    }
+
+    get visible_mode() {
+        return "inline-flex";
+    }
+
+    get hidden_mode() {
+        return "none";
+    }
+
+    get unpadded() {
+        return 0;
+    }
+
     get verticallyOriented() {
         return (this.getAttribute("orientation") == "vertical");
     }
@@ -33,31 +45,21 @@ class uiFrame extends uiBase {
         return (this.getAttribute("pad") == "true");
     }
 
-
-    get scale() {
-        var transform = this.style.transform;
-
-        if (transform == "") {
-            return 1.0;
-        }
-
-        return parseFloat(
-            transform.split("(")[1].split(")")[0]
-        );
-    }
-
-    set scale(scale) {
-        this.style.WebkitTransform = "scaleX(" + scale + ")";
-        this.style.transform = "scaleX(" + scale + ")";
-        this.style.transformOrigin = "0% 100%";
-    }
-
     get styled_children() {
         return Array.from(this.childNodes).filter(
             function(elem) {
                 return (elem.style != null);
             }
         );
+    }
+
+    show(showing) {
+        if (showing) {
+            this.style.display = this.visible_mode;
+        }
+        else {
+            this.style.display = this.hidden_mode;
+        }
     }
 
     elementsChanged(newElements) {
@@ -83,6 +85,9 @@ class uiFrame extends uiBase {
             }
             else if (! this.padded) {
             }
+            else if (elem.unpadded) {
+                // Element is immune from padding
+            }
             else if (vertically_arranged) {
                 elem.style.marginBottom = padding_value;
             }
@@ -90,39 +95,6 @@ class uiFrame extends uiBase {
                 elem.style.marginRight = padding_value;
             }
         }
-    }
-
-    show(showing) {
-        var visible = "inline-flex";
-        var hidden = "none";
-        var self = this;
-        var scale = this.scale;
-
-        if (showing) {
-            if (scale >= 1.0) {
-                return;
-            }
-
-            this.style.display = visible;
-            this.scale = scale + 0.1;
-        }
-        else {
-            if (scale <= 0.0) {
-                this.style.display = hidden;
-                return;
-            }
-
-            this.style.display = visible;
-            this.scale = scale - 0.1;
-        }
-
-        setTimeout(
-            function() {
-                self.show(showing);
-            },
-
-            this.configuration.getAttribute("animation_milliseconds")
-        )
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -192,7 +164,7 @@ class uiFrame extends uiBase {
         this.style.boxSizing = "border-box";
         this.style.margin = "0px";
         this.style.flexDirection = (this.verticallyOriented ? "column" : "row");
-        this.scale = 1.0;
+        this.style.position = "relative"; // DEBUG
 
         this.initAttributes();
         this.setTopics();

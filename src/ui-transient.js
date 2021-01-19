@@ -3,10 +3,6 @@ class uiTransient extends uiFrame {
         return "UI-TRANSIENT";
     }
 
-    constructor() {
-        super();
-    }
-
     static get defaultAttributes() {
         return Object.assign(
             uiFrame.defaultAttributes, {
@@ -21,16 +17,16 @@ class uiTransient extends uiFrame {
         );
     }
 
-    show(showing) {
-        var visible = "inline-block";
-        var hidden = "none";
+    constructor() {
+        super();
+    }
 
-        if (showing) {
-            this.style.display = visible;
-        }
-        else {
-            this.style.display = hidden;
-        }
+    get visible_mode() {
+        return "inline-block";
+    }
+
+    get unpadded() {
+        return 1;
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -53,9 +49,11 @@ class uiTransient extends uiFrame {
     }
 
     connectedCallback() {
+        var shadow_depth = this.configuration.getAttribute("shadow_depth");
+
         uiFrame.prototype.connectedCallback.call(this);
 
-        this.style.boxShadow = "0px 0px 12px " + this.alterRGB(
+        this.style.boxShadow = "0px 0px " + shadow_depth + " " + this.alterRGB(
             this.style.backgroundColor,
             -64
         );

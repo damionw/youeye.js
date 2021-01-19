@@ -8,39 +8,26 @@
     </head>
 
     <ui-configuration
-        application_background="#e7e7e7"
+        application_background="#f2f2f2"
         application_foreground="black"
+        application_typeface="Tahoma, sans-serif"
+        application_typesize="18px"
         toolbar_height="40px"
+        shadow_depth="4px"
         padding="4px"
         animation_milliseconds="22"
     ></ui-configuration>
 
     <body>
-        <ui-transient
-            relative=false
-            pad=true
-            width="400px"
-            height="120px"
-            consume="search_open,search_toggle,search_close"
-            listener="search_event"
-        >
-            <ui-toolbar background="inherit" justify=right style="border: 2px solid green">
-                <ui-button emit=search_close>
-                    <i class="fa fa-window-close fa-lg" aria-hidden="true"></i>
-                </ui-button>
-            </ui-frame>
-
-            Search Window
-            <ui-textfield width="100%" background=white foreground=blue>
-                Enter search terms
-            </ui-textfield>
-        </ui-transient>
-
         <ui-frame orientation="vertical">
             <ui-toolbar background=blue>
                 <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
                     <ui-button emit=menu_toggle>
                         <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+
+                    <ui-button emit=settings_toggle>
+                        Settings
                     </ui-button>
                 </ui-toolbar>
 
@@ -53,27 +40,50 @@
             </ui-toolbar>
 
             <ui-frame orientation="horizontal" pad=true>
-                <ui-frame
-                    orientation="vertical"
-                    width="140px"
-                    show=false
+                <ui-edgeframe
+                    edge="left"
                     pad=true
-                    background="#1a1a1a"
                     consume="menu_toggle, menu_open, menu_close"
                     listener="menu_event"
+                    width="200px"
+                    background="#fefffe"
                 >
-                    <ui-button foreground="white" highlight="+48" emit="menu_close">
+                    <ui-button highlight="-16" emit="menu_close">
                         One
                     </ui-button>
 
-                    <ui-button foreground="white" highlight="+48" background="orange" emit="menu_close">
+                    <ui-button highlight="-16" emit="menu_close">
                         Two
                     </ui-button>
-                </ui-frame>
+
+                    <ui-button highlight="-16" emit="menu_close">
+                        Three
+                    </ui-button>
+                </ui-edgeframe>
+
+                <ui-edgeframe
+                    edge="top"
+                    pad=true
+                    width="400px"
+                    consume="search_open,search_toggle,search_close"
+                    listener="search_event"
+                >
+                    <div style="margin: 4px;">
+                    Find
+                    </div>
+
+                    <ui-textfield width="100%" background=white foreground=blue emit="search_string">
+                        Enter search terms
+                    </ui-textfield>
+
+                    <ui-button emit=search_close>
+                        <i class="fa fa-window-close fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+                </ui-edgeframe>
 
                 <ui-frame orientation="vertical" pad=true>
                     <ui-frame orientation="horizontal" height="100%" pad=true>
-                        <ui-pane width="100%" height="100%" background="white" consume="search" listener="search_event.call(this, topic, payload);">
+                        <ui-pane width="100%" height="100%" background="white" consume="search_string" listener="search_event">
                         This is a test
                         </ui-pane>
 
@@ -83,7 +93,12 @@
                     </ui-frame>
 
                     <ui-pane width="100%" height="100%" background="white">
-                        Maybe one more
+                        <h1>Didn't melt fairer keepsakes since Fellowship elsewhere.</h1>
+                        <p>Woodlands payment Osgiliath tightening. Barad-dur follow belly comforts tender tough bell? Many that live deserve death. Some that die deserve life. Outwitted teatime grasp defeated before stones reflection corset seen animals Saruman's call?</p>
+                        <h2>Tad survive ensnare joy mistake courtesy Bagshot Row.</h2>
+                        <p>Ligulas step drops both? You shall not pass! Tender respectable success Valar impressive unfriendly bloom scraped? Branch hey-diddle-diddle pony trouble'll sleeping during jump Narsil.</p>
+                        <h3>North valor overflowing sort Iáve mister kingly money?</h3>
+                        <p>Curse you and all the halflings! Deserted anytime Lake-town burned caves balls. Smoked lthilien forbids Thrain?</p>
                     </ui-pane>
 
                     <ui-pane background="green" height="50px" foreground="white">
@@ -110,6 +125,10 @@
                         "true"
                     )
                 );
+            }
+            else if (topic == "search_string") {
+                this.textContent = payload;
+                this.emit("search_close");
             }
         }
 
