@@ -1,4 +1,7 @@
 class uiTextField extends uiBase {
+    //=========================================================
+    //                    Class Properties
+    //=========================================================
     static get tagname() {
         return "UI-TEXTFIELD";
     }
@@ -15,6 +18,9 @@ class uiTextField extends uiBase {
         );
     }
 
+    //=========================================================
+    //                       Constructor
+    //=========================================================
     constructor() {
         super();
 
@@ -33,6 +39,9 @@ class uiTextField extends uiBase {
         shadow.appendChild(div);
     }
 
+    //=========================================================
+    //                    Object Properties
+    //=========================================================
     get editor_element() {
         return this.shadowRoot.childNodes[0];
     }
@@ -41,6 +50,9 @@ class uiTextField extends uiBase {
         return this.editor_element.textContent;
     }
 
+    //=========================================================
+    //                         Events
+    //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
             this.style.width = this.getAttribute(name);
@@ -88,7 +100,7 @@ class uiTextField extends uiBase {
         this.style.display = "block";
         this.margin = "4px";
         this.style.boxSizing = "border-box";
-        this.style.borderRadius = this.border_radius;
+        this.style.borderRadius = this.configuration.getAttribute("border_radius");
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
         this.style.fontSize = this.configuration.getAttribute("application_typesize");
 
@@ -105,6 +117,8 @@ class uiTextField extends uiBase {
             if (topic.length && topic != "null") {
                 this.emit(topic, this.text);
             }
+        }
+        else if (event.keyCode == 27) {
         }
     }
 }

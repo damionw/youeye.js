@@ -1,19 +1,47 @@
 class uiBase extends HTMLElement {
-    constructor() {
-        super();
-
-        this._observer = null;
-        this._message_handler = null;
-
-        this.defaults = {
-            "border_radius": "4px",
+    //=========================================================
+    //                    Class Properties
+    //=========================================================
+    static get defaultAttributes() {
+        return {
+            "consume": null,
+            "listener": null,
+            "enabled": "true",
         };
     }
 
-    get border_radius() {
-        return this.defaults.border_radius;
+    static get observedAttributes() {
+        return Object.keys(this.defaultAttributes);
     }
 
+    //=========================================================
+    //                      Class Methods
+    //=========================================================
+    static attachSingleton(element) {
+        var search_elements = document.getElementsByTagName("BODY");
+
+        for (var i=0; i < search_elements.length; ++i) {
+            var parent_node = search_elements[i];
+            parent_node.appendChild(element);
+            return element;
+        }
+
+        throw new Error("No BODY element found in document");
+    }
+
+    //=========================================================
+    //                       Constructor
+    //=========================================================
+    constructor() {
+        super();
+
+        this._message_handler = null;
+        this._observer = null;
+    }
+
+    //=========================================================
+    //                    Object Properties
+    //=========================================================
     get observer_config() {
         // Options for the observer (which mutations to observe)
         return {
@@ -42,18 +70,6 @@ class uiBase extends HTMLElement {
         return this._observer;
     }
 
-    static get defaultAttributes() {
-        return {
-            "consume": null,
-            "listener": null,
-            "enabled": "true",
-        };
-    }
-
-    static get observedAttributes() {
-        return Object.keys(this.defaultAttributes);
-    }
-
     get configuration() {
         return uiConfiguration.singleton;
     }
@@ -62,6 +78,9 @@ class uiBase extends HTMLElement {
         return uiMessenger.singleton;
     }
 
+    //=========================================================
+    //                Message Handling
+    //=========================================================
     emit(topic, payload) {
         this.messenger.broadcast(topic, payload);
     }
@@ -72,6 +91,9 @@ class uiBase extends HTMLElement {
         }
     }
 
+    //=========================================================
+    //                Message Routing
+    //=========================================================
     setMessageHandler() {
         var code = this.getAttribute("listener");
 
@@ -106,18 +128,9 @@ class uiBase extends HTMLElement {
         );
     }
 
-    elementsChanged(newElements) {
-    }
-
-    connectedCallback() {
-    }
-
-    disconnectedCallback() {
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-    }
-
+    //=========================================================
+    //                      Initializing
+    //=========================================================
     setDefaults() {
         var attribute_entries = Object.entries(this.constructor.defaultAttributes);
 
@@ -148,6 +161,24 @@ class uiBase extends HTMLElement {
         }
     }
 
+    //=========================================================
+    //                      Events
+    //=========================================================
+    elementsChanged(newElements) {
+    }
+
+    connectedCallback() {
+    }
+
+    disconnectedCallback() {
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+    }
+
+    //=========================================================
+    //                 Color Manipulation
+    //=========================================================
     alterRGB(rgb, amt) {
         const [r, g, b] = this.rgbStrVal(rgb).map(
             function(color) {
@@ -166,17 +197,5 @@ class uiBase extends HTMLElement {
 
     rgbToHex(r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-    }
-
-    static attachSingleton(element) {
-        var search_elements = document.getElementsByTagName("BODY");
-
-        for (var i=0; i < search_elements.length; ++i) {
-            var parent_node = search_elements[i];
-            parent_node.appendChild(element);
-            return element;
-        }
-
-        throw new Error("No BODY element found in document");
     }
 }

@@ -1,4 +1,7 @@
 class uiButton extends uiBase {
+    //=========================================================
+    //                    Class Attributes
+    //=========================================================
     static get tagname() {
         return "UI-BUTTON";
     }
@@ -8,7 +11,8 @@ class uiButton extends uiBase {
             uiBase.defaultAttributes, {
                 "foreground": "inherit",
                 "background": "inherit",
-                "highlight": 16,
+                "highlight": 48,
+                "tooltip": "",
                 "width": "auto",
                 "height": "default",
                 "emit": "",
@@ -16,10 +20,44 @@ class uiButton extends uiBase {
         );
     }
 
+    //=========================================================
+    //                       Constructor
+    //=========================================================
     constructor() {
         super();
+        this._tooltip = null;
     }
 
+    //=========================================================
+    //                   Object attributes
+    //=========================================================
+    get tooltip() {
+        if (this._tooltip == null) {
+            var div = document.createElement('div');
+
+            div.style.display = "none";
+            div.style.width = "auto";
+            div.style.height = "auto";
+            div.style.color = "black";
+            div.style.backgroundColor = "inherit";
+            div.style.fontFamily = "inherit";
+            div.style.fontSize = "12px";
+            div.style.cursor = "inherit";
+            div.style.boxSizing = "border-box";
+            div.style.padding = "3px";
+            div.style.margin = "2px";
+
+            this.appendChild(div);
+
+            this._tooltip = div;
+        }
+
+        return this._tooltip;
+    }
+
+    //=========================================================
+    //                         Events
+    //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
             this.style.width = this.getAttribute("width");
@@ -32,12 +70,15 @@ class uiButton extends uiBase {
             );
         }
         else if (name == "background") {
-            this.style.backgroundColor = this.getAttribute("background");
+            this.style.backgroundColor = this.getAttribute(name);
         }
         else if (name == "foreground") {
-            this.style.color = this.getAttribute("foreground");
+            this.style.color = this.getAttribute(name);
         }
         else if (name == "highlight") {
+        }
+        else if (name == "tooltip") {
+            this.tooltip.textContent = this.getAttribute(name);
         }
         else {
             uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
@@ -51,11 +92,12 @@ class uiButton extends uiBase {
 
         this.style.display = "block";
         this.style.boxSizing = "border-box";
+        this.style.position = "relative";
         this.style.padding = "3px";
         this.style.margin = "0px";
         this.style.marginLeft = "6px";
         this.style.marginRight = "6px";
-        this.style.borderRadius = this.border_radius;
+        this.style.borderRadius = this.configuration.getAttribute("border_radius");
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
         this.style.fontSize = this.configuration.getAttribute("application_typesize");
 
@@ -64,25 +106,56 @@ class uiButton extends uiBase {
 
         this.addEventListener("mouseover", function(ev){self.mouseoverCallback(ev);});
         this.addEventListener("mouseout", function(ev){self.mouseoutCallback(ev);});
+        this.addEventListener("mousedown", function(ev){self.mousedownCallback(ev);});
+        this.addEventListener("mouseup", function(ev){self.mouseupCallback(ev);});
         this.addEventListener("click", function(ev){self.mouseclickCallback(ev);});
+    }
+
+    mousedownCallback(ev) {
+        var shadow_color = this.alterRGB(
+            window.getComputedStyle(this).backgroundColor,
+            -64
+        );
+
+        var inset = "3px 3px 2px 10px " + shadow_color + " inset";
+
+        this.style.WebkitBoxShadow = inset;
+        this.style.boxShadow = inset;
+    }
+
+    mouseupCallback(ev) {
+        this.style.WebkitBoxShadow = "none";
+        this.style.boxShadow = "none";
     }
 
     mouseoverCallback(ev) {
         this.attributeChangedCallback("background");
-
         this.style.cursor = "pointer";
 
-        this.style.backgroundColor = (
-            this.alterRGB(
-                window.getComputedStyle(this).backgroundColor,
-                parseInt(this.getAttribute("highlight"))
-            )
+        if (this.getAttribute("tooltip") != "") {
+            var tooltip = this.tooltip;
+
+            tooltip.style.display = "flex";
+            tooltip.style.flexDirection = "row";
+            tooltip.style.position = "absolute";
+            tooltip.style.left = "5px";
+            tooltip.style.top = "30px"; // this.configuration.toolbar_height;
+            tooltip.style.width = "auto";
+            tooltip.style.backgroundColor = "rgba(255,255,255,0.65)";
+            tooltip.style.color = "green";
+            tooltip.style.zIndex = 1;
+        }
+
+        this.style.backgroundColor = this.alterRGB(
+            window.getComputedStyle(this).backgroundColor,
+            parseInt(this.getAttribute("highlight"))
         );
     }
 
     mouseoutCallback(ev) {
         this.attributeChangedCallback("background");
         this.attributeChangedCallback("foreground");
+        this.tooltip.style.display = "none";
         this.style.cursor = "default";
     }
 

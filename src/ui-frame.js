@@ -1,4 +1,7 @@
 class uiFrame extends uiBase {
+    //=========================================================
+    //                    Class Attributes
+    //=========================================================
     static get tagname() {
         return "UI-FRAME";
     }
@@ -18,6 +21,9 @@ class uiFrame extends uiBase {
         );
     }
 
+    //=========================================================
+    //                      Constructor
+    //=========================================================
     constructor() {
         super();
 
@@ -25,6 +31,9 @@ class uiFrame extends uiBase {
         this.observer.observe(this, this.observer_config);
     }
 
+    //=========================================================
+    //                   Object attributes
+    //=========================================================
     get visible_mode() {
         return "inline-flex";
     }
@@ -53,8 +62,11 @@ class uiFrame extends uiBase {
         );
     }
 
+    //=========================================================
+    //                     Transitions
+    //=========================================================
     show(showing) {
-        if (showing) {
+        if (showing || showing == null) {
             this.style.display = this.visible_mode;
         }
         else {
@@ -62,6 +74,13 @@ class uiFrame extends uiBase {
         }
     }
 
+    hide() {
+        this.show(0);
+    }
+
+    //=========================================================
+    //                       Events
+    //=========================================================
     elementsChanged(newElements) {
         var padding_value = this.configuration.getAttribute("padding");
         var vertically_arranged = this.verticallyOriented;
@@ -164,7 +183,7 @@ class uiFrame extends uiBase {
         this.style.boxSizing = "border-box";
         this.style.margin = "0px";
         this.style.flexDirection = (this.verticallyOriented ? "column" : "row");
-        this.style.position = "relative"; // DEBUG
+        this.style.position = "relative";
 
         this.initAttributes();
         this.setTopics();

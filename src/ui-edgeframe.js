@@ -1,10 +1,9 @@
 class uiEdgeFrame extends uiFrame {
+    //=========================================================
+    //                    Class Attributes
+    //=========================================================
     static get tagname() {
         return "UI-EDGEFRAME";
-    }
-
-    static get unpadded() {
-        return 1;
     }
 
     static get defaultAttributes() {
@@ -19,10 +18,20 @@ class uiEdgeFrame extends uiFrame {
         );
     }
 
+    static get unpadded() {
+        return 1;
+    }
+
+    //=========================================================
+    //                       Constructor
+    //=========================================================
     constructor() {
         super();
     }
 
+    //=========================================================
+    //                       Transitions
+    //=========================================================
     show(showing) {
         var self = this;
         var edge = this.getAttribute("edge");
@@ -83,6 +92,9 @@ class uiEdgeFrame extends uiFrame {
         )
     }
 
+    //=========================================================
+    //                       Events
+    //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "edge") {
             var edge = this.getAttribute(name);
@@ -147,7 +159,7 @@ class uiEdgeFrame extends uiFrame {
         this.style.position = "absolute";
         this.style.zIndex = 1;
 
-        this.show(0);
+        this.hide();
     }
 }
 

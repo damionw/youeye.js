@@ -1,4 +1,7 @@
 class uiPane extends uiBase {
+    //=========================================================
+    //                    Class Properties
+    //=========================================================
     static get tagname() {
         return "UI-PANE";
     }
@@ -14,6 +17,9 @@ class uiPane extends uiBase {
         );
     }
 
+    //=========================================================
+    //                       Constructor
+    //=========================================================
     constructor() {
         super();
 
@@ -21,6 +27,9 @@ class uiPane extends uiBase {
         this.observer.observe(this, this.observer_config);
     }
 
+    //=========================================================
+    //                    Object Properties
+    //=========================================================
     get visible_mode() {
         return "inline-block";
     }
@@ -33,6 +42,9 @@ class uiPane extends uiBase {
         return 0;
     }
 
+    //=========================================================
+    //                         Events
+    //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
             this.style.width = this.getAttribute("width");
@@ -54,6 +66,7 @@ class uiPane extends uiBase {
     connectedCallback() {
         var padding_value = this.configuration.getAttribute("padding");
         var shadow_depth = this.configuration.getAttribute("shadow_depth");
+        var border_radius = this.configuration.getAttribute("border_radius");
 
         this.setDefaults();
 
@@ -61,13 +74,14 @@ class uiPane extends uiBase {
         this.style.boxSizing = "border-box";
         this.style.padding = padding_value;
         this.style.margin = "0px";
+        this.style.overflow = "auto";
 
         this.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
             this.style.backgroundColor,
             -64
         );
 
-        this.style.borderRadius = this.border_radius;
+        this.style.borderRadius = border_radius;
         this.initAttributes();
         this.setTopics();
     }

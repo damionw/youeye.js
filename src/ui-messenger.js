@@ -1,13 +1,9 @@
 class uiMessenger extends uiBase {
+    //=========================================================
+    //                    Class Properties
+    //=========================================================
     static get tagname() {
         return "UI-MESSENGER";
-    }
-
-    constructor() {
-        super();
-
-        this.registrations = {};
-        this.idcount = 0;
     }
 
     static get singleton() {
@@ -20,6 +16,19 @@ class uiMessenger extends uiBase {
         return this.attachSingleton(document.createElement(this.tagname));
     }
 
+    //=========================================================
+    //                       Constructor
+    //=========================================================
+    constructor() {
+        super();
+
+        this.registrations = {};
+        this.idcount = 0;
+    }
+
+    //=========================================================
+    //                     Message Routing
+    //=========================================================
     register(element, topic) {
         if (topic in {null: 0, "": 0, "null": 0}) {
             return;
@@ -36,8 +45,6 @@ class uiMessenger extends uiBase {
         }
 
         this.registrations[topic][element.id] = 1;
-
-//         console.log("REGISTER: topic=" + topic + " elements=" + Object.keys(this.registrations[topic]).join(",") + "]");
     }
 
     deregister(element, topic) {
@@ -82,24 +89,9 @@ class uiMessenger extends uiBase {
         );
     }
 
-    report() {
-        var l = Object.entries(this.registrations).map(
-            function(p1) {
-                return Object.entries(p1[1]).map(
-                    function(p2) {
-                        return [
-                            p1[0],
-                            p2[0],
-                            p2[1],
-                        ].join("|");
-                    }
-                );
-            }
-        );
-
-        console.log("REPORT: " + l.join("\n"));
-    }
-
+    //=========================================================
+    //                      Events
+    //=========================================================
     connectedCallback() {
         this.style.display = "none";
     }

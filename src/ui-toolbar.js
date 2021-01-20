@@ -1,10 +1,9 @@
 class uiToolBar extends uiFrame {
+    //=========================================================
+    //                    Class Properties
+    //=========================================================
     static get tagname() {
         return "UI-TOOLBAR";
-    }
-
-    constructor() {
-        super();
     }
 
     static get defaultAttributes() {
@@ -18,6 +17,16 @@ class uiToolBar extends uiFrame {
         );
     }
 
+    //=========================================================
+    //                       Constructor
+    //=========================================================
+    constructor() {
+        super();
+    }
+
+    //=========================================================
+    //                         Events
+    //=========================================================
     elementsChanged(newElements) {
         var padding_value = this.configuration.getAttribute("padding");
         var style_elements = this.styled_children;

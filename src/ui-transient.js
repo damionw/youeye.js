@@ -1,4 +1,7 @@
 class uiTransient extends uiFrame {
+    //=========================================================
+    //                    Class Properties
+    //=========================================================
     static get tagname() {
         return "UI-TRANSIENT";
     }
@@ -21,6 +24,9 @@ class uiTransient extends uiFrame {
         super();
     }
 
+    //=========================================================
+    //                    Object Properties
+    //=========================================================
     get visible_mode() {
         return "inline-block";
     }
@@ -29,6 +35,9 @@ class uiTransient extends uiFrame {
         return 1;
     }
 
+    //=========================================================
+    //                         Events
+    //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "x") {
             this.style.left = this.getAttribute(name);
@@ -65,7 +74,7 @@ class uiTransient extends uiFrame {
         this.style.maxWidth = "90%";
         this.style.maxHeight = "90%";
 
-        this.show(0);
+        this.hide();
     }
 }
 

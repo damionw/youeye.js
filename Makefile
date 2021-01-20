@@ -9,6 +9,7 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-pane.js \
 	src/ui-transient.js \
 	src/ui-edgeframe.js \
+	src/ui-form.js \
 	src/ui-textfield.js \
 	src/ui-toolbar.js
 

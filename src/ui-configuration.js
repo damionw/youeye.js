@@ -1,10 +1,9 @@
 class uiConfiguration extends uiBase {
+    //=========================================================
+    //                    Class Attributes
+    //=========================================================
     static get tagname() {
         return "UI-CONFIGURATION";
-    }
-
-    constructor() {
-        super();
     }
 
     static get defaultAttributes() {
@@ -13,6 +12,7 @@ class uiConfiguration extends uiBase {
             "application_foreground": "blue",
             "application_typeface": "Arial",
             "application_typesize": "18px",
+            "border_radius": "4px",
             "animation_milliseconds": 20,
             "shadow_depth": "4px",
             "toolbar_height": "40px",
@@ -28,6 +28,13 @@ class uiConfiguration extends uiBase {
         }
 
         return this.attachSingleton(document.createElement(this.tagname));
+    }
+
+    //=========================================================
+    //                       Constructor
+    //=========================================================
+    constructor() {
+        super();
     }
 
     connectedCallback() {
