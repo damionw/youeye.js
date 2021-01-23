@@ -67,15 +67,26 @@ class uiTransient extends uiFrame {
             -64
         );
 
-        this.style.borderRadius = "7px";
+        this.style.borderRadius = "0px";
         this.style.zIndex = 1;
-        this.style.top = this.configuration.getAttribute("toolbar_height");
+        this.style.top = this.parentNode.clientHeight - 2; // this.configuration.getAttribute("toolbar_height");
         this.style.overflow = "auto";
-        this.style.maxWidth = "90%";
-        this.style.maxHeight = "90%";
+//         this.style.maxWidth = "90%";
+//         this.style.maxHeight = "90%";
 
         this.hide();
     }
+
+    mouseoverCallback(ev) {
+        uiFrame.prototype.mouseoverCallback.call(this, ev);
+        this.show();
+    }
+
+    mouseoutCallback(ev) {
+        uiFrame.prototype.mouseoutCallback.call(this, ev);
+        this.hide();
+    }
+
 }
 
 customElements.define(uiTransient.tagname.toLowerCase(), uiTransient);

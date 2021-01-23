@@ -145,9 +145,9 @@ class uiEdgeFrame extends uiFrame {
     }
 
     connectedCallback() {
-        var shadow_depth = this.configuration.getAttribute("shadow_depth");
-
         uiFrame.prototype.connectedCallback.call(this);
+
+        var shadow_depth = this.configuration.getAttribute("shadow_depth");
 
         this.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
             this.style.backgroundColor,
@@ -160,6 +160,8 @@ class uiEdgeFrame extends uiFrame {
         this.style.zIndex = 1;
 
         this.hide();
+
+        uiBase.prototype.connectedCallback.call(this); // Do NOT call uiFrame.connectedCallback() !
     }
 }
 

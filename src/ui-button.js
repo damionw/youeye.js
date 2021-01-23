@@ -15,7 +15,6 @@ class uiButton extends uiBase {
                 "tooltip": "",
                 "width": "auto",
                 "height": "default",
-                "emit": "",
             }
         );
     }
@@ -86,8 +85,6 @@ class uiButton extends uiBase {
     }
 
     connectedCallback() {
-        var self = this;
-
         this.setDefaults();
 
         this.style.display = "block";
@@ -104,11 +101,7 @@ class uiButton extends uiBase {
         this.initAttributes();
         this.setTopics();
 
-        this.addEventListener("mouseover", function(ev){self.mouseoverCallback(ev);});
-        this.addEventListener("mouseout", function(ev){self.mouseoutCallback(ev);});
-        this.addEventListener("mousedown", function(ev){self.mousedownCallback(ev);});
-        this.addEventListener("mouseup", function(ev){self.mouseupCallback(ev);});
-        this.addEventListener("click", function(ev){self.mouseclickCallback(ev);});
+        uiBase.prototype.connectedCallback.call(this);
     }
 
     mousedownCallback(ev) {
@@ -121,11 +114,15 @@ class uiButton extends uiBase {
 
         this.style.WebkitBoxShadow = inset;
         this.style.boxShadow = inset;
+
+        uiBase.prototype.mousedownCallback.call(this, ev);
     }
 
     mouseupCallback(ev) {
         this.style.WebkitBoxShadow = "none";
         this.style.boxShadow = "none";
+
+        uiBase.prototype.mouseupCallback.call(this, ev);
     }
 
     mouseoverCallback(ev) {
@@ -150,6 +147,8 @@ class uiButton extends uiBase {
             window.getComputedStyle(this).backgroundColor,
             parseInt(this.getAttribute("highlight"))
         );
+
+        uiBase.prototype.mouseoverCallback.call(this, ev);
     }
 
     mouseoutCallback(ev) {
@@ -157,14 +156,12 @@ class uiButton extends uiBase {
         this.attributeChangedCallback("foreground");
         this.tooltip.style.display = "none";
         this.style.cursor = "default";
+
+        uiBase.prototype.mouseoutCallback.call(this, ev);
     }
 
     mouseclickCallback(ev) {
-        var topic = this.getAttribute("emit");
-
-        if (topic.length && topic != "null") {
-            this.emit(topic, null);
-        }
+        uiBase.prototype.mouseclickCallback.call(this, ev);
     }
 }
 

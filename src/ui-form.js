@@ -13,7 +13,6 @@ class uiForm extends uiBase {
                 "background": "inherit",
                 "width": "auto",
                 "height": "default",
-                "emit": "",
             }
         );
     }
@@ -24,7 +23,7 @@ class uiForm extends uiBase {
     constructor() {
         super();
 
-        this._panels = [];
+        this._panes = [];
 
         // Start observing the target node for configured mutations
         this.observer.observe(this, this.observer_config);
@@ -34,47 +33,63 @@ class uiForm extends uiBase {
     //                   Object attributes
     //=========================================================
     get panes() {
-        if (! this._panels.length) {
+        if (! this._panes.length) {
             var left = document.createElement('div');
-            var right = document.createElement('div');
 
-            left.style.display = "none";
-            left.style.width = "auto";
-            left.style.height = "auto";
-            left.style.color = "black";
-            left.style.backgroundColor = "inherit";
+            left.style.flex = "0 0 20%";
+            left.style.display = "block";
             left.style.boxSizing = "border-box";
-            left.style.padding = "3px";
-            left.style.margin = "2px";
             left.style.border = "2px solid blue"; // DEBUG
 
             this.appendChild(left);
-            this.appendChild(right);
+            this._panes.push(left);
 
-            this._panels.append(left);
-            this._panels.append(right);
+            var right = document.createElement('div');
+
+            right.style.flex = "1 1 30px";
+            right.style.display = "block";
+            right.style.boxSizing = "border-box";
+            right.style.border = "2px solid red"; // DEBUG
+
+            this.appendChild(right);
+            this._panes.push(right);
         }
 
-        return this._panels;
+        return this._panes;
     }
 
     get left_pane() {
-        return this.panels[0];
+        return this.panes[0];
     }
 
     get right_pane() {
-        return this.panels[1];
+        return this.panes[1];
     }
 
     //=========================================================
     //                         Events
     //=========================================================
     elementsChanged(newElements) {
-        var padding_value = this.configuration.getAttribute("padding");
-        var vertically_arranged = this.verticallyOriented;
-        var style_elements = this.styled_children;
+        for (var i=0; i < newElements.length; ++i) {
+            var element = newElements[i];
+            var label = "";
 
-        for (var i=0; i < style_elements.length; ++i){
+            if (element == this.left_pane) {
+            }
+            else if (element == this.right_pane) {
+            }
+            else if (element.nodeType == 3) {
+                this.left_pane.appendChild(element);
+                this.right_pane.appendChild(document.createElement("div"));
+            }
+            else if (element.hasAttribute("label")) {
+                this.left_pane.appendChild(document.createTextNode(element.getAttribute("label")));
+                this.right_pane.appendChild(element);
+            }
+            else {
+                this.left_pane.appendChild(document.createElement("div"));
+                this.right_pane.appendChild(element);
+            }
         }
     }
 
@@ -83,11 +98,7 @@ class uiForm extends uiBase {
             this.style.width = this.getAttribute("width");
         }
         else if (name == "height") {
-            this.style.height = (
-                this.getAttribute("height") == "default" ?
-                this.configuration.getAttribute("toolbar_height") :
-                this.getAttribute("height")
-            );
+            this.style.height = this.getAttribute("height");
         }
         else if (name == "background") {
             this.style.backgroundColor = this.getAttribute(name);
@@ -118,9 +129,12 @@ class uiForm extends uiBase {
         this.style.margin = "0px";
         this.style.flexDirection = "row";
         this.style.position = "relative";
+        this.style.padding = "10px";
 
         this.initAttributes();
         this.setTopics();
+
+        uiBase.prototype.connectedCallback.call(this);
     }
 }
 

@@ -22,23 +22,44 @@
         <ui-frame orientation="vertical">
             <ui-toolbar background=blue>
                 <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
-                    <ui-button tooltip="Open Context Menu" emit=menu_toggle>
+                    <ui-button clicked="menu_toggle">
                         <i class="fa fa-bars fa-6" aria-hidden="true"></i>
                     </ui-button>
 
-                    <ui-button emit=home_toggle>
+                    <ui-button clicked="home_toggle" hovered="home_show" exited="home_hide">
+                        <ui-transient
+                            consume="home_toggle,home_show,home_hide"
+                            listener="home_event"
+                            background="inherit"
+                            relative="true"
+                            width="100px"
+                            height="100px"
+                        >
+                           This is home
+                        </ui-transient>
                         <i class="fa fa-home fa-6" aria-hidden="true"></i>
                         Home
                     </ui-button>
 
-                    <ui-button tooltip="Open Settings Window" emit=settings_toggle>
+                    <ui-button clicked="settings_toggle" hovered="settings_show" exited="settings_hide">
+                        <ui-transient
+                            consume="settings_toggle,settings_show,settings_hide"
+                            listener="settings_event"
+                            background="inherit"
+                            relative="true"
+                            width="100px"
+                            height="200px"
+                        >
+                            What is it Now
+                        </ui-transient>
+
                         <i class="fa fa-cogs fa-6" aria-hidden="true"></i>
                         Settings
                     </ui-button>
                 </ui-toolbar>
 
                 <ui-toolbar width=200px foreground=white background="inherit" justify=right pad=true>
-                    <ui-button tooltip="Open Search Window" emit=search_toggle>
+                    <ui-button tooltip="Open Search Window" clicked="search_toggle">
                         <i class="fa fa-search fa-6" aria-hidden="true">
                         </i>
                     </ui-button>
@@ -54,15 +75,15 @@
                     width="200px"
                     background="#fefffe"
                 >
-                    <ui-button highlight="-16" emit="menu_close">
+                    <ui-button highlight="-16" clicked="menu_close">
                         One
                     </ui-button>
 
-                    <ui-button highlight="-16" emit="menu_close">
+                    <ui-button highlight="-16" clicked="menu_close">
                         Two
                     </ui-button>
 
-                    <ui-button highlight="-16" emit="menu_close">
+                    <ui-button highlight="-16" clicked="menu_close">
                         Three
                     </ui-button>
                 </ui-edgeframe>
@@ -78,11 +99,11 @@
                     Find
                     </div>
 
-                    <ui-textfield width="100%" background=white foreground=blue emit="search_string">
+                    <ui-textfield width="100%" background=white foreground=blue returnkey="search_string">
                         Enter search terms
                     </ui-textfield>
 
-                    <ui-button emit=search_close>
+                    <ui-button clicked="search_close">
                         <i class="fa fa-times fa-6" aria-hidden="true"></i>
                     </ui-button>
                 </ui-edgeframe>
@@ -135,6 +156,24 @@
             else if (topic == "search_string") {
                 this.textContent = payload;
                 this.emit("search_close");
+            }
+        }
+
+        function home_event(topic, payload) {
+            if (topic == "home_show") {
+                this.show();
+            }
+            else if (topic == "home_hide") {
+                this.hide();
+            }
+        }
+
+        function settings_event(topic, payload) {
+            if (topic == "settings_show") {
+                this.show();
+            }
+            else if (topic == "settings_hide") {
+                this.hide();
             }
         }
 

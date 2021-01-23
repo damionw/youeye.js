@@ -187,6 +187,8 @@ class uiFrame extends uiBase {
 
         this.initAttributes();
         this.setTopics();
+        
+        uiBase.prototype.connectedCallback.call(this);
     }
 }
 

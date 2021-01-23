@@ -7,6 +7,11 @@ class uiBase extends HTMLElement {
             "consume": null,
             "listener": null,
             "enabled": "true",
+            "pressed": "",
+            "released": "",
+            "clicked": "",
+            "hovered": "",
+            "exited": "",
         };
     }
 
@@ -164,16 +169,51 @@ class uiBase extends HTMLElement {
     //=========================================================
     //                      Events
     //=========================================================
-    elementsChanged(newElements) {
+    attributeChangedCallback(name, oldValue, newValue) {
     }
 
     connectedCallback() {
+        var self = this;
+
+        this.addEventListener("mouseover", function(ev){self.mouseoverCallback(ev);});
+        this.addEventListener("mouseout", function(ev){self.mouseoutCallback(ev);});
+        this.addEventListener("mousedown", function(ev){self.mousedownCallback(ev);});
+        this.addEventListener("mouseup", function(ev){self.mouseupCallback(ev);});
+        this.addEventListener("click", function(ev){self.mouseclickCallback(ev);});
+    }
+
+    elementsChanged(newElements) {
     }
 
     disconnectedCallback() {
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
+    mouseclickCallback(ev) {
+        this._emit_event("clicked", ev);
+    }
+
+    mousedownCallback(ev) {
+        this._emit_event("pressed", ev);
+    }
+
+    mouseupCallback(ev) {
+        this._emit_event("released", ev);
+    }
+
+    mouseoverCallback(ev) {
+        this._emit_event("hovered", ev);
+    }
+
+    mouseoutCallback(ev) {
+        this._emit_event("exited", ev);
+    }
+
+    _emit_event(attribute_name, event) {
+        var topic = this.getAttribute(attribute_name);
+
+        if (topic.length && topic != "null") {
+            this.emit(topic, event);
+        }
     }
 
     //=========================================================

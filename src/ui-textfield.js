@@ -13,7 +13,8 @@ class uiTextField extends uiBase {
                 "background": "inherit",
                 "width": "auto",
                 "height": "default",
-                "emit": "",
+                "confirmed": "",
+                "cancelled": "",
             }
         );
     }
@@ -108,17 +109,16 @@ class uiTextField extends uiBase {
         this.setTopics();
 
         this.editor_element.addEventListener("keydown", function(ev){self.keyPressCallback(ev);});
+
+        uiBase.prototype.connectedCallback.call(this);
     }
 
-    keyPressCallback(event) {
+    keyPressCallback(ev) {
         if (event.keyCode == 13) {
-            var topic = this.getAttribute("emit");
-
-            if (topic.length && topic != "null") {
-                this.emit(topic, this.text);
-            }
+            this._emit_event("confirmed", this.text);
         }
         else if (event.keyCode == 27) {
+            this._emit_event("cancelled", this.text);
         }
     }
 }
