@@ -67,9 +67,9 @@ class uiTransient extends uiFrame {
             -64
         );
 
-        this.style.borderRadius = "0px";
+        this.style.borderRadius = "4px";
         this.style.zIndex = 1;
-        this.style.top = this.parentNode.clientHeight - 2; // this.configuration.getAttribute("toolbar_height");
+        this.style.top = this.parentNode.clientHeight; // this.configuration.getAttribute("toolbar_height");
         this.style.overflow = "auto";
 //         this.style.maxWidth = "90%";
 //         this.style.maxHeight = "90%";

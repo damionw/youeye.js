@@ -89,7 +89,7 @@ class uiEdgeFrame extends uiFrame {
             },
 
             this.configuration.getAttribute("animation_milliseconds")
-        )
+        );
     }
 
     //=========================================================

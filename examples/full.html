@@ -22,11 +22,11 @@
         <ui-frame orientation="vertical">
             <ui-toolbar background=blue>
                 <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
-                    <ui-button clicked="menu_toggle">
+                    <ui-button clickedsignal="menu_toggle">
                         <i class="fa fa-bars fa-6" aria-hidden="true"></i>
                     </ui-button>
 
-                    <ui-button clicked="home_toggle" hovered="home_show" exited="home_hide">
+                    <ui-button clickedsignal="home_toggle" hoversignal="home_show" exitsignal="home_hide">
                         <ui-transient
                             consume="home_toggle,home_show,home_hide"
                             listener="home_event"
@@ -41,14 +41,14 @@
                         Home
                     </ui-button>
 
-                    <ui-button clicked="settings_toggle" hovered="settings_show" exited="settings_hide">
+                    <ui-button clickedsignal="toggle_settings" hoversignal="show_settings" exitsignal="hide_settings">
                         <ui-transient
-                            consume="settings_toggle,settings_show,settings_hide"
+                            consume="toggle_settings,show_settings,hide_settings"
                             listener="settings_event"
                             background="inherit"
                             relative="true"
-                            width="100px"
-                            height="200px"
+                            width="200px"
+                            height="auto"
                         >
                             What is it Now
                         </ui-transient>
@@ -59,7 +59,7 @@
                 </ui-toolbar>
 
                 <ui-toolbar width=200px foreground=white background="inherit" justify=right pad=true>
-                    <ui-button tooltip="Open Search Window" clicked="search_toggle">
+                    <ui-button tooltip="Open Search Window" clickedsignal="toggle_search">
                         <i class="fa fa-search fa-6" aria-hidden="true">
                         </i>
                     </ui-button>
@@ -75,15 +75,15 @@
                     width="200px"
                     background="#fefffe"
                 >
-                    <ui-button highlight="-16" clicked="menu_close">
+                    <ui-button highlight="-16" clickedsignal="menu_close">
                         One
                     </ui-button>
 
-                    <ui-button highlight="-16" clicked="menu_close">
+                    <ui-button highlight="-16" clickedsignal="menu_close">
                         Two
                     </ui-button>
 
-                    <ui-button highlight="-16" clicked="menu_close">
+                    <ui-button highlight="-16" clickedsignal="menu_close">
                         Three
                     </ui-button>
                 </ui-edgeframe>
@@ -92,18 +92,18 @@
                     edge="top"
                     pad=true
                     width="400px"
-                    consume="search_open,search_toggle,search_close"
+                    consume="search_open,toggle_search,search_close"
                     listener="search_event"
                 >
                     <div style="margin: 4px;">
                     Find
                     </div>
 
-                    <ui-textfield width="100%" background=white foreground=blue returnkey="search_string">
+                    <ui-textfield width="100%" background=white foreground=blue confirmedsignal="search_string">
                         Enter search terms
                     </ui-textfield>
 
-                    <ui-button clicked="search_close">
+                    <ui-button clickedsignal="search_close">
                         <i class="fa fa-times fa-6" aria-hidden="true"></i>
                     </ui-button>
                 </ui-edgeframe>
@@ -144,7 +144,7 @@
             else if (topic == "search_close") {
                 this.setAttribute("show", "false");
             }
-            else if (topic == "search_toggle") {
+            else if (topic == "toggle_search") {
                 this.setAttribute(
                     "show", (
                         this.getAttribute("show") == "true" ?
@@ -161,7 +161,7 @@
 
         function home_event(topic, payload) {
             if (topic == "home_show") {
-                this.show();
+                this.show(200);
             }
             else if (topic == "home_hide") {
                 this.hide();
@@ -169,10 +169,10 @@
         }
 
         function settings_event(topic, payload) {
-            if (topic == "settings_show") {
-                this.show();
+            if (topic == "show_settings") {
+                this.show(200);
             }
-            else if (topic == "settings_hide") {
+            else if (topic == "hide_settings") {
                 this.hide();
             }
         }

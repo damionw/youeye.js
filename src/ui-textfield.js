@@ -13,8 +13,8 @@ class uiTextField extends uiBase {
                 "background": "inherit",
                 "width": "auto",
                 "height": "default",
-                "confirmed": "",
-                "cancelled": "",
+                "confirmedsignal": "",
+                "cancelledsignal": "",
             }
         );
     }
@@ -115,10 +115,10 @@ class uiTextField extends uiBase {
 
     keyPressCallback(ev) {
         if (event.keyCode == 13) {
-            this._emit_event("confirmed", this.text);
+            this._emit_event("confirmedsignal", this.text);
         }
         else if (event.keyCode == 27) {
-            this._emit_event("cancelled", this.text);
+            this._emit_event("cancelledsignal", this.text);
         }
     }
 }

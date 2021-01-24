@@ -65,8 +65,19 @@ class uiFrame extends uiBase {
     //=========================================================
     //                     Transitions
     //=========================================================
-    show(showing) {
-        if (showing || showing == null) {
+    _set_visibility(showing, delay) {
+        if (delay != null) {
+            var self = this;
+
+            setTimeout(
+                function() {
+                    self._set_visibility(showing, null);
+                },
+
+                delay
+            );
+        }
+        else if (showing || showing == null) {
             this.style.display = this.visible_mode;
         }
         else {
@@ -74,8 +85,12 @@ class uiFrame extends uiBase {
         }
     }
 
-    hide() {
-        this.show(0);
+    show(delay) {
+        this._set_visibility(1, delay);
+    }
+
+    hide(delay) {
+        this._set_visibility(0, delay);
     }
 
     //=========================================================

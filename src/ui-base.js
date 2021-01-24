@@ -7,11 +7,11 @@ class uiBase extends HTMLElement {
             "consume": null,
             "listener": null,
             "enabled": "true",
-            "pressed": "",
-            "released": "",
-            "clicked": "",
-            "hovered": "",
-            "exited": "",
+            "pressedsignal": "",
+            "releasedsignal": "",
+            "clickedsignal": "",
+            "hoversignal": "",
+            "exitsignal": "",
         };
     }
 
@@ -189,23 +189,23 @@ class uiBase extends HTMLElement {
     }
 
     mouseclickCallback(ev) {
-        this._emit_event("clicked", ev);
+        this._emit_event("clickedsignal", ev);
     }
 
     mousedownCallback(ev) {
-        this._emit_event("pressed", ev);
+        this._emit_event("pressedsignal", ev);
     }
 
     mouseupCallback(ev) {
-        this._emit_event("released", ev);
+        this._emit_event("releasedsignal", ev);
     }
 
     mouseoverCallback(ev) {
-        this._emit_event("hovered", ev);
+        this._emit_event("hoversignal", ev);
     }
 
     mouseoutCallback(ev) {
-        this._emit_event("exited", ev);
+        this._emit_event("exitsignal", ev);
     }
 
     _emit_event(attribute_name, event) {
