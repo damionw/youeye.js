@@ -52,7 +52,7 @@ class uiTransient extends uiFrame {
             var shadow_depth = this.configuration.getAttribute("shadow_depth");
 
             if (this.booleanAttribute(name)) {
-                this.style.boxShadow = "0px 0px " + shadow_depth + " " + this.alterRGB(
+                this.style.boxShadow = "0px 3px " + shadow_depth + " " + this.alterRGB(
                     this.style.backgroundColor,
                     -64
                 );
