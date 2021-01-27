@@ -66,6 +66,10 @@ class uiForm extends uiBase {
         return this.panes[1];
     }
 
+    get visible_mode() {
+        return "block";
+    }
+
     //=========================================================
     //                         Events
     //=========================================================

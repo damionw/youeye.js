@@ -34,10 +34,6 @@ class uiPane extends uiBase {
         return "inline-block";
     }
 
-    get hidden_mode() {
-        return "none";
-    }
-
     get unpadded() {
         return 0;
     }
@@ -84,6 +80,8 @@ class uiPane extends uiBase {
         this.style.borderRadius = border_radius;
         this.initAttributes();
         this.setTopics();
+
+        this.show();
     }
 }
 

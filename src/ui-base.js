@@ -2,6 +2,10 @@ class uiBase extends HTMLElement {
     //=========================================================
     //                    Class Properties
     //=========================================================
+    static get tagname() {
+        return "UI-BASE";
+    }
+
     static get defaultAttributes() {
         return {
             "consume": null,
@@ -48,7 +52,7 @@ class uiBase extends HTMLElement {
     //                    Object Properties
     //=========================================================
     get observer_config() {
-        // Options for the observer (which mutations to observe)
+        // Options for the observer (select which DOM mutations to observe)
         return {
             // attributes: true,
             // subtree: true,
@@ -81,6 +85,22 @@ class uiBase extends HTMLElement {
 
     get messenger() {
         return uiMessenger.singleton;
+    }
+
+    get visible_mode() {
+        return this.hidden_mode;
+    }
+
+    get hidden_mode() {
+        return "none";
+    }
+
+    get styled_children() {
+        return Array.from(this.childNodes).filter(
+            function(elem) {
+                return (elem.style != null);
+            }
+        );
     }
 
     //=========================================================
@@ -170,6 +190,9 @@ class uiBase extends HTMLElement {
     //                      Events
     //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
+        if (name == "show") {
+            this.setVisibility(this.booleanAttribute(name));
+        }
     }
 
     connectedCallback() {
@@ -217,6 +240,26 @@ class uiBase extends HTMLElement {
     }
 
     //=========================================================
+    //                     Transitions
+    //=========================================================
+    setVisibility(showing) {
+        if (showing && this.style.display != this.visible_mode) {
+            this.style.display = this.visible_mode;
+        }
+        else if ((! showing) && this.style.display != this.hidden_mode) {
+            this.style.display = this.hidden_mode;
+        }
+    }
+
+    show() {
+        this.setAttribute("show", "true");
+    }
+
+    hide() {
+        this.setAttribute("show", "false");
+    }
+
+    //=========================================================
     //                 Color Manipulation
     //=========================================================
     alterRGB(rgb, amt) {
@@ -237,5 +280,16 @@ class uiBase extends HTMLElement {
 
     rgbToHex(r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    //=========================================================
+    //                    Conversions
+    //=========================================================
+    booleanAttribute(name) {
+        var value = this.getAttribute(name);
+
+        return (
+            value != null && value.toLowerCase() == "true"
+        );
     }
 }

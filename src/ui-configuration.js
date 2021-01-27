@@ -15,7 +15,7 @@ class uiConfiguration extends uiBase {
             "border_radius": "4px",
             "animation_milliseconds": 20,
             "shadow_depth": "4px",
-            "toolbar_height": "40px",
+            "toolbar_height": "50px",
             "padding": "5px",
         };
     }

@@ -20,9 +20,25 @@
 
     <body>
         <ui-frame orientation="vertical">
+            <ui-transient
+                consume="show_config,hide_config"
+                listener="config_event"
+                relative="false"
+                decorate="true"
+                hover="false"
+                x="50px"
+                y="50px"
+            >
+                Nothing here yet (Maybe a form)
+
+                <ui-button clickedsignal="hide_config">
+                    <i class="fa fa-times fa-6" aria-hidden="true"></i>
+                </ui-button>
+            </ui-transient>
+
             <ui-toolbar background=blue>
                 <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
-                    <ui-button clickedsignal="menu_toggle">
+                    <ui-button clickedsignal="toggle_menu">
                         <i class="fa fa-bars fa-6" aria-hidden="true"></i>
                     </ui-button>
 
@@ -32,10 +48,17 @@
                             listener="home_event"
                             background="inherit"
                             relative="true"
-                            width="100px"
-                            height="100px"
+                            foreground="white"
+                            y="25px"
+                            width="140px"
+                            height="200px"
                         >
-                           This is home
+                            <ui-button highlight="-16" clickedsignal="show_config">
+                                The first entry
+                            </ui-button>
+                            <ui-button highlight="-16" clickedsignal="show_config">
+                                The second entry
+                            </ui-button>
                         </ui-transient>
                         <i class="fa fa-home fa-6" aria-hidden="true"></i>
                         Home
@@ -45,10 +68,12 @@
                         <ui-transient
                             consume="toggle_settings,show_settings,hide_settings"
                             listener="settings_event"
+                            foreground="white"
                             background="inherit"
                             relative="true"
+                            y="25px"
                             width="200px"
-                            height="auto"
+                            height="200px"
                         >
                             What is it Now
                         </ui-transient>
@@ -59,7 +84,7 @@
                 </ui-toolbar>
 
                 <ui-toolbar width=200px foreground=white background="inherit" justify=right pad=true>
-                    <ui-button tooltip="Open Search Window" clickedsignal="toggle_search">
+                    <ui-button clickedsignal="toggle_search">
                         <i class="fa fa-search fa-6" aria-hidden="true">
                         </i>
                     </ui-button>
@@ -70,20 +95,20 @@
                 <ui-edgeframe
                     edge="left"
                     pad=true
-                    consume="menu_toggle, menu_open, menu_close"
+                    consume="toggle_menu, open_menu, close_menu"
                     listener="menu_event"
                     width="200px"
                     background="#fefffe"
                 >
-                    <ui-button highlight="-16" clickedsignal="menu_close">
+                    <ui-button highlight="-16" clickedsignal="close_menu">
                         One
                     </ui-button>
 
-                    <ui-button highlight="-16" clickedsignal="menu_close">
+                    <ui-button highlight="-16" clickedsignal="close_menu">
                         Two
                     </ui-button>
 
-                    <ui-button highlight="-16" clickedsignal="menu_close">
+                    <ui-button highlight="-16" clickedsignal="close_menu">
                         Three
                     </ui-button>
                 </ui-edgeframe>
@@ -161,30 +186,39 @@
 
         function home_event(topic, payload) {
             if (topic == "home_show") {
-                this.show(200);
+                this.setAttribute("show", "true");
             }
             else if (topic == "home_hide") {
-                this.hide();
+                this.setAttribute("show", "false");
             }
         }
 
         function settings_event(topic, payload) {
             if (topic == "show_settings") {
-                this.show(200);
+                this.setAttribute("show", "true");
             }
             else if (topic == "hide_settings") {
-                this.hide();
+                this.setAttribute("show", "false");
+            }
+        }
+
+        function config_event(topic, payload) {
+            if (topic == "show_config") {
+                this.setAttribute("show", "true");
+            }
+            else if (topic == "hide_config") {
+                this.setAttribute("show", "false");
             }
         }
 
         function menu_event(topic, payload) {
-            if (topic == "menu_open") {
+            if (topic == "open_menu") {
                 this.setAttribute("show", "true");
             }
-            else if (topic == "menu_close") {
+            else if (topic == "close_menu") {
                 this.setAttribute("show", "false");
             }
-            else if (topic == "menu_toggle") {
+            else if (topic == "toggle_menu") {
                 this.setAttribute(
                     "show", (
                         this.getAttribute("show") == "true" ?

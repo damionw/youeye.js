@@ -18,10 +18,6 @@ class uiEdgeFrame extends uiFrame {
         );
     }
 
-    static get unpadded() {
-        return 1;
-    }
-
     //=========================================================
     //                       Constructor
     //=========================================================
@@ -30,9 +26,16 @@ class uiEdgeFrame extends uiFrame {
     }
 
     //=========================================================
+    //                   Object attributes
+    //=========================================================
+    get unpadded() {
+        return 1;
+    }
+
+    //=========================================================
     //                       Transitions
     //=========================================================
-    show(showing) {
+    setVisibility(showing) {
         var self = this;
         var edge = this.getAttribute("edge");
         var transform = this.style.transform;
@@ -85,7 +88,7 @@ class uiEdgeFrame extends uiFrame {
 
         setTimeout(
             function() {
-                self.show(showing);
+                self.setVisibility(showing);
             },
 
             this.configuration.getAttribute("animation_milliseconds")

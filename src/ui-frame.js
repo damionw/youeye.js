@@ -38,59 +38,16 @@ class uiFrame extends uiBase {
         return "inline-flex";
     }
 
-    get hidden_mode() {
-        return "none";
-    }
-
     get unpadded() {
         return 0;
     }
 
+    get padded() {
+        return (this.booleanAttribute("pad"));
+    }
+
     get verticallyOriented() {
         return (this.getAttribute("orientation") == "vertical");
-    }
-
-    get padded() {
-        return (this.getAttribute("pad") == "true");
-    }
-
-    get styled_children() {
-        return Array.from(this.childNodes).filter(
-            function(elem) {
-                return (elem.style != null);
-            }
-        );
-    }
-
-    //=========================================================
-    //                     Transitions
-    //=========================================================
-    _set_visibility(showing, delay) {
-        if (delay != null) {
-            var self = this;
-
-            setTimeout(
-                function() {
-                    self._set_visibility(showing, null);
-                },
-
-                delay
-            );
-        }
-        else if (showing || showing == null) {
-            this.style.display = this.visible_mode;
-        }
-        else {
-            this.style.display = this.hidden_mode;
-        }
-    }
-
-    show(delay) {
-        this._set_visibility(1, delay);
-    }
-
-    hide(delay) {
-        this._set_visibility(0, delay);
     }
 
     //=========================================================
@@ -137,9 +94,6 @@ class uiFrame extends uiBase {
         }
         else if (name == "height") {
             this.style.height = this.getAttribute("height");
-        }
-        else if (name == "show" && oldValue != newValue) {
-            this.show(this.getAttribute(name) == "true");
         }
         else if (name == "background") {
             this.style.backgroundColor = (

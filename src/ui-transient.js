@@ -10,12 +10,14 @@ class uiTransient extends uiFrame {
         return Object.assign(
             uiFrame.defaultAttributes, {
                 "orientation": "vertical",
+                "hover": "false",
+                "decorate": "false",
                 "relative": "true",
                 "width": "auto",
                 "height": "auto",
                 "show": "false",
-                "x": "30px",
-                "y": "30px",
+                "x": "0px",
+                "y": "0px",
             }
         );
     }
@@ -45,12 +47,31 @@ class uiTransient extends uiFrame {
         else if (name == "y") {
             this.style.top = this.getAttribute(name);
         }
+        else if (name == "decorate") {
+            var border_radius = this.configuration.getAttribute("border_radius");
+            var shadow_depth = this.configuration.getAttribute("shadow_depth");
+
+            if (this.booleanAttribute(name)) {
+                this.style.boxShadow = "0px 0px " + shadow_depth + " " + this.alterRGB(
+                    this.style.backgroundColor,
+                    -64
+                );
+
+                this.style.borderRadius = border_radius;
+            } else {
+                this.style.boxShadow = "auto";
+                this.style.borderRadius = "0px";
+            }
+        }
+        else if (name == "hover") {
+        }
         else if (name == "relative") {
-            this.style.position = (
-                this.getAttribute(name) == "true" ?
-                "absolute" :
-                "fixed"
-            );
+            if (this.booleanAttribute(name)) {
+                this.style.position = "absolute";
+            }
+            else {
+                this.style.position = "fixed";
+            }
         }
         else {
             uiFrame.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
@@ -58,35 +79,29 @@ class uiTransient extends uiFrame {
     }
 
     connectedCallback() {
-        var shadow_depth = this.configuration.getAttribute("shadow_depth");
-
         uiFrame.prototype.connectedCallback.call(this);
 
-        this.style.boxShadow = "0px 0px " + shadow_depth + " " + this.alterRGB(
-            this.style.backgroundColor,
-            -64
-        );
-
-        this.style.borderRadius = "4px";
         this.style.zIndex = 1;
-        this.style.top = this.parentNode.clientHeight; // this.configuration.getAttribute("toolbar_height");
+        this.style.top = this.parentNode.clientHeight;
         this.style.overflow = "auto";
-//         this.style.maxWidth = "90%";
-//         this.style.maxHeight = "90%";
-
         this.hide();
     }
 
     mouseoverCallback(ev) {
         uiFrame.prototype.mouseoverCallback.call(this, ev);
-        this.show();
+
+        if (this.booleanAttribute("hover")) {
+            this.show();
+        }
     }
 
     mouseoutCallback(ev) {
         uiFrame.prototype.mouseoutCallback.call(this, ev);
-        this.hide();
-    }
 
+        if (this.booleanAttribute("hover")) {
+            this.hide();
+        }
+    }
 }
 
 customElements.define(uiTransient.tagname.toLowerCase(), uiTransient);

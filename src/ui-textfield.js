@@ -43,6 +43,10 @@ class uiTextField extends uiBase {
     //=========================================================
     //                    Object Properties
     //=========================================================
+    get visible_mode() {
+        return "block";
+    }
+
     get editor_element() {
         return this.shadowRoot.childNodes[0];
     }
@@ -74,7 +78,7 @@ class uiTextField extends uiBase {
         else if (name == "enabled") {
             this.attributeChangedCallback("background");
 
-            if (this.getAttribute(name) == "true") {
+            if (this.booleanAttribute(name)) {
                 this.editor_element.contentEditable = "true";
                 this.style.cursor = "text";
             }
