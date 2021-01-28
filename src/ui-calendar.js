@@ -1,14 +1,14 @@
-class uiPane extends uiBase {
+class uiCalendar extends uiBase {
     //=========================================================
     //                    Class Properties
     //=========================================================
     static get tagname() {
-        return "UI-PANE";
+        return "UI-CALENDAR";
     }
 
     static get defaultAttributes() {
         return Object.assign(
-            uiBase.defaultAttributes, {
+            uiFrame.defaultAttributes, {
                 "foreground": "inherit",
                 "background": "inherit",
                 "width": "100%",
@@ -23,19 +23,66 @@ class uiPane extends uiBase {
     constructor() {
         super();
 
-        // Start observing the target node for configured mutations
-        this.observer.observe(this, this.observer_config);
+        var shadow = this.attachShadow({mode: 'open'});
+        var table_element = document.createElement('table');
+        table_element.style.tableLayout = "fixed";
+        table_element.innerHTML = this.calendar_definition;
+        shadow.appendChild(table_element);
     }
 
     //=========================================================
     //                    Object Properties
     //=========================================================
+    get calendar_definition() {
+        var output = this.header_definition;
+
+        for (var i=0; i < this.rows; ++i) {
+            output = output + this.row_definition;
+        }
+
+        return output;
+    }
+
+    get rows() {
+        return 5;
+    }
+
+    get columns() {
+        return 7;
+    }
+
+    get header_definition() {
+        return '<th style="background: yellow; width: 20px">' + this.field_definition + "</th>"
+    }
+
+    get row_definition() {
+        return '<tr style="background: white;">' + this.field_definition + "</tr>"
+    }
+
+    get field_definition() {
+        var output = "";
+
+        for (var i=0; i < this.columns; ++i) {
+            output = output + this.cell_definition;
+        }
+
+        return output;
+    }
+
+    get cell_definition() {
+        return "<td></td>";
+    }
+
     get visible_mode() {
-        return "inline-block";
+        return "block";
     }
 
     get unpadded() {
         return 0;
+    }
+
+    get table_element() {
+        return this.shadowRoot.childNodes[0];
     }
 
     //=========================================================
@@ -43,16 +90,18 @@ class uiPane extends uiBase {
     //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
-            this.style.width = this.getAttribute("width");
+            this.style.width = this.getAttribute(name);
         }
         else if (name == "height") {
-            this.style.height = this.getAttribute("height");
+            this.style.height = this.getAttribute(name);
         }
         else if (name == "background") {
-            this.style.backgroundColor = this.getAttribute("background");
+            this.style.backgroundColor = this.getAttribute(name);
         }
         else if (name == "foreground") {
-            this.style.color = this.getAttribute("foreground");
+            this.style.color = this.getAttribute(name);
+        }
+        else if (name == "date") {
         }
         else {
             uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
@@ -61,23 +110,15 @@ class uiPane extends uiBase {
 
     connectedCallback() {
         var padding_value = this.configuration.getAttribute("padding");
-        var shadow_depth = this.configuration.getAttribute("shadow_depth");
-        var border_radius = this.configuration.getAttribute("border_radius");
 
         this.setDefaults();
 
-        this.style.display = "block";
         this.style.boxSizing = "border-box";
+        this.style.border = "2px solid blue"; // DEBUG
         this.style.padding = padding_value;
         this.style.margin = "0px";
-        this.style.overflow = "auto";
+        this.style.overflow = "hidden";
 
-        this.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
-            this.style.backgroundColor,
-            -64
-        );
-
-        this.style.borderRadius = border_radius;
         this.initAttributes();
         this.setTopics();
 
@@ -85,4 +126,4 @@ class uiPane extends uiBase {
     }
 }
 
-customElements.define(uiPane.tagname.toLowerCase(), uiPane);
+customElements.define(uiCalendar.tagname.toLowerCase(), uiCalendar);

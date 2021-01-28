@@ -41,6 +41,23 @@ class uiTextField extends uiBase {
     }
 
     //=========================================================
+    //                     Transitions
+    //=========================================================
+    highlight(on) {
+        var shadow_depth = this.configuration.getAttribute("shadow_depth");
+
+        if (on) {
+            this.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
+                this.style.backgroundColor,
+                -64
+            );
+        }
+        else {
+            this.style.boxShadow = "none";
+        }
+    }
+
+    //=========================================================
     //                    Object Properties
     //=========================================================
     get visible_mode() {
@@ -111,7 +128,10 @@ class uiTextField extends uiBase {
 
         this.initAttributes();
         this.setTopics();
+        this.highlight(0);
 
+        this.editor_element.addEventListener("focus", function(ev){self.focusEnterCallback(ev);});
+        this.editor_element.addEventListener("blur", function(ev){self.focusExitCallback(ev);});
         this.editor_element.addEventListener("keydown", function(ev){self.keyPressCallback(ev);});
 
         uiBase.prototype.connectedCallback.call(this);
@@ -124,6 +144,18 @@ class uiTextField extends uiBase {
         else if (event.keyCode == 27) {
             this._emit_event("cancelledsignal", this.text);
         }
+
+        uiBase.prototype.keyPressCallback.call(this, ev);
+    }
+
+    focusEnterCallback(ev) {
+        this.highlight(1);
+        uiBase.prototype.focusEnterCallback.call(this, ev);
+    }
+
+    focusExitCallback(ev) {
+        this.highlight(0);
+        uiBase.prototype.focusExitCallback.call(this, ev);
     }
 }
 

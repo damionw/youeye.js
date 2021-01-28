@@ -27,6 +27,13 @@ class uiMessenger extends uiBase {
     }
 
     //=========================================================
+    //                    Object Properties
+    //=========================================================
+    get visible_mode() {
+        return this.hidden_mode;
+    }
+
+    //=========================================================
     //                     Message Routing
     //=========================================================
     register(element, topic) {
@@ -79,12 +86,77 @@ class uiMessenger extends uiBase {
                 return document.getElementById(_id);
             }
         ).filter(
-            function(_element) {
-                return _element != null;
+            function(element) {
+                return element != null;
             }
         ).forEach(
-            function(_element) {
-                _element.receive(topic, payload);
+            function(element) {
+                if (element._message_handler != null) {
+                    return element._message_handler.call(element, topic, payload);
+                }
+            }
+        );
+    }
+
+    register_all_consumers() {
+        var messenger = this;
+
+        Array.from(document.querySelectorAll("*")).filter(
+            function(element) {
+                return (
+                    element != null &&
+                    element.getAttribute("listener") != null &&
+                    element.getAttribute("consume") != null
+                );
+            }
+         )
+        .forEach(
+            function(element) {
+                messenger.setElementHandler(element);
+                messenger.setElementTopics(element);
+
+                if (element.emit == null) {
+                    element.emit = function(topic, payload) {
+                        messenger.broadcast(topic, payload);
+                    }
+                }
+            }
+        );
+    }
+
+    //=========================================================
+    //                Element Message Handling
+    //=========================================================
+    setElementHandler(element) {
+        var code = element.getAttribute("listener");
+
+        if (code == "" || code == "null") {
+            element._message_handler = new Function("return;");
+        }
+        else if (window[code] != null) {
+            element._message_handler = window[code];
+        }
+        else if (code.search(";") == -1) {
+            element._message_handler = new Function("topic", "payload", code + ".call(this, topic, payload);");
+        }
+        else {
+            element._message_handler = new Function("topic", "payload", code);
+        }
+    }
+
+    setElementTopics(element) {
+        var messenger = this;
+
+        (element.getAttribute("consume") || "").
+        split(",").
+        map(
+            function(term) {
+                return term.trim();
+            }
+        ).
+        forEach(
+            function(topic) {
+                messenger.register(element, topic);
             }
         );
     }
@@ -93,7 +165,17 @@ class uiMessenger extends uiBase {
     //                      Events
     //=========================================================
     connectedCallback() {
-        this.style.display = "none";
+        var self = this;
+
+        setTimeout(
+            function() {
+                self.register_all_consumers();
+            },
+
+            1000
+        );
+
+        this.hide();
     }
 }
 

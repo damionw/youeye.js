@@ -110,47 +110,8 @@ class uiBase extends HTMLElement {
         this.messenger.broadcast(topic, payload);
     }
 
-    receive(topic, payload) {
-        if (this._message_handler != null) {
-            return this._message_handler.call(this, topic, payload);
-        }
-    }
-
-    //=========================================================
-    //                Message Routing
-    //=========================================================
-    setMessageHandler() {
-        var code = this.getAttribute("listener");
-
-        if (code == "" || code == "null") {
-            this._message_handler = new Function("return;");
-        }
-        else if (window[code] != null) {
-            this._message_handler = window[code];
-        }
-        else if (code.search(";") == -1) {
-            this._message_handler = new Function("topic", "payload", code + ".call(this, topic, payload);");
-        }
-        else {
-            this._message_handler = new Function("topic", "payload", code);
-        }
-    }
-
     setTopics() {
-        var self = this;
-
-        (this.getAttribute("consume") || "").
-        split(",").
-        map(
-            function(term) {
-                return term.trim();
-            }
-        ).
-        forEach(
-            function(topic) {
-                self.messenger.register(self, topic);
-            }
-        );
+        this.messenger.setElementTopics(this);
     }
 
     //=========================================================
@@ -175,10 +136,10 @@ class uiBase extends HTMLElement {
             var attribute_name = attribute_collection[i];
 
             if (attribute_name == "consume") {
-                this.setTopics();
+                this.messenger.setElementTopics(this);
             }
             else if (attribute_name == "listener") {
-                this.setMessageHandler();
+                this.messenger.setElementHandler(this);
             }
             else {
                 this.attributeChangedCallback(attribute_name);
@@ -203,6 +164,9 @@ class uiBase extends HTMLElement {
         this.addEventListener("mousedown", function(ev){self.mousedownCallback(ev);});
         this.addEventListener("mouseup", function(ev){self.mouseupCallback(ev);});
         this.addEventListener("click", function(ev){self.mouseclickCallback(ev);});
+        this.addEventListener("focus", function(ev){self.focusEnterCallback(ev);});
+        this.addEventListener("blur", function(ev){self.focusExitCallback(ev);});
+        this.addEventListener("keydown", function(ev){self.keyPressCallback(ev);});
     }
 
     elementsChanged(newElements) {
@@ -231,10 +195,22 @@ class uiBase extends HTMLElement {
         this._emit_event("exitsignal", ev);
     }
 
+    focusEnterCallback(ev) {
+        this._emit_event("focussignal", ev);
+    }
+
+    focusExitCallback(ev) {
+        this._emit_event("blursignal", ev);
+    }
+
+    keyPressCallback(ev) {
+        this._emit_event("keysignal", ev);
+    }
+
     _emit_event(attribute_name, event) {
         var topic = this.getAttribute(attribute_name);
 
-        if (topic.length && topic != "null") {
+        if (topic != null && topic.length && topic != "null") {
             this.emit(topic, event);
         }
     }
