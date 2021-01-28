@@ -11,6 +11,7 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-edgeframe.js \
 	src/ui-form.js \
 	src/ui-textfield.js \
+	src/ui-calendar.js \
 	src/ui-toolbar.js
 
 all: build/static/youeye.js

@@ -29,14 +29,17 @@
                 background="#fefefe"
                 decorate="true"
                 hover="false"
-                x="50px"
-                y="50px"
+                x="100px"
+                y="70px"
             >
-                Nothing here yet (Maybe a form)
+                <ui-textfield height="80%">
+                </ui-textfield>
 
-                <ui-button clickedsignal="hide_config">
-                    <i class="fa fa-times fa-6" aria-hidden="true"></i>
-                </ui-button>
+                <ui-toolbar justify="right" background="inherit">
+                    <ui-button clickedsignal="hide_config">
+                        <i class="fa fa-times fa-6" aria-hidden="true"></i>
+                    </ui-button>
+                    </ui-toolbar>
             </ui-transient>
 
             <ui-toolbar background=blue>
@@ -53,8 +56,8 @@
                             relative="true"
                             foreground="white"
                             y="25px"
-                            width="140px"
-                            height="200px"
+                            width="180px"
+                            height="80px"
                         >
                             <ui-button highlight="-16" clickedsignal="show_config">
                                 The first entry
@@ -76,9 +79,11 @@
                             relative="true"
                             y="25px"
                             width="200px"
-                            height="200px"
+                            height="100px"
                         >
-                            What is it Now
+                            <ui-button highlight="-16" clickedsignal="show_config">
+                                Another entry...
+                            </ui-button>
                         </ui-transient>
 
                         <i class="fa fa-cogs fa-6" aria-hidden="true"></i>
@@ -157,7 +162,7 @@
                     </ui-pane>
 
                     <ui-pane background="green" height="50px" foreground="white">
-                        And another
+                        <div consume="status" listener="status_event">And another</div>
                     </ui-pane>
                 </ui-frame>
             </ui-frame>
@@ -165,6 +170,10 @@
     </body>
 
     <script type="application/javascript">
+        function status_event(topic, payload) {
+            this.innerHTML = topic + ": " + payload;
+        }
+
         function search_event(topic, payload) {
             if (topic == "search_open") {
                 this.setAttribute("show", "true");
@@ -185,6 +194,8 @@
                 this.textContent = payload;
                 this.emit("search_close");
             }
+
+            this.emit("status", topic);
         }
 
         function home_event(topic, payload) {
@@ -194,6 +205,8 @@
             else if (topic == "home_hide") {
                 this.setAttribute("show", "false");
             }
+
+            this.emit("status", topic);
         }
 
         function settings_event(topic, payload) {
@@ -203,6 +216,8 @@
             else if (topic == "hide_settings") {
                 this.setAttribute("show", "false");
             }
+
+            this.emit("status", topic);
         }
 
         function config_event(topic, payload) {
@@ -212,6 +227,8 @@
             else if (topic == "hide_config") {
                 this.setAttribute("show", "false");
             }
+
+            this.emit("status", topic);
         }
 
         function menu_event(topic, payload) {
@@ -230,6 +247,8 @@
                     )
                 );
             }
+
+            this.emit("status", topic);
         }
     </script>
 </html>
