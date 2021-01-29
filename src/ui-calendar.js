@@ -23,54 +23,94 @@ class uiCalendar extends uiBase {
     constructor() {
         super();
 
+        this._cells = [];
+        this._today = new Date();
+
         var shadow = this.attachShadow({mode: 'open'});
-        var table_element = document.createElement('table');
-        table_element.style.tableLayout = "fixed";
-        table_element.innerHTML = this.calendar_definition;
-        shadow.appendChild(table_element);
+
+        shadow.appendChild(this._banner = document.createElement('div'));
+        shadow.appendChild(this._table = this.formatShadowElement());
     }
 
     //=========================================================
     //                    Object Properties
     //=========================================================
-    get calendar_definition() {
-        var output = this.header_definition;
+    formatShadowElement() {
+        var table_element = document.createElement('table');
 
-        for (var i=0; i < this.rows; ++i) {
-            output = output + this.row_definition;
+        for (var y=0; y < this.rowCount; ++y) {
+            var row_element = document.createElement('tr');
+
+            for (var x=0; x < this.columnCount; ++x) {
+                var cell_element;
+
+                if (y == 0) {
+                    cell_element = document.createElement('th');
+
+                    cell_element.style.backgroundColor = "green";
+                    cell_element.style.color = "white";
+                    cell_element.innerHTML = this.days[x];
+                }
+                else {
+                    cell_element = document.createElement('td');
+
+                    cell_element.style.backgroundColor = "white";
+                    cell_element.style.color = "black";
+                    cell_element.style.textAlign = "right";
+
+                    this._cells.push(cell_element);
+                }
+
+                cell_element.style.width = "40px";
+                cell_element.style.height = "20px";
+                cell_element.style.margin = "1px";
+
+                row_element.appendChild(cell_element);
+            }
+
+            table_element.appendChild(row_element);
         }
 
-        return output;
+        table_element.style.tableLayout = "fixed";
+
+        return table_element;
     }
 
-    get rows() {
-        return 5;
-    }
-
-    get columns() {
+    get rowCount() {
         return 7;
     }
 
-    get header_definition() {
-        return '<th style="background: yellow; width: 20px">' + this.field_definition + "</th>"
+    get columnCount() {
+        return this.days.length;
     }
 
-    get row_definition() {
-        return '<tr style="background: white;">' + this.field_definition + "</tr>"
+    get days() {
+        return [
+            "Sun",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+        ];
     }
 
-    get field_definition() {
-        var output = "";
-
-        for (var i=0; i < this.columns; ++i) {
-            output = output + this.cell_definition;
-        }
-
-        return output;
+    get today() {
+        return this._today;
     }
 
-    get cell_definition() {
-        return "<td></td>";
+    set today(date_string) {
+        this._today = new Date(date_string);
+        this.updateView();
+    }
+
+    get month() {
+        return new Date(
+            this.today.getFullYear(),
+            this.today.getMonth(),
+            1,
+        );
     }
 
     get visible_mode() {
@@ -82,7 +122,56 @@ class uiCalendar extends uiBase {
     }
 
     get table_element() {
-        return this.shadowRoot.childNodes[0];
+        return this._table;
+    }
+
+    //=========================================================
+    //                       Transitions
+    //=========================================================
+    updateView() {
+        var today = this.today;
+        var month = this.month;
+        var cells = this._cells;
+        var day_of_first = month.getDay();
+        var previous_month = new Date(month);
+        var end_of_month = new Date(month);
+
+        previous_month.setDate(previous_month.getDate() - 1);
+        end_of_month.setMonth(end_of_month.getMonth() + 1);
+        end_of_month.setDate(end_of_month.getDate() - 1);
+
+        var last_day_of_month = end_of_month.getDate();
+
+        for (var i=0; i < cells.length; ++i) {
+            var cell = cells[i];
+            var day = (i - day_of_first) + 1;
+
+            if (i < day_of_first) {
+                cell.innerHTML = previous_month.getDate() - (day_of_first - (i + 1));
+                cell.style.backgroundColor = "grey";
+            }
+            else if (day > last_day_of_month) {
+                cell.innerHTML = day - last_day_of_month;
+                cell.style.backgroundColor = "grey";
+            }
+            else {
+                cell.innerHTML = (i - day_of_first) + 1;
+
+                cell.style.backgroundColor = (
+                    i == day_of_first ? "yellow" : "inherit"
+                );
+            }
+        }
+
+        this._banner.innerHTML = today.toLocaleDateString(
+            undefined,
+            {
+                 weekday: 'long',
+                 year: 'numeric',
+                 month: 'long',
+                 day: 'numeric'
+            }
+        );
     }
 
     //=========================================================
@@ -102,6 +191,7 @@ class uiCalendar extends uiBase {
             this.style.color = this.getAttribute(name);
         }
         else if (name == "date") {
+            this.today = this.getAttribute(name);
         }
         else {
             uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
@@ -113,14 +203,14 @@ class uiCalendar extends uiBase {
 
         this.setDefaults();
 
-        this.style.boxSizing = "border-box";
-        this.style.border = "2px solid blue"; // DEBUG
-        this.style.padding = padding_value;
-        this.style.margin = "0px";
-        this.style.overflow = "hidden";
+        this.style.fontFamily = this.configuration.getAttribute("application_typeface");
+        this.style.fontSize = this.configuration.getAttribute("application_typesize");
+
+        this.table_element.style.margin = padding_value;
 
         this.initAttributes();
         this.setTopics();
+        this.updateView();
 
         this.show();
     }

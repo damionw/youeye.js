@@ -2,21 +2,43 @@
 <html lang="en-US">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>YouEyeJS Demo</title>
+        <title>YouEyeJS Calendar Demo</title>
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
     </head>
 
     <body>
         <ui-configuration
-            application_background="#b0b0b0"
+            application_background="#fefefe"
             application_foreground="black"
             button_height="50px"
             padding="4px"
         ></ui-configuration>
 
         <ui-frame orientation="vertical" pad=true>
-            <ui-calendar height="100px">
+            <ui-toolbar background=blue>
+                <ui-button clickedsignal="previous_date">
+                    Back
+                </ui-button>
+                <ui-button clickedsignal="next_date">
+                    Forward
+                </ui-button>
+            </ui-toolbar>
+
+            <ui-calendar consume="previous_date,next_date" listener=date_event>
             </ui-calendar>
         </ui-frame>
     </body>
+
+    <script type="application/javascript">
+        function date_event(topic, payload) {
+            if (topic == "next_date") {
+                this.today.setDate(this.today.getDate() + 1);
+                this.updateView();
+            }
+            else if (topic == "previous_date") {
+                this.today.setDate(this.today.getDate() - 1);
+                this.updateView();
+            }
+        }
+    </script>
 </html>
