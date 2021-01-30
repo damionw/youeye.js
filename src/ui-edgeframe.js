@@ -86,6 +86,7 @@ class uiEdgeFrame extends uiFrame {
             this.style.transformOrigin = "0% 100%";
         }
 
+        // Schedule the next transition 'pass'
         setTimeout(
             function() {
                 self.setVisibility(showing);

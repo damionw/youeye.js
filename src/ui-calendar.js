@@ -11,8 +11,18 @@ class uiCalendar extends uiBase {
             uiFrame.defaultAttributes, {
                 "foreground": "inherit",
                 "background": "inherit",
+                "disabled_foreground": "#1f1f1f",
+                "disabled_background": "#eeeeee",
+                "selected_foreground": "inherit",
+                "selected_background": "yellow",
+                "highlight_foreground": "white",
+                "highlight_background": "green",
                 "width": "100%",
                 "height": "100%",
+                "date": "",
+                "dateselection_signal": "",
+                "datehovered_signal": "",
+                "dateexited_signal": "",
             }
         );
     }
@@ -24,7 +34,8 @@ class uiCalendar extends uiBase {
         super();
 
         this._cells = [];
-        this._today = new Date();
+        this._date = new Date();
+        this._dates = [];
 
         var shadow = this.attachShadow({mode: 'open'});
 
@@ -35,47 +46,6 @@ class uiCalendar extends uiBase {
     //=========================================================
     //                    Object Properties
     //=========================================================
-    formatShadowElement() {
-        var table_element = document.createElement('table');
-
-        for (var y=0; y < this.rowCount; ++y) {
-            var row_element = document.createElement('tr');
-
-            for (var x=0; x < this.columnCount; ++x) {
-                var cell_element;
-
-                if (y == 0) {
-                    cell_element = document.createElement('th');
-
-                    cell_element.style.backgroundColor = "green";
-                    cell_element.style.color = "white";
-                    cell_element.innerHTML = this.days[x];
-                }
-                else {
-                    cell_element = document.createElement('td');
-
-                    cell_element.style.backgroundColor = "white";
-                    cell_element.style.color = "black";
-                    cell_element.style.textAlign = "right";
-
-                    this._cells.push(cell_element);
-                }
-
-                cell_element.style.width = "40px";
-                cell_element.style.height = "20px";
-                cell_element.style.margin = "1px";
-
-                row_element.appendChild(cell_element);
-            }
-
-            table_element.appendChild(row_element);
-        }
-
-        table_element.style.tableLayout = "fixed";
-
-        return table_element;
-    }
-
     get rowCount() {
         return 7;
     }
@@ -85,32 +55,26 @@ class uiCalendar extends uiBase {
     }
 
     get days() {
-        return [
-            "Sun",
-            "Mon",
-            "Tue",
-            "Wed",
-            "Thu",
-            "Fri",
-            "Sat",
-        ];
+        return ["Su","Mo","Tu","We","Th","Fr","Sa"];
     }
 
-    get today() {
-        return this._today;
+    get dates() {
+        return this._dates;
     }
 
-    set today(date_string) {
-        this._today = new Date(date_string);
+    get date() {
+        return this._date;
+    }
+
+    set date(date_string) {
+        if (date_string == null || date_string == "") {
+            this._date = new Date();
+        }
+        else {
+            this._date = new Date(date_string);
+        }
+
         this.updateView();
-    }
-
-    get month() {
-        return new Date(
-            this.today.getFullYear(),
-            this.today.getMonth(),
-            1,
-        );
     }
 
     get visible_mode() {
@@ -128,42 +92,137 @@ class uiCalendar extends uiBase {
     //=========================================================
     //                       Transitions
     //=========================================================
-    updateView() {
-        var today = this.today;
-        var month = this.month;
-        var cells = this._cells;
-        var day_of_first = month.getDay();
-        var previous_month = new Date(month);
-        var end_of_month = new Date(month);
+    formatShadowElement() {
+        var table_element = document.createElement('table');
+        var column_width = (100.0 / this.columnCount) + "%";
+        var row_height = (100.0 / this.rowCount) + "%";
+        var self = this;
 
-        previous_month.setDate(previous_month.getDate() - 1);
-        end_of_month.setMonth(end_of_month.getMonth() + 1);
-        end_of_month.setDate(end_of_month.getDate() - 1);
+        for (var y=0; y < this.rowCount; ++y) {
+            var row_element = document.createElement('tr');
 
-        var last_day_of_month = end_of_month.getDate();
+            for (var x=0; x < this.columnCount; ++x) {
+                var cell_element;
 
-        for (var i=0; i < cells.length; ++i) {
-            var cell = cells[i];
-            var day = (i - day_of_first) + 1;
+                if (y == 0) {
+                    cell_element = document.createElement('th');
 
-            if (i < day_of_first) {
-                cell.innerHTML = previous_month.getDate() - (day_of_first - (i + 1));
-                cell.style.backgroundColor = "grey";
+                    cell_element.style.width = column_width;
+                    cell_element.innerHTML = this.days[x];
+                }
+                else {
+                    var cell_index = this._cells.length;
+
+                    cell_element = document.createElement('td');
+
+                    cell_element.style.textAlign = "right";
+
+                    this.registerCell(cell_element, cell_index);
+                    this._cells.push(cell_element);
+                    this._dates.push(null);
+                }
+
+                cell_element.style.padding = "2px";
+
+                row_element.appendChild(cell_element);
             }
-            else if (day > last_day_of_month) {
-                cell.innerHTML = day - last_day_of_month;
-                cell.style.backgroundColor = "grey";
-            }
-            else {
-                cell.innerHTML = (i - day_of_first) + 1;
 
-                cell.style.backgroundColor = (
-                    i == day_of_first ? "yellow" : "inherit"
-                );
-            }
+            row_element.style.height = row_height;
+            table_element.appendChild(row_element);
         }
 
-        this._banner.innerHTML = today.toLocaleDateString(
+        table_element.style.tableLayout = "fixed";
+        table_element.style.margin = "0px";
+        table_element.style.padding = "0px";
+
+        return table_element;
+    }
+
+    registerCell(cell_element, cell_index) {
+        var self = this;
+        cell_element.addEventListener("mouseover", function(ev){self.mouseoverCallback(cell_index);});
+        cell_element.addEventListener("mouseout", function(ev){self.mouseoutCallback(cell_index);});
+        cell_element.addEventListener("click", function(ev){self.mouseclickCallback(cell_index);});
+    }
+
+    updateView() {
+        var cells = this._cells;
+
+        var foreground_color = this.getAttribute("foreground");
+        var background_color = this.getAttribute("background");
+        var highlight_foreground = this.getAttribute("highlight_foreground");
+        var highlight_background = this.getAttribute("highlight_background");
+        var selected_foreground = this.getAttribute("selected_foreground");
+        var selected_background = this.getAttribute("selected_background");
+        var disabled_foreground = this.getAttribute("disabled_foreground");
+        var disabled_background = this.getAttribute("disabled_background");
+
+        var current_date = this.date;
+        var current_day = current_date.getDate();
+        var month_start_date = new Date(current_date.getFullYear(), current_date.getMonth(), 1);
+        var first_weekday = month_start_date.getDay();
+
+        var prior_month_end_date = new Date(month_start_date)
+        prior_month_end_date.setDate(prior_month_end_date.getDate() - 1);
+
+        var prior_month_last_day = prior_month_end_date.getDate();
+
+        var month_end_date = new Date(month_start_date);
+        month_end_date.setMonth(month_end_date.getMonth() + 1);
+        month_end_date.setDate(month_end_date.getDate() - 1);
+
+        var last_day_of_month = month_end_date.getDate();
+        var index = 0;
+
+        // Highlight table header cells
+        Array.from(this.table_element.querySelectorAll("th")).forEach(
+            function(cell_element) {
+                cell_element.style.backgroundColor = highlight_background;
+                cell_element.style.color = highlight_foreground;
+            }
+        );
+
+        // Disable prior month days
+        for (var i=first_weekday; i > 0; --i, ++index) {
+            var cell = cells[index];
+            var day = (prior_month_last_day + 1) - i;
+            cell.innerHTML = day;
+            cell.style.backgroundColor = disabled_background;
+            cell.style.color = disabled_foreground;
+            cell.style.cursor = "auto";
+            this._dates[index] = null;
+        }
+
+        // Enable current month days and highlight current day
+        for (var i=1; i <= last_day_of_month; ++i, ++index) {
+            var cell = cells[index];
+            var day = i;
+            cell.innerHTML = day;
+            cell.style.backgroundColor = (day == current_day ? selected_background : background_color);
+            cell.style.color = selected_foreground;
+            this._dates[index] = new Date(current_date.getFullYear(), current_date.getMonth(), day);
+            cell.style.cursor = "pointer";
+        }
+
+        // Disable following month days
+        for (var day=1; index < cells.length; ++day, ++index) {
+            var cell = cells[index];
+            cell.innerHTML = day;
+            cell.style.backgroundColor = disabled_background;
+            cell.style.color = disabled_foreground;
+            cell.style.cursor = "auto";
+            this._dates[index] = null;
+        }
+
+        var height = parseInt(window.getComputedStyle(this).height.split("px")[0]);
+        var preferred_fontsize = parseInt(height / this.rowCount);
+        var banner_fontsize = parseInt(preferred_fontsize - 8);
+
+        this._banner.style.textAlign = "center";
+        this.style.fontSize = preferred_fontsize + "px";
+        this._banner.style.fontSize = banner_fontsize + "px";
+
+        this._banner.innerHTML = current_date.toLocaleDateString(
             undefined,
             {
                  weekday: 'long',
@@ -179,10 +238,10 @@ class uiCalendar extends uiBase {
     //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
-            this.style.width = this.getAttribute(name);
+            this.table_element.style.width = this.style.width = this.getAttribute(name);
         }
         else if (name == "height") {
-            this.style.height = this.getAttribute(name);
+            this.table_element.style.height = this.style.height = this.getAttribute(name);
         }
         else if (name == "background") {
             this.style.backgroundColor = this.getAttribute(name);
@@ -190,8 +249,20 @@ class uiCalendar extends uiBase {
         else if (name == "foreground") {
             this.style.color = this.getAttribute(name);
         }
+        else if (name == "selected_background") {
+        }
+        else if (name == "selected_foreground") {
+        }
+        else if (name == "highlight_background") {
+        }
+        else if (name == "highlight_foreground") {
+        }
+        else if (name == "disabled_background") {
+        }
+        else if (name == "disabled_foreground") {
+        }
         else if (name == "date") {
-            this.today = this.getAttribute(name);
+            this.date = this.getAttribute(name);
         }
         else {
             uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
@@ -204,15 +275,38 @@ class uiCalendar extends uiBase {
         this.setDefaults();
 
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
-        this.style.fontSize = this.configuration.getAttribute("application_typesize");
-
-        this.table_element.style.margin = padding_value;
 
         this.initAttributes();
         this.setTopics();
         this.updateView();
 
         this.show();
+    }
+
+    mouseclickCallback(cell_index) {
+        this._emit_event("dateselection_signal", this._dates[cell_index]);
+    }
+
+    mouseoverCallback(cell_index) {
+        var date = this._dates[cell_index];
+
+        if (date != null) {
+            var highlight_background = this.getAttribute("highlight_background");
+            var cell_element = this._cells[cell_index];
+            cell_element.style.border = "1px solid " + highlight_background;
+            this._emit_event("datehovered_signal", date);
+        }
+    }
+
+    mouseoutCallback(cell_index) {
+        var date = this._dates[cell_index];
+        var cell_element = this._cells[cell_index];
+
+        if (date != null) {
+            this._emit_event("dateexited_signal", date);
+        }
+
+        cell_element.style.border = "none";
     }
 }
 

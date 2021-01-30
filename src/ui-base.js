@@ -23,6 +23,14 @@ class uiBase extends HTMLElement {
         return Object.keys(this.defaultAttributes);
     }
 
+    static get signalAttributes() {
+        return Object.keys(this.defaultAttributes).filter(
+            function(_name) {
+                return (_name.indexOf("signal") > -1);
+            }
+        ).sort();
+    }
+
     //=========================================================
     //                      Class Methods
     //=========================================================
