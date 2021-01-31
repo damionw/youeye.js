@@ -10,6 +10,12 @@ class uiConfiguration extends uiBase {
         return {
             "application_background": "#bfbfbf",
             "application_foreground": "blue",
+            "disabled_foreground": "#1f1f1f",
+            "disabled_background": "#eeeeee",
+            "selected_foreground": "inherit",
+            "selected_background": "yellow",
+            "highlight_foreground": "white",
+            "highlight_background": "green",
             "application_typeface": "Arial",
             "application_typesize": "18px",
             "border_radius": "4px",

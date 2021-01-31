@@ -41,11 +41,7 @@ class uiToolBar extends uiFrame {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "height") {
-            this.style.height = (
-                this.getAttribute("height") == "default" ?
-                this.configuration.getAttribute("toolbar_height") :
-                this.getAttribute("height")
-            );
+            this.style.height = this.getConfigAttribute(name, "toolbar_height");
         }
         else {
             uiFrame.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);

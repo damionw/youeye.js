@@ -9,8 +9,8 @@ class uiPane extends uiBase {
     static get defaultAttributes() {
         return Object.assign(
             uiBase.defaultAttributes, {
-                "foreground": "inherit",
-                "background": "inherit",
+                "normal_foreground": "inherit",
+                "normal_background": "inherit",
                 "width": "100%",
                 "height": "100%",
             }
@@ -43,16 +43,16 @@ class uiPane extends uiBase {
     //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
-            this.style.width = this.getAttribute("width");
+            this.style.width = this.getAttribute(name);
         }
         else if (name == "height") {
-            this.style.height = this.getAttribute("height");
+            this.style.height = this.getAttribute(name);
         }
-        else if (name == "background") {
-            this.style.backgroundColor = this.getAttribute("background");
+        else if (name == "normal_background") {
+            this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
         }
-        else if (name == "foreground") {
-            this.style.color = this.getAttribute("foreground");
+        else if (name == "normal_foreground") {
+            this.style.Color = this.getConfigAttribute(name, "application_foreground");
         }
         else {
             uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);

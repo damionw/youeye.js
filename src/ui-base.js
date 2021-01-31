@@ -112,7 +112,7 @@ class uiBase extends HTMLElement {
     }
 
     //=========================================================
-    //                Message Handling
+    //                  Message Handling
     //=========================================================
     emit(topic, payload) {
         this.messenger.broadcast(topic, payload);
@@ -123,7 +123,24 @@ class uiBase extends HTMLElement {
     }
 
     //=========================================================
-    //                      Initializing
+    //               Attribute Manipulation
+    //=========================================================
+    getConfigAttribute(attribute_name, configuration_name) {
+        var attribute = this.getAttribute(attribute_name);
+
+        if (attribute == "default" || attribute == null || attribute == "") {
+            return this.configuration.getAttribute(
+                configuration_name == null || configuration_name == "" ?
+                attribute_name :
+                configuration_name
+            );
+        }
+
+        return attribute;
+    }
+
+    //=========================================================
+    //                   Initializing
     //=========================================================
     setDefaults() {
         var attribute_entries = Object.entries(this.constructor.defaultAttributes);

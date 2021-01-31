@@ -9,8 +9,10 @@ class uiButton extends uiBase {
     static get defaultAttributes() {
         return Object.assign(
             uiBase.defaultAttributes, {
-                "foreground": "inherit",
-                "background": "inherit",
+                "normal_foreground": "inherit",
+                "normal_background": "inherit",
+                "disabled_foreground": "default",
+                "disabled_background": "default",
                 "highlight": 48,
                 "tooltip": "",
                 "width": "auto",
@@ -37,8 +39,8 @@ class uiButton extends uiBase {
             div.style.display = "none";
             div.style.width = "auto";
             div.style.height = "auto";
-            div.style.color = "black";
-            div.style.backgroundColor = "inherit";
+            div.style.color = this.getConfigAttribute("normal_foreground", "application_foreground");
+            div.style.backgroundColor = this.getConfigAttribute("normal_background", "application_background");
             div.style.fontFamily = "inherit";
             div.style.fontSize = "12px";
             div.style.cursor = "inherit";
@@ -59,20 +61,16 @@ class uiButton extends uiBase {
     //=========================================================
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
-            this.style.width = this.getAttribute("width");
+            this.style.width = this.getAttribute(name);
         }
         else if (name == "height") {
-            this.style.height = (
-                this.getAttribute("height") == "default" ?
-                this.configuration.getAttribute("toolbar_height") :
-                this.getAttribute("height")
-            );
+            this.style.height = this.getConfigAttribute(name, "toolbar_height");
         }
-        else if (name == "background") {
-            this.style.backgroundColor = this.getAttribute(name);
+        else if (name == "normal_background") {
+            this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
         }
-        else if (name == "foreground") {
-            this.style.color = this.getAttribute(name);
+        else if (name == "normal_foreground") {
+            this.style.Color = this.getConfigAttribute(name, "application_foreground");
         }
         else if (name == "highlight") {
         }
@@ -152,8 +150,8 @@ class uiButton extends uiBase {
     }
 
     mouseoutCallback(ev) {
-        this.attributeChangedCallback("background");
-        this.attributeChangedCallback("foreground");
+        this.attributeChangedCallback("normal_background");
+        this.attributeChangedCallback("normal_foreground");
         this.tooltip.style.display = "none";
         this.style.cursor = "default";
 

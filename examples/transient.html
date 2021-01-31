@@ -30,12 +30,16 @@
         ></ui-configuration>
 
         <ui-transient
-            relative=true
+            relative=false
             pad=true
-            background="#fefefe"
+            normal_background="#f0f0f0"
             height="300px"
+            width="500px"
             consume="toggle_window"
             listener="event_handler"
+            x="100px"
+            y="100px"
+            decorate=true
         >
             <h1>Didn't melt fairer keepsakes since Fellowship elsewhere.</h1>
             <p>Woodlands payment Osgiliath tightening. Barad-dur follow belly comforts tender tough bell? Many that live deserve death. Some that die deserve life. Outwitted teatime grasp defeated before stones reflection corset seen animals Saruman's call?</p>
@@ -61,11 +65,11 @@
 
         <ui-frame orientation="vertical">
             <ui-frame orientation="vertical" pad=true>
-                <ui-button background="#bcbcff" clickedsignal="toggle_window">
+                <ui-button normal_background="#bcbcff" clickedsignal="toggle_window">
                 Press it
                 </ui-button>
 
-                <ui-pane width="100%" height="100%" background="white">
+                <ui-pane width="100%" height="100%" normal_background="white">
                     This is a test
                 </ui-pane>
             </ui-frame>

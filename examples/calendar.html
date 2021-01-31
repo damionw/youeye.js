@@ -11,6 +11,7 @@
         <ui-configuration
             application_background="#fefefe"
             application_foreground="black"
+            highlight_background="aqua"
             toolbar_height="40px"
             padding="4px"
         ></ui-configuration>
@@ -21,7 +22,7 @@
             width="210px"
             height="150px"
         >
-            <ui-toolbar background=blue foreground=white>
+            <ui-toolbar normal_background=blue normal_foreground=white>
                 <ui-button clickedsignal="previous_month">
                     <i class="fa fa-fast-backward fa-10" aria-hidden="true"></i>
                 </ui-button>
@@ -43,7 +44,6 @@
                 dateselection_signal="date_selected"
                 consume="date_selected,previous_month,previous_date,next_date,next_month"
                 listener=date_event
-                highlight_background="#00a0fe"
             >
             </ui-calendar>
         </ui-frame>

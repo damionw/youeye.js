@@ -10,6 +10,7 @@ class uiEdgeFrame extends uiFrame {
         return Object.assign(
             uiFrame.defaultAttributes, {
                 "orientation": "vertical",
+                "normal_background": "default",
                 "width": "auto",
                 "height": "auto",
                 "show": "false",

@@ -9,8 +9,8 @@ class uiFrame extends uiBase {
     static get defaultAttributes() {
         return Object.assign(
             uiBase.defaultAttributes, {
-                "background": "default",
-                "foreground": "default",
+                "normal_background": "inherit",
+                "normal_foreground": "inherit",
                 "orientation": "vertical",
                 "width": "100%",
                 "height": "100%",
@@ -90,24 +90,16 @@ class uiFrame extends uiBase {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "width") {
-            this.style.width = this.getAttribute("width");
+            this.style.width = this.getAttribute(name);
         }
         else if (name == "height") {
-            this.style.height = this.getAttribute("height");
+            this.style.height = this.getAttribute(name);
         }
-        else if (name == "background") {
-            this.style.backgroundColor = (
-                this.getAttribute("background") == "default" ?
-                this.configuration.getAttribute("application_background") :
-                this.getAttribute("background")
-            );
+        else if (name == "normal_background") {
+            this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
         }
-        else if (name == "foreground") {
-            this.style.color = (
-                this.getAttribute("foreground") == "default" ?
-                this.configuration.getAttribute("application_foreground") :
-                this.getAttribute("foreground")
-            );
+        else if (name == "normal_foreground") {
+            this.style.color = this.getConfigAttribute(name, "application_foreground");
         }
         else if (name == "pad") {
             this.elementsChanged();

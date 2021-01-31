@@ -9,8 +9,8 @@ class uiTextField extends uiBase {
     static get defaultAttributes() {
         return Object.assign(
             uiBase.defaultAttributes, {
-                "foreground": "inherit",
-                "background": "inherit",
+                "normal_foreground": "inherit",
+                "normal_background": "inherit",
                 "width": "auto",
                 "height": "default",
                 "confirmedsignal": "",
@@ -80,17 +80,13 @@ class uiTextField extends uiBase {
             this.style.width = this.getAttribute(name);
         }
         else if (name == "height") {
-            this.style.height = (
-                this.getAttribute(name) == "default" ?
-                this.configuration.getAttribute("toolbar_height") :
-                this.getAttribute(name)
-            );
+            this.style.height = this.getConfigAttribute(name, "toolbar_height");
         }
-        else if (name == "background") {
-            this.style.backgroundColor = this.getAttribute(name);
+        else if (name == "normal_background") {
+            this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
         }
-        else if (name == "foreground") {
-            this.style.color = this.getAttribute(name);
+        else if (name == "normal_foreground") {
+            this.style.color = this.getConfigAttribute(name, "application_foreground");
         }
         else if (name == "enabled") {
             this.attributeChangedCallback("background");

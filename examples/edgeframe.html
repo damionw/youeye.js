@@ -19,15 +19,15 @@
 
     <body>
         <ui-frame orientation="vertical">
-            <ui-toolbar background="#00c0ff">
-                <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
-                    <ui-button onclick="menu_toggle">
+            <ui-toolbar normal_background="#00c0ff">
+                <ui-toolbar width=100% normal_foreground=white justify=left pad=true>
+                    <ui-button clickedsignal="menu_toggle">
                         <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
                     </ui-button>
                 </ui-toolbar>
 
-                <ui-toolbar width=200px foreground=white background="inherit" justify=right pad=true>
-                    <ui-button onclick="search_toggle">
+                <ui-toolbar width=200px normal_foreground=white justify=right pad=true>
+                    <ui-button clickedsignal="search_toggle">
                         <i class="fa fa-search fa-lg" aria-hidden="true">
                         </i>
                     </ui-button>
@@ -40,7 +40,7 @@
                     consume="menu_toggle, menu_open, menu_close"
                     listener="menu_event"
                 >
-                    <ui-button onclick=menu_close>
+                    <ui-button clickedsignal=menu_close>
                         <i class="fa fa-window-close fa-lg" aria-hidden="true"></i>
                     </ui-button>
 

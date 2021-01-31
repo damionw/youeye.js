@@ -8,7 +8,7 @@
     </head>
 
     <ui-configuration
-        application_background="#f2f2f2"
+        application_background="#fefefe"
         application_foreground="black"
         application_typeface="Tahoma, sans-serif"
         application_typesize="18px"
@@ -19,31 +19,83 @@
     ></ui-configuration>
 
     <body>
-        <ui-frame orientation="vertical">
+        <ui-frame orientation="vertical" normal_background="default">
             <ui-transient
                 consume="show_config,hide_config"
                 listener="config_event"
                 relative="false"
                 width="400px"
                 height="250px"
-                background="#fefefe"
+                normal_background="default"
                 decorate="true"
                 hover="false"
                 x="100px"
                 y="70px"
             >
-                <ui-textfield height="80%">
+                <div style="width: 100%; height=40px; background-color: blue; color: white; text-align: center;">
+                     Configuration Details
+                </div>
+
+                <ui-textfield height="75%">
                 </ui-textfield>
 
-                <ui-toolbar justify="right" background="inherit">
+                <ui-toolbar justify="right" normal_background="inherit">
                     <ui-button clickedsignal="hide_config">
                         <i class="fa fa-times fa-6" aria-hidden="true"></i>
                     </ui-button>
-                    </ui-toolbar>
+                </ui-toolbar>
             </ui-transient>
 
-            <ui-toolbar background=blue>
-                <ui-toolbar width=100% foreground=white background="inherit" justify=left pad=true>
+            <ui-transient
+                consume="show_calendar,hide_calendar"
+                listener="calendar_event"
+                relative="false"
+                normal_background="default"
+                decorate="true"
+                hover="false"
+                x="100px"
+                y="70px"
+            >
+                <div style="width: 100%; height=40px; background-color: blue; color: white; text-align: center;">
+                     Calendar
+                </div>
+
+                <ui-toolbar normal_background=blue normal_foreground=white>
+                    <ui-button clickedsignal="previous_month">
+                        <i class="fa fa-fast-backward fa-10" aria-hidden="true"></i>
+                    </ui-button>
+
+                    <ui-button clickedsignal="previous_date">
+                        <i class="fa fa-backward fa-10" aria-hidden="true"></i>
+                    </ui-button>
+
+                    <ui-button clickedsignal="next_date">
+                        <i class="fa fa-forward fa-10" aria-hidden="true"></i>
+                    </ui-button>
+
+                    <ui-button clickedsignal="next_month">
+                        <i class="fa fa-fast-forward fa-10" aria-hidden="true"></i>
+                    </ui-button>
+                </ui-toolbar>
+
+                <ui-calendar
+                    dateselection_signal="date_selected"
+                    consume="date_selected,previous_month,previous_date,next_date,next_month"
+                    listener=date_event
+                    highlight_background="#00a0fe"
+                    width=400px
+                >
+                </ui-calendar>
+
+                <ui-toolbar justify="right" normal_background="inherit">
+                    <ui-button clickedsignal="hide_calendar">
+                        <i class="fa fa-times fa-6" aria-hidden="true"></i>
+                    </ui-button>
+                </ui-toolbar>
+            </ui-transient>
+
+            <ui-toolbar normal_background=blue normal_foreground=white>
+                <ui-toolbar width=100% normal_foreground=white justify=left pad=true>
                     <ui-button clickedsignal="toggle_menu">
                         <i class="fa fa-bars fa-6" aria-hidden="true"></i>
                     </ui-button>
@@ -52,20 +104,24 @@
                         <ui-transient
                             consume="home_toggle,home_show,home_hide"
                             listener="home_event"
-                            background="inherit"
                             relative="true"
-                            foreground="white"
+                            normal_foreground="white"
                             y="25px"
                             width="180px"
-                            height="80px"
                         >
                             <ui-button highlight="-16" clickedsignal="show_config">
                                 The first entry
                             </ui-button>
+
                             <ui-button highlight="-16" clickedsignal="show_config">
                                 The second entry
                             </ui-button>
+
+                            <ui-button highlight="-16" clickedsignal="show_calendar">
+                                Calendar...
+                            </ui-button>
                         </ui-transient>
+
                         <i class="fa fa-home fa-6" aria-hidden="true"></i>
                         Home
                     </ui-button>
@@ -74,12 +130,11 @@
                         <ui-transient
                             consume="toggle_settings,show_settings,hide_settings"
                             listener="settings_event"
-                            foreground="white"
-                            background="inherit"
+                            normal_foreground="white"
+                            normal_background="inherit"
                             relative="true"
                             y="25px"
                             width="200px"
-                            height="100px"
                         >
                             <ui-button highlight="-16" clickedsignal="show_config">
                                 Another entry...
@@ -91,10 +146,9 @@
                     </ui-button>
                 </ui-toolbar>
 
-                <ui-toolbar width=200px foreground=white background="inherit" justify=right pad=true>
+                <ui-toolbar width=200px normal_foreground=white justify=right pad=true>
                     <ui-button clickedsignal="toggle_search">
-                        <i class="fa fa-search fa-6" aria-hidden="true">
-                        </i>
+                        <i class="fa fa-search fa-6" aria-hidden="true"></i>
                     </ui-button>
                 </ui-toolbar>
             </ui-toolbar>
@@ -106,7 +160,7 @@
                     consume="toggle_menu, open_menu, close_menu"
                     listener="menu_event"
                     width="200px"
-                    background="#fefffe"
+                    normal_background="default"
                 >
                     <ui-button highlight="-16" clickedsignal="close_menu">
                         One
@@ -132,7 +186,7 @@
                     Find
                     </div>
 
-                    <ui-textfield width="100%" background=white foreground=blue confirmedsignal="search_string">
+                    <ui-textfield width="100%" normal_background=white normal_foreground=blue confirmedsignal="search_string">
                         Enter search terms
                     </ui-textfield>
 
@@ -143,16 +197,32 @@
 
                 <ui-frame orientation="vertical" pad=true>
                     <ui-frame orientation="horizontal" height="40%" pad=true>
-                        <ui-pane width="100%" height="100%" background="white" consume="search_string" listener="search_event">
+                        <ui-pane width="100%" height="100%" normal_background="white" consume="search_string" listener="search_event">
                         This is a test
                         </ui-pane>
 
-                        <ui-pane width="100%" height="100%" background="white">
-                            This is another test
+                        <ui-pane width="100%" height="100%" normal_background="white">
+                            <ui-tabular
+                                data='{
+                                    "columns": ["one", "two", "three"],
+                                    "values": [
+                                        ["a", "b", "c"],
+                                        ["d", "e", "f"],
+                                        ["a", "b", "c"],
+                                        ["d", "e", "f"],
+                                        ["a", "b", "c"],
+                                        ["d", "e", "f"],
+                                        ["a", "b", "c"],
+                                        ["d", "e", "f"],
+                                        ["a", "b", "c"]
+                                    ]
+                                }'
+                            >
+                            <ui-tabular>
                         </ui-pane>
                     </ui-frame>
 
-                    <ui-pane width="100%" height="100%" background="white">
+                    <ui-pane width="100%" height="100%" normal_background="white">
                         <h1>Didn't melt fairer keepsakes since Fellowship elsewhere.</h1>
                         <p>Woodlands payment Osgiliath tightening. Barad-dur follow belly comforts tender tough bell? Many that live deserve death. Some that die deserve life. Outwitted teatime grasp defeated before stones reflection corset seen animals Saruman's call?</p>
                         <h2>Tad survive ensnare joy mistake courtesy Bagshot Row.</h2>
@@ -161,7 +231,7 @@
                         <p>Curse you and all the halflings! Deserted anytime Lake-town burned caves balls. Smoked lthilien forbids Thrain?</p>
                     </ui-pane>
 
-                    <ui-pane background="green" height="50px" foreground="white">
+                    <ui-pane normal_background="green" height="50px" normal_foreground="white">
                         <div consume="status" listener="status_event">And another</div>
                     </ui-pane>
                 </ui-frame>
@@ -231,6 +301,17 @@
             this.emit("status", topic);
         }
 
+        function calendar_event(topic, payload) {
+            if (topic == "show_calendar") {
+                this.setAttribute("show", "true");
+            }
+            else if (topic == "hide_calendar") {
+                this.setAttribute("show", "false");
+            }
+
+            this.emit("status", topic);
+        }
+
         function menu_event(topic, payload) {
             if (topic == "open_menu") {
                 this.setAttribute("show", "true");
@@ -249,6 +330,31 @@
             }
 
             this.emit("status", topic);
+        }
+
+        function date_event(topic, payload) {
+            var date = this.date;
+
+            if (topic == "next_month") {
+                date.setMonth(date.getMonth() + 1);
+            }
+            else if (topic == "next_date") {
+                date.setDate(date.getDate() + 1);
+            }
+            else if (topic == "previous_date") {
+                date.setDate(date.getDate() - 1);
+            }
+            else if (topic == "previous_month") {
+                date.setMonth(date.getMonth() - 1);
+            }
+            else if (topic == "date_selected") {
+                console.log("Selected " + payload);
+            }
+            else {
+                return;
+            }
+
+            this.setAttribute("date", date);
         }
     </script>
 </html>

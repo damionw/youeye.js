@@ -9,14 +9,14 @@ class uiCalendar extends uiBase {
     static get defaultAttributes() {
         return Object.assign(
             uiFrame.defaultAttributes, {
-                "foreground": "inherit",
-                "background": "inherit",
-                "disabled_foreground": "#1f1f1f",
-                "disabled_background": "#eeeeee",
-                "selected_foreground": "inherit",
-                "selected_background": "yellow",
-                "highlight_foreground": "white",
-                "highlight_background": "green",
+                "normal_foreground": "inherit",
+                "normal_background": "inherit",
+                "disabled_foreground": "default",
+                "disabled_background": "default",
+                "selected_foreground": "default",
+                "selected_background": "default",
+                "highlight_foreground": "default",
+                "highlight_background": "default",
                 "width": "100%",
                 "height": "100%",
                 "date": "",
@@ -36,6 +36,7 @@ class uiCalendar extends uiBase {
         this._cells = [];
         this._date = new Date();
         this._dates = [];
+        this._resized = false;
 
         var shadow = this.attachShadow({mode: 'open'});
 
@@ -148,14 +149,14 @@ class uiCalendar extends uiBase {
     updateView() {
         var cells = this._cells;
 
-        var foreground_color = this.getAttribute("foreground");
-        var background_color = this.getAttribute("background");
-        var highlight_foreground = this.getAttribute("highlight_foreground");
-        var highlight_background = this.getAttribute("highlight_background");
-        var selected_foreground = this.getAttribute("selected_foreground");
-        var selected_background = this.getAttribute("selected_background");
-        var disabled_foreground = this.getAttribute("disabled_foreground");
-        var disabled_background = this.getAttribute("disabled_background");
+        var highlight_foreground = this.getConfigAttribute("highlight_foreground");
+        var highlight_background = this.getConfigAttribute("highlight_background");
+        var foreground_color = this.getConfigAttribute("normal_foreground", "application_foreground");
+        var background_color = this.getConfigAttribute("normal_background", "application_background");
+        var selected_foreground = this.getConfigAttribute("selected_foreground");
+        var selected_background = this.getConfigAttribute("selected_background");
+        var disabled_foreground = this.getConfigAttribute("disabled_foreground");
+        var disabled_background = this.getConfigAttribute("disabled_background");
 
         var current_date = this.date;
         var current_day = current_date.getDate();
@@ -214,13 +215,17 @@ class uiCalendar extends uiBase {
             this._dates[index] = null;
         }
 
-        var height = parseInt(window.getComputedStyle(this).height.split("px")[0]);
-        var preferred_fontsize = parseInt(height / this.rowCount);
-        var banner_fontsize = parseInt(preferred_fontsize - 8);
+        if (! this._resized) {
+            var height = parseInt(window.getComputedStyle(this).height.split("px")[0]);
+            var preferred_fontsize = parseInt(height / this.rowCount);
+            var banner_fontsize = parseInt(preferred_fontsize - 2);
 
-        this._banner.style.textAlign = "center";
-        this.style.fontSize = preferred_fontsize + "px";
-        this._banner.style.fontSize = banner_fontsize + "px";
+            this._banner.style.textAlign = "center";
+            this.style.fontSize = preferred_fontsize + "px";
+            this._banner.style.fontSize = banner_fontsize + "px";
+
+            this._resized = true;
+        }
 
         this._banner.innerHTML = current_date.toLocaleDateString(
             undefined,
@@ -243,11 +248,11 @@ class uiCalendar extends uiBase {
         else if (name == "height") {
             this.table_element.style.height = this.style.height = this.getAttribute(name);
         }
-        else if (name == "background") {
-            this.style.backgroundColor = this.getAttribute(name);
+        else if (name == "normal_background") {
+            this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
         }
-        else if (name == "foreground") {
-            this.style.color = this.getAttribute(name);
+        else if (name == "normal_foreground") {
+            this.style.color = this.getConfigAttribute(name, "application_foreground");
         }
         else if (name == "selected_background") {
         }
@@ -273,13 +278,10 @@ class uiCalendar extends uiBase {
         var padding_value = this.configuration.getAttribute("padding");
 
         this.setDefaults();
-
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
-
         this.initAttributes();
         this.setTopics();
         this.updateView();
-
         this.show();
     }
 
@@ -291,7 +293,7 @@ class uiCalendar extends uiBase {
         var date = this._dates[cell_index];
 
         if (date != null) {
-            var highlight_background = this.getAttribute("highlight_background");
+            var highlight_background = this.getConfigAttribute("highlight_background");
             var cell_element = this._cells[cell_index];
             cell_element.style.border = "1px solid " + highlight_background;
             this._emit_event("datehovered_signal", date);
