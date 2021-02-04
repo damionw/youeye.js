@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>YouEyeJS Canvas Demo</title>
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+        <script type="application/javascript" language="javascript" src="sprites.js"></script>
+    </head>
+
+    <ui-configuration
+        application_background="#b0b0b0"
+        application_foreground="black"
+        button_height="50px"
+        padding="4px"
+    ></ui-configuration>
+
+    <body>
+        <ui-frame orientation="vertical">
+            <ui-frame orientation="horizontal" height="100%" width="100%">
+                <ui-canvas id=myCanvas normal_background="#f0f0b5" height="100%">
+                </ui-canvas>
+            </ui-frame>
+
+            <ui-frame orientation=horizontal background=blue height=70px consume=submit_command listener=command_entered>
+                <div style="background-color: blue; width: 100px; line-height: 60px; color: white; align: text-align: center;">
+                    Command
+                </div>
+
+                <ui-textfield width=100% height=70px normal_background=white confirmedsignal=submit_command>
+                </ui-textfield>
+            </ui-frame>
+        </ui-frame>
+    </body>
+    <script>
+        function command_entered(topic, payload) {
+            console.log("NEW COMMAND: " + payload);
+        }
+
+        var canvas = document.getElementById("myCanvas").canvas;
+        var animator = new Sprites.Animator(canvas);
+        var box = new Sprites.Box(20, 20, 50, 50);
+        box.delta_x = box.delta_y = 2;
+
+        var circle = new Sprites.Circle(0, 100, 30);
+        circle.delta_x = 1;
+        circle.delta_y = -1;
+
+        animator.add(box, circle);
+        animator.start(100);
+    </script>
+</html>

@@ -12,6 +12,7 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-form.js \
 	src/ui-textfield.js \
 	src/ui-calendar.js \
+	src/ui-canvas.js \
 	src/ui-tabular.js \
 	src/ui-toolbar.js
 
@@ -21,7 +22,7 @@ demo_support: all build/static/font-awesome.min.css build/static/d3.min.js
 	@cp examples/* build/static/
 
 build/static/d3.min.js: build/static
-	@curl -q -s https://d3js.org/d3.v4.min.js -o $@
+	@curl -q -s https://d3js.org/d3.v5.min.js -o $@
 
 build/static/youeye.js: src/*.js build/static
 	@(echo '"use strict"'";\n"; for name in $(ORDERED_COMPONENTS_LIST); do cat $${name}; echo '\n'; done) > $@
