@@ -31,6 +31,7 @@
             </ui-frame>
         </ui-frame>
     </body>
+
     <script>
         function command_entered(topic, payload) {
             console.log("NEW COMMAND: " + payload);
@@ -41,7 +42,7 @@
         var box = new Sprites.Box(20, 20, 50, 50);
         box.delta_x = box.delta_y = 2;
 
-        var circle = new Sprites.Circle(0, 100, 30);
+        var circle = new Sprites.Circle(10, 120, 30);
         circle.delta_x = 1;
         circle.delta_y = -1;
 
