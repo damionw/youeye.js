@@ -13,8 +13,8 @@ class uiCanvas extends uiBase {
                 "normal_background": "inherit",
                 "drawing_width": "600",
                 "drawing_height": "480",
-                "width": "auto",
-                "height": "default",
+                "width": "100%",
+                "height": "100%",
             }
         );
     }

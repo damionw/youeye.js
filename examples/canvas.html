@@ -4,7 +4,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>YouEyeJS Canvas Demo</title>
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
-        <script type="application/javascript" language="javascript" src="sprites.js"></script>
     </head>
 
     <ui-configuration
@@ -17,7 +16,7 @@
     <body>
         <ui-frame orientation="vertical">
             <ui-frame orientation="horizontal" height="100%" width="100%">
-                <ui-canvas id=myCanvas normal_background="#f0f0b5" height="100%">
+                <ui-canvas id=myCanvas normal_background="#f0f0b5" width="100%" height="100%">
                 </ui-canvas>
             </ui-frame>
 
@@ -37,16 +36,11 @@
             console.log("NEW COMMAND: " + payload);
         }
 
-        var canvas = document.getElementById("myCanvas").canvas;
-        var animator = new Sprites.Animator(canvas);
-        var box = new Sprites.Box(20, 20, 50, 50);
-        box.delta_x = box.delta_y = 2;
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
 
-        var circle = new Sprites.Circle(10, 120, 30);
-        circle.delta_x = 1;
-        circle.delta_y = -1;
-
-        animator.add(box, circle);
-        animator.start(100);
+        ctx.fillStyle = "blue";
+        ctx.arc(canvas.getAttribute("drawing_width") / 2, canvas.getAttribute("drawing_height") / 2, 30, 0, 2 * Math.PI);
+        ctx.fill();
     </script>
 </html>
