@@ -13,9 +13,10 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-calendar.js \
 	src/ui-canvas.js \
 	src/ui-tabular.js \
-	src/ui-toolbar.js
+	src/ui-toolbar.js \
+	checkouts/pubber/build/static/pubber.js
 
-all: build/static/youeye.js build/static/pubber.js
+all: build/static/youeye.js
 
 demo_support: all build/static/font-awesome.min.css build/static/d3.min.js
 	@cp examples/* build/static/
@@ -23,7 +24,7 @@ demo_support: all build/static/font-awesome.min.css build/static/d3.min.js
 build/static/d3.min.js: build/static
 	@curl -q -s https://d3js.org/d3.v5.min.js -o $@
 
-build/static/youeye.js: src/*.js build/static
+build/static/youeye.js: src/*.js build/static checkouts/pubber/build/static/pubber.js
 	@(echo '"use strict"'";\n"; for name in $(ORDERED_COMPONENTS_LIST); do cat $${name}; echo '\n'; done) > $@
 
 build/static/font-awesome.min.css: build/static build/static/fontawesome-webfont.eot build/static/fontawesome-webfont.woff2 build/static/fontawesome-webfont.ttf
@@ -38,12 +39,11 @@ build/static/fontawesome-webfont.woff2: build/static
 build/static/fontawesome-webfont.ttf: build/static
 	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf -o $@
 
-build/static/pubber.js: checkouts/pubber build/static
-	@cp $</build/static/$(notdir $@) $@
+checkouts/pubber/build/static/pubber.js: checkouts/pubber
+	@make -C $<
 
 checkouts/pubber: checkouts
 	@git clone https://github.com/damionw/pubber.git $@
-	@make -C $@
 
 build/static checkouts:
 	@mkdir -p $@
