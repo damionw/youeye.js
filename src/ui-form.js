@@ -136,7 +136,6 @@ class uiForm extends uiBase {
         this.style.padding = "10px";
 
         this.initAttributes();
-        this.setTopics();
 
         uiBase.prototype.connectedCallback.call(this);
     }

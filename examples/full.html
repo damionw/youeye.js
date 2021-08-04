@@ -5,6 +5,7 @@
         <title>Custom Elements Compound Demo</title>
         <link rel="stylesheet" href="font-awesome.min.css">
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
+        <script type="application/javascript" language="javascript" src="pubber.js"></script>
     </head>
 
     <ui-configuration
@@ -21,7 +22,7 @@
     <body>
         <ui-frame orientation="vertical" normal_background="default">
             <ui-transient
-                consume="show_config,hide_config"
+                subscribe="show_config,hide_config"
                 listener="config_event"
                 relative="false"
                 width="400px"
@@ -47,7 +48,7 @@
             </ui-transient>
 
             <ui-transient
-                consume="show_calendar,hide_calendar"
+                subscribe="show_calendar,hide_calendar"
                 listener="calendar_event"
                 relative="false"
                 normal_background="default"
@@ -80,7 +81,7 @@
 
                 <ui-calendar
                     dateselection_signal="date_selected"
-                    consume="date_selected,previous_month,previous_date,next_date,next_month"
+                    subscribe="date_selected,previous_month,previous_date,next_date,next_month"
                     listener=date_event
                     highlight_background="#00a0fe"
                     width=400px
@@ -102,7 +103,7 @@
 
                     <ui-button clickedsignal="home_toggle" hoversignal="home_show" exitsignal="home_hide">
                         <ui-transient
-                            consume="home_toggle,home_show,home_hide"
+                            subscribe="home_toggle,home_show,home_hide"
                             listener="home_event"
                             relative="true"
                             normal_foreground="white"
@@ -128,7 +129,7 @@
 
                     <ui-button clickedsignal="toggle_settings" hoversignal="show_settings" exitsignal="hide_settings">
                         <ui-transient
-                            consume="toggle_settings,show_settings,hide_settings"
+                            subscribe="toggle_settings,show_settings,hide_settings"
                             listener="settings_event"
                             normal_foreground="white"
                             normal_background="inherit"
@@ -157,7 +158,7 @@
                 <ui-edgeframe
                     edge="left"
                     pad=true
-                    consume="toggle_menu, open_menu, close_menu"
+                    subscribe="toggle_menu, open_menu, close_menu"
                     listener="menu_event"
                     width="200px"
                     normal_background="default"
@@ -179,7 +180,7 @@
                     edge="top"
                     pad=true
                     width="400px"
-                    consume="search_open,toggle_search,search_close"
+                    subscribe="search_open,toggle_search,search_close"
                     listener="search_event"
                 >
                     <div style="margin: 4px;">
@@ -197,7 +198,7 @@
 
                 <ui-frame orientation="vertical" pad=true normal_background="#eeeeee">
                     <ui-frame orientation="horizontal" height="40%" pad=true>
-                        <ui-pane width="100%" height="100%" normal_background="white" consume="search_string" listener="search_event">
+                        <ui-pane width="100%" height="100%" normal_background="white" subscribe="search_string" listener="search_event">
                         This is a test
                         </ui-pane>
 
@@ -232,7 +233,7 @@
                     </ui-pane>
 
                     <ui-pane normal_background="green" height="50px" normal_foreground="white">
-                        <div consume="status" listener="status_event">And another</div>
+                        <div subscribe="status" listener="status_event">And another</div>
                     </ui-pane>
                 </ui-frame>
             </ui-frame>

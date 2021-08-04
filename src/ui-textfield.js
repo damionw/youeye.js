@@ -123,7 +123,6 @@ class uiTextField extends uiBase {
         this.style.fontSize = this.configuration.getAttribute("application_typesize");
 
         this.initAttributes();
-        this.setTopics();
         this.highlight(0);
 
         this.editor_element.addEventListener("focus", function(ev){self.focusEnterCallback(ev);});

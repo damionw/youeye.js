@@ -4,6 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Custom Elements Edge Frame Demo</title>
         <link rel="stylesheet" href="font-awesome.min.css">
+        <script type="application/javascript" language="javascript" src="pubber.js"></script>
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
     </head>
 
@@ -37,7 +38,7 @@
             <ui-frame orientation="horizontal" pad=true>
                 <ui-edgeframe
                     pad=true
-                    consume="menu_toggle, menu_open, menu_close"
+                    subscribe="menu_toggle, menu_open, menu_close"
                     listener="menu_event"
                 >
                     <ui-button clickedsignal=menu_close>

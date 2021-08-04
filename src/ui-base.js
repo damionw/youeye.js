@@ -8,8 +8,6 @@ class uiBase extends HTMLElement {
 
     static get defaultAttributes() {
         return {
-            "consume": null,
-            "listener": null,
             "enabled": "true",
             "pressedsignal": "",
             "releasedsignal": "",
@@ -91,10 +89,6 @@ class uiBase extends HTMLElement {
         return uiConfiguration.singleton;
     }
 
-    get messenger() {
-        return uiMessenger.singleton;
-    }
-
     get visible_mode() {
         return this.hidden_mode;
     }
@@ -109,17 +103,6 @@ class uiBase extends HTMLElement {
                 return (elem.style != null);
             }
         );
-    }
-
-    //=========================================================
-    //                  Message Handling
-    //=========================================================
-    emit(topic, payload) {
-        this.messenger.broadcast(topic, payload);
-    }
-
-    setTopics() {
-        this.messenger.setElementTopics(this);
     }
 
     //=========================================================
@@ -159,16 +142,7 @@ class uiBase extends HTMLElement {
 
         for (var i=0; i < attribute_collection.length; ++i) {
             var attribute_name = attribute_collection[i];
-
-            if (attribute_name == "consume") {
-                this.messenger.setElementTopics(this);
-            }
-            else if (attribute_name == "listener") {
-                this.messenger.setElementHandler(this);
-            }
-            else {
-                this.attributeChangedCallback(attribute_name);
-            }
+            this.attributeChangedCallback(attribute_name);
         }
     }
 
@@ -233,11 +207,20 @@ class uiBase extends HTMLElement {
     }
 
     _emit_event(attribute_name, event) {
-        var topic = this.getAttribute(attribute_name);
+        var _topic = this.getAttribute(attribute_name);
 
-        if (topic != null && topic.length && topic != "null") {
-            this.emit(topic, event);
+        if (_topic != null && _topic.length && _topic != "null") {
+            this.emit(_topic, event);
         }
+    }
+
+    emit(topic, payload) {
+        // We can only use emit() if pubber has been enabled
+        if (typeof(pubsubMessageRouter) == "undefined") {
+            return;
+        }
+
+        pubsubMessageRouter.singleton.emit(topic, payload);
     }
 
     //=========================================================

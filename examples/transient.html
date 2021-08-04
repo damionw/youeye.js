@@ -4,6 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Custom Elements Transient Demo</title>
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
+        <script type="application/javascript" language="javascript" src="pubber.js"></script>
         <script type="application/javascript">
             function event_handler(topic, payload) {
                 console.log("MESSAGE: " + topic);
@@ -35,7 +36,7 @@
             normal_background="#f0f0f0"
             height="300px"
             width="500px"
-            consume="toggle_window"
+            subscribe="toggle_window"
             listener="event_handler"
             x="100px"
             y="100px"

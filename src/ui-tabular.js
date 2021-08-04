@@ -203,7 +203,6 @@ class uiTabular extends uiBase {
         this.style.fontSize = this.configuration.getAttribute("application_typesize");
         this.table_element.style.margin = padding_value;
         this.initAttributes();
-        this.setTopics();
         this.show();
     }
 

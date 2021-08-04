@@ -280,7 +280,6 @@ class uiCalendar extends uiBase {
         this.setDefaults();
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
         this.initAttributes();
-        this.setTopics();
         this.updateView();
         this.show();
     }

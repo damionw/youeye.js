@@ -3,7 +3,6 @@
 ORDERED_COMPONENTS_LIST := \
 	src/ui-base.js \
 	src/ui-configuration.js \
-	src/ui-messenger.js \
 	src/ui-frame.js \
 	src/ui-button.js \
 	src/ui-pane.js \
@@ -16,7 +15,7 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-tabular.js \
 	src/ui-toolbar.js
 
-all: build/static/youeye.js
+all: build/static/youeye.js build/static/pubber.js
 
 demo_support: all build/static/font-awesome.min.css build/static/d3.min.js
 	@cp examples/* build/static/
@@ -39,7 +38,14 @@ build/static/fontawesome-webfont.woff2: build/static
 build/static/fontawesome-webfont.ttf: build/static
 	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf -o $@
 
-build/static:
+build/static/pubber.js: checkouts/pubber build/static
+	@cp $</build/static/$(notdir $@) $@
+
+checkouts/pubber: checkouts
+	@git clone https://github.com/damionw/pubber.git $@
+	@make -C $@
+
+build/static checkouts:
 	@mkdir -p $@
 
 clean:

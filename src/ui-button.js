@@ -97,7 +97,6 @@ class uiButton extends uiBase {
         this.style.fontSize = this.configuration.getAttribute("application_typesize");
 
         this.initAttributes();
-        this.setTopics();
 
         uiBase.prototype.connectedCallback.call(this);
     }

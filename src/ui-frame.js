@@ -147,8 +147,7 @@ class uiFrame extends uiBase {
         this.style.position = "relative";
 
         this.initAttributes();
-        this.setTopics();
-        
+
         uiBase.prototype.connectedCallback.call(this);
     }
 }

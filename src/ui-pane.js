@@ -79,7 +79,6 @@ class uiPane extends uiBase {
 
         this.style.borderRadius = border_radius;
         this.initAttributes();
-        this.setTopics();
 
         this.show();
     }

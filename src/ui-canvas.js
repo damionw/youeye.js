@@ -81,7 +81,6 @@ class uiCanvas extends uiBase {
         this.style.boxSizing = "border-box";
 
         this.initAttributes();
-        this.setTopics();
 
         uiBase.prototype.connectedCallback.call(this);
     }
