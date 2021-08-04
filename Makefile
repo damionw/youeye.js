@@ -18,11 +18,8 @@ ORDERED_COMPONENTS_LIST := \
 
 all: build/static/youeye.js
 
-demo_support: all build/static/font-awesome.min.css build/static/d3.min.js
+demo_support: all build/static/font-awesome.min.css
 	@cp examples/* build/static/
-
-build/static/d3.min.js: build/static
-	@curl -q -s https://d3js.org/d3.v5.min.js -o $@
 
 build/static/youeye.js: src/*.js build/static checkouts/pubber/build/static/pubber.js
 	@(echo '"use strict"'";\n"; for name in $(ORDERED_COMPONENTS_LIST); do cat $${name}; echo '\n'; done) > $@
