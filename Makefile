@@ -20,13 +20,13 @@ ORDERED_COMPONENTS_LIST := \
 
 all: build/static/youeye.js
 
-demo_support: all build/static/font-awesome.min.css
+demo_support: all build/static/font-awesome.css
 	@cp examples/* build/static/
 
 build/static/youeye.js: src/*.js build/static checkouts/pubber/build/static/pubber.js
 	@(echo '"use strict"'";\n"; for name in $(ORDERED_COMPONENTS_LIST); do cat $${name}; echo '\n'; done) > $@
 
-build/static/font-awesome.min.css: build/static build/static/fontawesome-webfont.eot build/static/fontawesome-webfont.woff2 build/static/fontawesome-webfont.ttf
+build/static/font-awesome.css: build/static build/static/fontawesome-webfont.eot build/static/fontawesome-webfont.woff2 build/static/fontawesome-webfont.ttf
 	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)/css/font-awesome.min.css | sed -e 's/\.\.\/fonts//g' -e "s|url('/|url('|g" > $@
 
 build/static/fontawesome-webfont.eot: build/static
