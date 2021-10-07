@@ -80,6 +80,9 @@ class uiFrame extends uiBase {
                 // Element is immune from padding
             }
             else if (vertically_arranged) {
+                // ### DEBUG ###
+                console.log("Padding " + elem.tagName + " = " + padding_value);
+                // ### DEBUG ###
                 elem.style.marginBottom = padding_value;
             }
             else {
