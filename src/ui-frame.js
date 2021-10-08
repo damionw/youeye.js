@@ -61,32 +61,33 @@ class uiFrame extends uiBase {
         for (var i=0; i < style_elements.length; ++i){
             var elem = style_elements[i];
             var is_lastelement = (i >= (style_elements.length - 1));
+            var is_firstelement = (i == 0);
 
             var flex_attribute = (
                 vertically_arranged ? elem.style.height : elem.style.width
             );
 
             elem.style.flex = (
-                flex_attribute[flex_attribute.length - 1] == "%" ?
+                flex_attribute.endsWith("%") || flex_attribute.endsWith("vh") ?
                 "1 1 0px" :
                 ("0 0 " + flex_attribute)
             );
 
-            if (is_lastelement) {
-            }
-            else if (! this.padded) {
-            }
-            else if (elem.unpadded) {
-                // Element is immune from padding
-            }
-            else if (vertically_arranged) {
-                // ### DEBUG ###
-                console.log("Padding " + elem.tagName + " = " + padding_value);
-                // ### DEBUG ###
-                elem.style.marginBottom = padding_value;
-            }
-            else {
-                elem.style.marginRight = padding_value;
+            if (this.padded && ! elem.unpadded) {
+                elem.style.margin = 0;
+
+                if (this.verticallyOriented) {
+                    elem.style.marginBottom = (is_lastelement ? padding_value : 0);
+                    elem.style.marginTop = padding_value;
+//                     elem.style.marginLeft = padding_value;
+//                     elem.style.marginRight = padding_value;
+                }
+                else {
+                    elem.style.marginRight = (is_lastelement ? padding_value : 0);
+                    elem.style.marginLeft = padding_value;
+//                     elem.style.marginTop = padding_value;
+//                     elem.style.marginBottom = padding_value;
+                }
             }
         }
     }

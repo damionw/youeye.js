@@ -69,7 +69,7 @@ class uiPane extends uiBase {
         this.style.display = "block";
         this.style.boxSizing = "border-box";
         this.style.padding = padding_value;
-        this.style.margin = "0px";
+//         this.style.margin = "0px";
         this.style.overflow = "auto";
 
         this.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
