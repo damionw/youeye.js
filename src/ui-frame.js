@@ -8,7 +8,7 @@ class uiFrame extends uiBase {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiBase.defaultAttributes, {
+            {}, uiBase.defaultAttributes, {
                 "normal_background": "inherit",
                 "normal_foreground": "inherit",
                 "orientation": "vertical",

@@ -8,7 +8,7 @@ class uiForm extends uiBase {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiBase.defaultAttributes, {
+            {}, uiBase.defaultAttributes, {
                 "normal_foreground": "inherit",
                 "normal_background": "inherit",
                 "width": "auto",

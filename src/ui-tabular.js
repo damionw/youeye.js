@@ -8,7 +8,7 @@ class uiTabular extends uiBase {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiFrame.defaultAttributes, {
+            {}, uiFrame.defaultAttributes, {
                 "normal_foreground": "default",
                 "normal_background": "default",
                 "disabled_foreground": "default",

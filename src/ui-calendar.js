@@ -8,7 +8,7 @@ class uiCalendar extends uiBase {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiFrame.defaultAttributes, {
+            {}, uiFrame.defaultAttributes, {
                 "normal_foreground": "inherit",
                 "normal_background": "inherit",
                 "disabled_foreground": "default",

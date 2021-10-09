@@ -8,9 +8,9 @@ class uiTextField extends uiBase {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiBase.defaultAttributes, {
-                "normal_foreground": "inherit",
-                "normal_background": "inherit",
+            {}, uiBase.defaultAttributes, {
+                "editor_foreground": "default",
+                "editor_background": "default",
                 "width": "auto",
                 "height": "default",
                 "confirmedsignal": "",
@@ -31,11 +31,13 @@ class uiTextField extends uiBase {
         div.contentEditable = "true";
 
         div.style.width = "100%";
-        div.style.height = "100%";
+        div.style.height = "calc(100% - 20px)";
         div.style.color = "inherit";
         div.style.backgroundColor = "inherit";
         div.style.fontFamily = "inherit";
         div.style.cursor = "inherit";
+        div.style.caretColor = "black";
+        div.style.marginLeft = "5px";
 
         shadow.appendChild(div);
     }
@@ -79,14 +81,17 @@ class uiTextField extends uiBase {
         if (name == "width") {
             this.style.width = this.getAttribute(name);
         }
-        else if (name == "height") {
-            this.style.height = this.getConfigAttribute(name, "toolbar_height");
+//         else if (name == "height") {
+//             this.style.height = this.getConfigAttribute(name, "toolbar_height");
+//         }
+        else if (name == "editor_background") {
+            console.log("HERE: " + name + " -> " + this.getConfigAttribute(name, "editor_background"));
+            // this.style.backgroundColor = "white"; // this.getConfigAttribute(name, "editor_background");
+            this.editor_element.style.backgroundColor = this.getConfigAttribute(name, "editor_background");
         }
-        else if (name == "normal_background") {
-            this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
-        }
-        else if (name == "normal_foreground") {
-            this.style.color = this.getConfigAttribute(name, "application_foreground");
+        else if (name == "editor_foreground") {
+            this.style.color = this.getConfigAttribute(name, "editor_foreground");
+            this.editor_element.style.color = this.getConfigAttribute(name, "editor_foreground");
         }
         else if (name == "enabled") {
             this.attributeChangedCallback("background");
@@ -133,10 +138,10 @@ class uiTextField extends uiBase {
     }
 
     keyPressCallback(ev) {
-        if (event.keyCode == 13) {
+        if (ev.keyCode == 13) {
             this._emit_event("confirmedsignal", this.text);
         }
-        else if (event.keyCode == 27) {
+        else if (ev.keyCode == 27) {
             this._emit_event("cancelledsignal", this.text);
         }
 

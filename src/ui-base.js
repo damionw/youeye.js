@@ -109,17 +109,16 @@ class uiBase extends HTMLElement {
     //               Attribute Manipulation
     //=========================================================
     getConfigAttribute(attribute_name, configuration_name) {
-        var attribute = this.getAttribute(attribute_name);
+        var attribute_value = this.getAttribute(attribute_name);
 
-        if (attribute == "default" || attribute == null || attribute == "") {
-            return this.configuration.getAttribute(
-                configuration_name == null || configuration_name == "" ?
-                attribute_name :
-                configuration_name
-            );
-        }
-
-        return attribute;
+        // Only default or null element attribute values will permit consultation of
+        // the configuration scheme singleton !!!
+        if (! (attribute_value == "default" || attribute_value == null || attribute_value == ""))
+            return attribute_value;
+        else if (configuration_name == null || configuration_name == "")
+            return this.configuration.getAttribute(attribute_name);
+        else 
+            return this.configuration.getAttribute(configuration_name);
     }
 
     //=========================================================

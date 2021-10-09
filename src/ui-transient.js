@@ -8,7 +8,7 @@ class uiTransient extends uiFrame {
 
     static get defaultAttributes() {
         return Object.assign(
-            uiFrame.defaultAttributes, {
+            {}, uiFrame.defaultAttributes, {
                 "orientation": "vertical",
                 "hover": "false",
                 "decorate": "false",
