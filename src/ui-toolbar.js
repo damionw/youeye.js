@@ -56,6 +56,7 @@ class uiToolBar extends uiFrame {
             );
 
             elem.style.verticalAlign = "middle";
+            elem.style.height = "calc(100% - 20px)";
             elem.style.margin = 0;
 
             if (this.padded && ! elem.unpadded) {

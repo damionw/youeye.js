@@ -31,7 +31,7 @@ class uiTextField extends uiBase {
         div.contentEditable = "true";
 
         div.style.width = "100%";
-        div.style.height = "calc(100% - 20px)";
+        div.style.height = "100%";
         div.style.color = "inherit";
         div.style.backgroundColor = "inherit";
         div.style.fontFamily = "inherit";
@@ -85,7 +85,6 @@ class uiTextField extends uiBase {
 //             this.style.height = this.getConfigAttribute(name, "toolbar_height");
 //         }
         else if (name == "editor_background") {
-            console.log("HERE: " + name + " -> " + this.getConfigAttribute(name, "editor_background"));
             // this.style.backgroundColor = "white"; // this.getConfigAttribute(name, "editor_background");
             this.editor_element.style.backgroundColor = this.getConfigAttribute(name, "editor_background");
         }

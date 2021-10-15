@@ -20,7 +20,7 @@ ORDERED_COMPONENTS_LIST := \
 
 all: build/static/youeye.js
 
-demo_auto:
+auto:
 	monitored_runner "make demo_support" ./
 
 demo_support: all build/static/font-awesome.css
