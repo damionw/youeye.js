@@ -56,10 +56,10 @@ class uiToolBar extends uiFrame {
             );
 
             elem.style.verticalAlign = "middle";
+            elem.style.height = "calc(100% - " + (padding_value ? padding_value * 2 : "10px") + ")";
             elem.style.margin = 0;
 
             if (this.padded && ! elem.unpadded) {
-                elem.style.height = "calc(100% - " + (padding_value * 2) + ")";
                 elem.style.marginRight = (is_lastelement ? padding_value : 0);
                 elem.style.marginLeft = padding_value;
                 elem.style.marginTop = padding_value;
