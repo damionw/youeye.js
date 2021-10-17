@@ -83,15 +83,18 @@ class uiButton extends uiBase {
     }
 
     connectedCallback() {
+        var padding_value = this.configuration.getAttribute("padding");
+
         this.setDefaults();
 
-        this.style.display = "block";
+        this.style.display = "flex"; // "block";
         this.style.boxSizing = "border-box";
         this.style.position = "relative";
-        this.style.padding = "3px";
         this.style.margin = "0px";
-        this.style.marginLeft = "6px";
-        this.style.marginRight = "6px";
+        this.style.paddingLeft = padding_value;
+        this.style.paddingRight = padding_value;
+        this.style.justifyContent = "center";
+        this.style.alignItems = "center";
         this.style.borderRadius = this.configuration.getAttribute("border_radius");
         this.style.fontFamily = this.configuration.getAttribute("application_typeface");
         this.style.fontSize = this.configuration.getAttribute("application_typesize");
