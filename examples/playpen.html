@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="font-awesome.css">
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+    </head>
+
+    <body>
+        <ui-configuration
+            application_background="#b0b0b0"
+            application_foreground="black"
+            toolbar_height=45px
+            padding="10px"
+        ></ui-configuration>
+
+        <ui-frame orientation="vertical" pad=false>
+            <ui-toolbar normal_background="#00c0ff">
+                <ui-toolbar width=100% normal_foreground=white justify=left pad=false>
+                    <ui-button clickedsignal="toggle_panel">
+                        <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+                </ui-toolbar>
+            </ui-toolbar>
+
+            <ui-frame orientation="horizontal" pad=false>
+                <ui-frame
+                    orientation="vertical"
+                    width="200px"
+                    pad=true
+                    show=false
+                    subscribe="show_panel,hide_panel,toggle_panel"
+                    listener="panel_event_handler"
+                >
+                    <ui-pane
+                        normal_background="#00f0f1"
+                        normal_foreground="yellow"
+                    >
+                        Here we are
+                    </ui-pane>
+                </ui-frame>
+
+                <ui-frame orientation="vertical" pad=true
+                    subscribe="init"
+                    listener="populate_handler"
+                >
+                    <ui-pane
+                        normal_background="#fff1f1"
+                        height="200px"
+                    >
+                        This is a test
+                    </ui-pane>
+                </ui-frame>
+            </ui-frame>
+        </ui-frame>
+    </body>
+    
+    <script>
+        function panel_event_handler(topic, payload) {
+            if (topic == "show_panel") {
+                this.setAttribute("show", "true");
+            }
+            else if (topic == "hide_panel") {
+                this.setAttribute("show", "false");
+            }
+            else if (topic == "toggle_panel") {
+                this.setAttribute("show", (this.getAttribute("show") == "true" ? "false" : "true"));
+            }
+        }
+
+        function fetch_message_dates() {
+            ajaxFunction(
+                "/api/dates",
+
+                function(ajax_result){
+                    pubsubMessageRouter.singleton.emit("message_dates", ajax_result);
+                },
+
+                function(ajax_exception){
+                }
+            );
+        }
+        
+        function populate_handler() {
+            ['Apple', 'Banana'].forEach(
+                name => {
+                    console.log(name);
+
+                    var panel = document.createElement("ui-pane");
+                    var div = document.createElement("div");
+
+                    div.style.fontSize = "22px"; // DEBUG
+                    div.append(name);
+                    panel.appendChild(div);
+
+                    this.appendChild(panel);
+
+                    panel.setAttribute("height", "100px");
+//                     panel.setAttribute("width", "100%");
+                    panel.setAttribute("normal_background", "#f0f0ff");
+                }
+            );
+        }
+        
+        setTimeout(function() {pubsubMessageRouter.singleton.emit("init")}, 2000);
+    </script>
+</html>
