@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>YouEyeJS Basic Demo</title>
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+    </head>
+
+    <script type="application/javascript">
+        var messages = [
+            ["Here we are", "#ffd0ff"],
+            ["What is it that you want ?", "#ffd0d0"],
+            ["I'm here now", "#d0ffd0"],
+            ["There is no such creature", "#d0d0ff"],
+        ];
+
+        function startup_event() {
+            var surface = document.getElementById("surface");
+
+            messages.forEach(
+                details => {
+                    var message = details[0];
+                    var color = details[1] || "#fffefe";
+                    const div = document.createElement("div");
+                    div.style.marginTop = "10px";
+                    div.style.fontSize = "30px";
+                    div.innerHTML = '<ui-pane normal_background="' + color + '" normal_foreground="black">' + message + '</ui-pane>';
+                    surface.appendChild(div);
+                }
+            );
+        }
+    </script>
+
+    <body id="surface" onload="startup_event();">
+        <ui-configuration
+            application_background="#b0b0b0"
+            application_foreground="black"
+            button_height="50px"
+            padding="10px"
+        ></ui-configuration>
+    </body>
+</html>
