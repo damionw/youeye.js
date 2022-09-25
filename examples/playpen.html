@@ -103,6 +103,12 @@
             );
         }
         
-        setTimeout(function() {pubsubMessageRouter.singleton.emit("init")}, 2000);
+        setTimeout(
+            function() {
+                pubsubMessageRouter.singleton.emit("init")
+            },
+
+            2000
+        );
     </script>
 </html>

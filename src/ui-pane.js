@@ -72,10 +72,16 @@ class uiPane extends uiBase {
 //         this.style.margin = "0px";
         this.style.overflow = "auto";
 
-        this.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
+//         this.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
+//             this.style.backgroundColor,
+//             -64
+//         );
+
+        // Chrome bug workaround: e.g. filter: drop-shadow(0 70px 70px black);
+        this.style.filter = "drop-shadow(3px 3px " + shadow_depth + " " + this.alterRGB(
             this.style.backgroundColor,
             -64
-        );
+        ) + ")";
 
         this.style.borderRadius = border_radius;
         this.initAttributes();
