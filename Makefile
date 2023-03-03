@@ -1,6 +1,7 @@
 .PHONY: clean demo_support
 
 FONTAWESOME_VERSION := 4.7.0
+CHARTS_VERSION := 3.8.2
 
 ORDERED_COMPONENTS_LIST := \
 	src/ui-base.js \
@@ -18,12 +19,17 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-toolbar.js \
 	checkouts/pubber/build/static/pubber.js
 
+DEMO_DEPENDENCIES :=\
+	build/static/font-awesome.css \
+	build/static/Chart.js \
+	build/static/pureknob.js
+
 all: build/static/youeye.js
 
-auto:
-	monitored_runner "make demo_support" ./
+auto: build/bin/monitored_runner
+	$< "make demo_support" ./
 
-demo_support: all build/static/font-awesome.css
+demo_support: all $(DEMO_DEPENDENCIES)
 	@cp examples/* build/static/
 
 build/static/youeye.js: src/*.js build/static checkouts/pubber/build/static/pubber.js
@@ -41,14 +47,31 @@ build/static/fontawesome-webfont.woff2: build/static
 build/static/fontawesome-webfont.ttf: build/static
 	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)/fonts/fontawesome-webfont.ttf -o $@
 
+# See: https://www.chartjs.org/docs/latest/getting-started/
+build/static/Chart.js: | build/static
+	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/Chart.js/$(CHARTS_VERSION)/chart.min.js -o $@
+
+# See: https://github.com/andrepxx/pure-knob
+build/static/pureknob.js: checkouts/pureknob | build/static
+	@install $</$(notdir $@) $@
+
+build/bin/monitored_runner: checkouts/recipes build/bin
+	@install -m 755 $</bash/$(notdir $@) $@
+
 checkouts/pubber/build/static/pubber.js: checkouts/pubber
 	@make -C $<
 
-checkouts/pubber: checkouts
-	@git clone https://github.com/damionw/pubber.git $@
+checkouts/recipes: | checkouts
+	@(cd "$@" >/dev/null 2>&1 && git pull) || git clone https://github.com/damionw/recipes.git $@
 
-build/static checkouts:
-	@mkdir -p $@
+checkouts/pubber: | checkouts
+	@(cd "$@" >/dev/null 2>&1 && git pull) || git clone https://github.com/damionw/pubber.git $@
+
+checkouts/pureknob: | checkouts
+	@(cd "$@" >/dev/null 2>&1 && git pull) || git clone https://github.com/andrepxx/pure-knob $@
+
+build/static build/bin checkouts:
+	@install -d $@
 
 clean:
 	-@rm -rf build checkouts downloads

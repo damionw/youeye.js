@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Charts Demonstration</title>
+        <link rel="stylesheet" href="font-awesome.css">
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+        <script type="application/javascript" language="javascript" src="pureknob.js"></script>
+        <script type="application/javascript" language="javascript" src="Chart.js"></script>
+    </head>
+
+    <body>
+        <ui-configuration
+            application_background="#ffffff"
+            application_foreground="black"
+            toolbar_height=50px
+            shadow_depth=5px
+            border_radius=8px
+            padding="5px"
+        ></ui-configuration>
+
+        <ui-frame orientation="vertical" pad=false>
+            <ui-frame orientation="horizontal" pad=false>
+                <ui-frame
+                    orientation="vertical"
+                    show=true
+                    pad=true
+                >
+                    <ui-frame
+                        orientation="horizontal"
+                        height="170px"
+                        pad=true
+                    >
+                        <ui-pane
+                            id="dial_1"
+                            normal_background="#fefefe"
+                            height="146px"
+                            width="146px"
+                            subscribe="dial_data"
+                            listener="dial_handler"
+                        >
+                        </ui-pane>
+                    </ui-frame>
+
+                    <ui-frame
+                        orientation="horizontal"
+                        width=788px
+                        height=400px
+                        pad=true
+                    >
+                        <ui-pane
+                            normal_foreground="white"
+                            normal_background="#fefefe"
+                            shadow_depth=4
+                            pad=true
+                        >
+                            <canvas
+                                id="chart_canvas"
+                                subscribe="chart_data"
+                                listener="chart_data_handler"
+                            >
+                            </canvas>
+                        </ui-pane>
+                    </ui-frame>
+                </ui-frame>
+            </ui-frame>
+        </ui-frame>
+    </body>
+
+    <script>
+        function create_dial(element_id, label, maxval) {
+            var knob = pureknob.createKnob(125, 125);
+
+            // Set properties.
+            knob.setProperty('angleStart', -0.75 * Math.PI);
+            knob.setProperty('angleEnd', 0.75 * Math.PI);
+            knob.setProperty('colorFG', '#88ff88');
+            knob.setProperty('trackWidth', 0.4);
+            knob.setProperty('valMin', 0);
+            knob.setProperty('valMax', maxval);
+            knob.setProperty('label', label);
+            knob.setProperty('colorLabel', '#ff0000');
+
+            // Set initial value.
+            knob.setValue(0);
+
+            /*
+            * Event listener.
+            *
+            * Parameter 'knob' is the knob object which was
+            * actuated. Allows you to associate data with
+            * it to discern which of your knobs was actuated.
+            *
+            * Parameter 'value' is the value which was set
+            * by the user.
+            */
+        //     var listener = function(knob, value) {
+        //         console.log(value);
+        //     };
+
+        //     knob.addListener(listener);
+
+            // Add new knob element to the DOM.
+            document.getElementById(element_id).appendChild(
+                knob.node()
+            );
+
+            return knob;
+        }
+
+        function refresh() {
+            var now = new Date();
+            var formatted_time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+            var timevalue = (now / 1000) % 60;
+
+            window._dial_1.setValue(timevalue);
+            window._chart.data.labels.push(formatted_time);
+            window._chart.data.datasets[0].data.push(Math.random() * 60);
+            window._chart.update();
+        }
+
+        window._dial_1 = create_dial("dial_1", "Dial", 60);
+
+        window._chart = new Chart(
+            document.getElementById('chart_canvas'), {
+                type: 'line',
+
+                options: {
+                },
+
+                data: {
+                    labels: [],
+
+                    datasets: [
+                        {
+                            borderColor: "blue",
+                            borderWidth: "2",
+                            pointRadius: 0,
+                            label: "Dataset",
+                            data: [
+                            ]
+                        }
+                    ]
+                }
+            }
+        );
+
+        window.event_timer_id = window.setInterval(
+            refresh,
+            5000
+        );
+    </script>
+</html>
