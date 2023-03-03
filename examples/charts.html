@@ -110,12 +110,21 @@
 
         function refresh() {
             var now = new Date();
-            var formatted_time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-            var timevalue = (now / 1000) % 60;
 
-            window._dial_1.setValue(timevalue);
-            window._chart.data.labels.push(formatted_time);
-            window._chart.data.datasets[0].data.push(Math.random() * 60);
+            var label = now.toLocaleTimeString(
+                'en-US', {
+                    hour12: false,
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric"
+                }
+            );
+
+            var value = Math.random() * 60;
+
+            window._dial_1.setValue(value);
+            window._chart.data.labels.push(label);
+            window._chart.data.datasets[0].data.push(value);
             window._chart.update();
         }
 
