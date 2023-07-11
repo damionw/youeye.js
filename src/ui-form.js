@@ -1,4 +1,4 @@
-class uiForm extends uiBase {
+class uiForm extends uiPane {
     //=========================================================
     //                    Class Attributes
     //=========================================================
@@ -11,8 +11,8 @@ class uiForm extends uiBase {
             {}, uiBase.defaultAttributes, {
                 "normal_foreground": "inherit",
                 "normal_background": "inherit",
-                "width": "auto",
-                "height": "default",
+                "width": "100%",
+                "height": "100%",
             }
         );
     }
@@ -23,61 +23,105 @@ class uiForm extends uiBase {
     constructor() {
         super();
 
-        this._panes = [];
+        var shadow = this.attachShadow({mode: 'open'});
 
-        // Start observing the target node for configured mutations
-        this.observer.observe(this, this.observer_config);
+        var table_pane = this._table_pane = document.createElement('table');
+        var column_group = document.createElement('colgroup');
+        var left_column = document.createElement('col');
+        var right_column = document.createElement('col');
+
+        left_column.style.width = "20%";
+        left_column.style.backgroundColor = "beige";
+
+        right_column.style.width = "100%";
+        right_column.style.backgroundColor = "white";
+
+        table_pane.style.width = "100%";
+        table_pane.style.height = "100%";
+        table_pane.style.backgroundColor = "black";
+        table_pane.style.color = "inherit";
+
+        column_group.appendChild(left_column);
+        column_group.appendChild(right_column);
+        table_pane.appendChild(column_group);
+        shadow.appendChild(table_pane);
     }
 
     //=========================================================
     //                   Object attributes
     //=========================================================
-    get panes() {
-        if (! this._panes.length) {
-            var left = document.createElement('div');
+//     get panes() {
+//         if (! this._panes.length) {
+//             var left = document.createElement('div');
+//
+//             left.style.flex = "0 0 20%";
+//             left.style.display = "block";
+//             left.style.boxSizing = "border-box";
+//             left.style.border = "2px solid blue"; // DEBUG
+//
+//             this.appendChild(left);
+//             this._panes.push(left);
+//
+//             var right = document.createElement('div');
+//
+//             right.style.flex = "1 1 30px";
+//             right.style.display = "block";
+//             right.style.boxSizing = "border-box";
+//             right.style.border = "2px solid red"; // DEBUG
+//
+//             this.appendChild(right);
+//             this._panes.push(right);
+//         }
+//
+//         return this._panes;
+//     }
+//
+//     get left_pane() {
+//         return this.panes[0];
+//     }
+//
+//     get right_pane() {
+//         return this.panes[1];
+//     }
 
-            left.style.flex = "0 0 20%";
-            left.style.display = "block";
-            left.style.boxSizing = "border-box";
-            left.style.border = "2px solid blue"; // DEBUG
-
-            this.appendChild(left);
-            this._panes.push(left);
-
-            var right = document.createElement('div');
-
-            right.style.flex = "1 1 30px";
-            right.style.display = "block";
-            right.style.boxSizing = "border-box";
-            right.style.border = "2px solid red"; // DEBUG
-
-            this.appendChild(right);
-            this._panes.push(right);
-        }
-
-        return this._panes;
-    }
-
-    get left_pane() {
-        return this.panes[0];
-    }
-
-    get right_pane() {
-        return this.panes[1];
-    }
-
-    get visible_mode() {
-        return "block";
-    }
+//     get visible_mode() {
+//         return "block";
+//     }
 
     //=========================================================
     //                         Events
     //=========================================================
     elementsChanged(newElements) {
+        var mytable = this._table_pane;
+
         for (var i=0; i < newElements.length; ++i) {
             var element = newElements[i];
-            var label = "";
+            var get_attribute_function = element.getAttribute;
 
+            if (get_attribute_function == null) {
+                continue;
+            }
+
+            console.log("HERE: " + element.nodeName + " of " + newElements.length);
+
+            var labeltext = element.getAttribute("form-label");
+
+            if (labeltext == null || labeltext == "") {
+                continue;
+            }
+
+            var new_row = mytable.insertRow(-1);
+
+            var left_cell =  new_row.insertCell(0);
+            var right_cell =  new_row.insertCell(1);
+
+            console.log("FORM ENTRY: " + element.tagName + " = " + labeltext);
+
+            left_cell.innerHTML = labeltext;
+            right_cell.appendChild(element);
+
+            continue; // DEBUG
+/*
             if (element == this.left_pane) {
             }
             else if (element == this.right_pane) {
@@ -93,7 +137,7 @@ class uiForm extends uiBase {
             else {
                 this.left_pane.appendChild(document.createElement("div"));
                 this.right_pane.appendChild(element);
-            }
+            }*/
         }
     }
 
@@ -141,4 +185,7 @@ class uiForm extends uiBase {
     }
 }
 
-customElements.define(uiForm.tagname.toLowerCase(), uiForm);
+customElements.define(
+    uiForm.tagname.toLowerCase(),
+    uiForm
+);
