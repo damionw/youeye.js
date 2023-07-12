@@ -32,14 +32,19 @@ class uiForm extends uiPane {
 
         left_column.style.width = "20%";
         left_column.style.backgroundColor = "beige";
+        left_column.style.padding = "5px";
+        left_column.style.border = "none";
 
         right_column.style.width = "100%";
         right_column.style.backgroundColor = "white";
+        right_column.style.padding = "5px";
+        right_column.style.border = "none";
 
         table_pane.style.width = "100%";
         table_pane.style.height = "100%";
         table_pane.style.backgroundColor = "black";
         table_pane.style.color = "inherit";
+        table_pane.style.border = "none";
 
         column_group.appendChild(left_column);
         column_group.appendChild(right_column);
@@ -48,96 +53,67 @@ class uiForm extends uiPane {
     }
 
     //=========================================================
-    //                   Object attributes
-    //=========================================================
-//     get panes() {
-//         if (! this._panes.length) {
-//             var left = document.createElement('div');
-//
-//             left.style.flex = "0 0 20%";
-//             left.style.display = "block";
-//             left.style.boxSizing = "border-box";
-//             left.style.border = "2px solid blue"; // DEBUG
-//
-//             this.appendChild(left);
-//             this._panes.push(left);
-//
-//             var right = document.createElement('div');
-//
-//             right.style.flex = "1 1 30px";
-//             right.style.display = "block";
-//             right.style.boxSizing = "border-box";
-//             right.style.border = "2px solid red"; // DEBUG
-//
-//             this.appendChild(right);
-//             this._panes.push(right);
-//         }
-//
-//         return this._panes;
-//     }
-//
-//     get left_pane() {
-//         return this.panes[0];
-//     }
-//
-//     get right_pane() {
-//         return this.panes[1];
-//     }
-
-//     get visible_mode() {
-//         return "block";
-//     }
-
-    //=========================================================
     //                         Events
     //=========================================================
     elementsChanged(newElements) {
+        var padding_value = this.configuration.getAttribute("padding");
+        var shadow_depth = this.configuration.getAttribute("shadow_depth");
+        var border_radius = this.configuration.getAttribute("border_radius");
+        var foreground_color = this.getConfigAttribute("normal_foreground", "application_foreground");
+        var background_color = this.getConfigAttribute("normal_background", "application_background");
+
         var mytable = this._table_pane;
 
         for (var i=0; i < newElements.length; ++i) {
-            var element = newElements[i];
-            var get_attribute_function = element.getAttribute;
+            var form_element = newElements[i];
 
-            if (get_attribute_function == null) {
+            if (form_element.getAttribute == null) {
                 continue;
             }
 
-            console.log("HERE: " + element.nodeName + " of " + newElements.length);
-
-            var labeltext = element.getAttribute("form-label");
+            var labeltext = form_element.getAttribute("form-label");
 
             if (labeltext == null || labeltext == "") {
                 continue;
             }
 
             var new_row = mytable.insertRow(-1);
-
             var left_cell =  new_row.insertCell(0);
             var right_cell =  new_row.insertCell(1);
+            var label_element = document.createElement('div');
 
-            console.log("FORM ENTRY: " + element.tagName + " = " + labeltext);
+            label_element.innerHTML = labeltext;
 
-            left_cell.innerHTML = labeltext;
-            right_cell.appendChild(element);
+            left_cell.style.verticalAlign = "top";
+            left_cell.style.color = foreground_color;
+            left_cell.style.backgroundColor = "inherit";
+            left_cell.style.fontFamily = "inherit";
+            left_cell.style.fontSize = "24px";
+            left_cell.style.cursor = "inherit";
+            left_cell.style.boxSizing = "border-box";
+            left_cell.style.padding = "5px";
+            left_cell.style.margin = "2px";
 
-            continue; // DEBUG
-/*
-            if (element == this.left_pane) {
-            }
-            else if (element == this.right_pane) {
-            }
-            else if (element.nodeType == 3) {
-                this.left_pane.appendChild(element);
-                this.right_pane.appendChild(document.createElement("div"));
-            }
-            else if (element.hasAttribute("label")) {
-                this.left_pane.appendChild(document.createTextNode(element.getAttribute("label")));
-                this.right_pane.appendChild(element);
-            }
-            else {
-                this.left_pane.appendChild(document.createElement("div"));
-                this.right_pane.appendChild(element);
-            }*/
+            right_cell.style.verticalAlign = "top";
+            right_cell.style.borderRadius = border_radius;
+            right_cell.style.color = foreground_color;
+            right_cell.style.backgroundColor = "inherit";
+            right_cell.style.fontFamily = "inherit";
+            right_cell.style.fontSize = "24px";
+            right_cell.style.cursor = "inherit";
+            right_cell.style.boxSizing = "border-box";
+            right_cell.style.padding = "5px";
+            right_cell.style.margin = "2px";
+
+            form_element.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
+                background_color,
+                -64
+            );
+
+//             console.log("FORM ENTRY: " + element.tagName + " = " + labeltext);
+
+            left_cell.appendChild(label_element);
+            right_cell.appendChild(form_element);
         }
     }
 
