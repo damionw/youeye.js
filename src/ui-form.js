@@ -33,17 +33,20 @@ class uiForm extends uiPane {
         left_column.style.width = "20%";
         left_column.style.backgroundColor = "beige";
         left_column.style.padding = "5px";
+        left_column.style.borderStyle = "none";
         left_column.style.border = "none";
 
         right_column.style.width = "100%";
         right_column.style.backgroundColor = "white";
         right_column.style.padding = "5px";
+        right_column.style.borderStyle = "none";
         right_column.style.border = "none";
 
         table_pane.style.width = "100%";
         table_pane.style.height = "100%";
-        table_pane.style.backgroundColor = "black";
+        table_pane.style.backgroundColor = "beige";
         table_pane.style.color = "inherit";
+        table_pane.style.borderStyle = "none";
         table_pane.style.border = "none";
 
         column_group.appendChild(left_column);
@@ -61,6 +64,8 @@ class uiForm extends uiPane {
         var border_radius = this.configuration.getAttribute("border_radius");
         var foreground_color = this.getConfigAttribute("normal_foreground", "application_foreground");
         var background_color = this.getConfigAttribute("normal_background", "application_background");
+        var font_family = this.configuration.getAttribute("application_typeface");
+        var font_size = this.configuration.getAttribute("application_typesize");
 
         var mytable = this._table_pane;
 
@@ -93,13 +98,20 @@ class uiForm extends uiPane {
             left_cell.style.boxSizing = "border-box";
             left_cell.style.padding = "5px";
             left_cell.style.margin = "2px";
+            left_cell.style.fontFamily = font_family;
+            left_cell.style.fontSize = font_size;
+            left_cell.style.paddingLeft = padding_value;
+            left_cell.style.paddingRight = padding_value;
+            left_cell.style.justifyContent = "center";
 
             right_cell.style.verticalAlign = "top";
             right_cell.style.borderRadius = border_radius;
             right_cell.style.color = foreground_color;
             right_cell.style.backgroundColor = "inherit";
-            right_cell.style.fontFamily = "inherit";
-            right_cell.style.fontSize = "24px";
+            left_cell.style.fontFamily = font_family;
+            left_cell.style.fontSize = font_size;
+            left_cell.style.paddingLeft = padding_value;
+            left_cell.style.paddingRight = padding_value;
             right_cell.style.cursor = "inherit";
             right_cell.style.boxSizing = "border-box";
             right_cell.style.padding = "5px";
