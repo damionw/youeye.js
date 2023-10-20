@@ -26,12 +26,13 @@ class uiForm extends uiPane {
         var shadow = this.attachShadow({mode: 'open'});
 
         var table_pane = this._table_pane = document.createElement('table');
+
         var column_group = document.createElement('colgroup');
         var left_column = document.createElement('col');
         var right_column = document.createElement('col');
 
         left_column.style.width = "20%";
-        left_column.style.backgroundColor = "beige";
+        left_column.style.backgroundColor = "inherit";
         left_column.style.padding = "5px";
         left_column.style.borderStyle = "none";
         left_column.style.border = "none";
@@ -44,10 +45,11 @@ class uiForm extends uiPane {
 
         table_pane.style.width = "100%";
         table_pane.style.height = "100%";
-        table_pane.style.backgroundColor = "beige";
+        table_pane.style.backgroundColor = "inherit";
         table_pane.style.color = "inherit";
         table_pane.style.borderStyle = "none";
         table_pane.style.border = "none";
+        table_pane.style.borderSpacing = "5px";
 
         column_group.appendChild(left_column);
         column_group.appendChild(right_column);
@@ -108,10 +110,10 @@ class uiForm extends uiPane {
             right_cell.style.borderRadius = border_radius;
             right_cell.style.color = foreground_color;
             right_cell.style.backgroundColor = "inherit";
-            left_cell.style.fontFamily = font_family;
-            left_cell.style.fontSize = font_size;
-            left_cell.style.paddingLeft = padding_value;
-            left_cell.style.paddingRight = padding_value;
+            right_cell.style.fontFamily = font_family;
+            right_cell.style.fontSize = font_size;
+            right_cell.style.paddingLeft = padding_value;
+            right_cell.style.paddingRight = padding_value;
             right_cell.style.cursor = "inherit";
             right_cell.style.boxSizing = "border-box";
             right_cell.style.padding = "5px";
@@ -122,7 +124,7 @@ class uiForm extends uiPane {
                 -64
             );
 
-//             console.log("FORM ENTRY: " + element.tagName + " = " + labeltext);
+            new_row.style.height = form_element.style.height;
 
             left_cell.appendChild(label_element);
             right_cell.appendChild(form_element);
@@ -138,9 +140,11 @@ class uiForm extends uiPane {
         }
         else if (name == "normal_background") {
             this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
+            this._table_pane.style.backgroundColor = "inherit";
         }
         else if (name == "normal_foreground") {
             this.style.color = this.getConfigAttribute(name, "application_foreground");
+            this._table_pane.style.foregroundColor = "inherit";
         }
         else {
             uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);

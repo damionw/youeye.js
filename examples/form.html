@@ -13,14 +13,20 @@
         application_typesize="18px"
         toolbar_height="40px"
         shadow_depth="4px"
-        padding="4px"
+        padding="10px"
         animation_milliseconds="22"
     ></ui-configuration>
 
     <body>
         <ui-frame>
-            <ui-form>
-                <div form-label="Meat" contentEditable=true style="background-color: beige;">This is a test</div>
+            <ui-form normal_background="#c0c0f0">
+                <div
+                    form-label="Meat"
+                    contentEditable=true
+                    style="background-color: white; height: 25px;"
+                >
+                    This is a test
+                </div>
 
                 <select form-label="Cars" name="cars" id="cars">
                     <option value="volvo">Volvo</option>
@@ -28,6 +34,14 @@
                     <option value="mercedes">Mercedes</option>
                     <option value="audi">Audi</option>
                 </select>
+
+                <textarea
+                    form-label="Content"
+                    name="content"
+                    style="height: 100%; width: 100%; outline: none; border: none;"
+                >
+                    edit me !
+                </textarea>
             </ui-form>
         </ui-frame>
     </body>
