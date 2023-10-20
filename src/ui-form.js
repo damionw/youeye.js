@@ -26,6 +26,7 @@ class uiForm extends uiPane {
         var shadow = this.attachShadow({mode: 'open'});
 
         var table_pane = this._table_pane = document.createElement('table');
+        var lookup = this._field_lookup = {};
 
         var column_group = document.createElement('colgroup');
         var left_column = document.createElement('col');
@@ -70,6 +71,7 @@ class uiForm extends uiPane {
         var font_size = this.configuration.getAttribute("application_typesize");
 
         var mytable = this._table_pane;
+        var lookup = this._field_lookup;
 
         for (var i=0; i < newElements.length; ++i) {
             var form_element = newElements[i];
@@ -84,6 +86,12 @@ class uiForm extends uiPane {
                 continue;
             }
 
+            var entry_name = form_element.getAttribute("name");
+
+            if (entry_name != null) {
+                lookup[entry_name] = form_element;
+            }
+
             var new_row = mytable.insertRow(-1);
             var left_cell =  new_row.insertCell(0);
             var right_cell =  new_row.insertCell(1);
@@ -94,8 +102,6 @@ class uiForm extends uiPane {
             left_cell.style.verticalAlign = "top";
             left_cell.style.color = foreground_color;
             left_cell.style.backgroundColor = "inherit";
-            left_cell.style.fontFamily = "inherit";
-            left_cell.style.fontSize = "24px";
             left_cell.style.cursor = "inherit";
             left_cell.style.boxSizing = "border-box";
             left_cell.style.padding = "5px";
@@ -119,7 +125,7 @@ class uiForm extends uiPane {
             right_cell.style.padding = "5px";
             right_cell.style.margin = "2px";
 
-            form_element.style.boxShadow = "3px 3px " + shadow_depth + " " + this.alterRGB(
+            form_element.style.boxShadow = "5px 5px " + shadow_depth + " " + this.alterRGB(
                 background_color,
                 -64
             );
@@ -174,6 +180,25 @@ class uiForm extends uiPane {
         this.initAttributes();
 
         uiBase.prototype.connectedCallback.call(this);
+    }
+
+    //=========================================================
+    //                   Object attributes
+    //=========================================================
+    get values() {
+        var lookup = this._field_lookup;
+
+        if (lookup == null) {
+            return {};
+        }
+
+        return Object.fromEntries(
+            Object.keys(lookup).map(
+                function(_key) {
+                    return [_key, lookup[_key].innerHTML];
+                }
+            )
+        );
     }
 }
 

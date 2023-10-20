@@ -19,16 +19,26 @@
 
     <body>
         <ui-frame>
-            <ui-form normal_background="#c0c0f0">
+            <ui-form
+                normal_background="#c0c0f0"
+                subscribe="doit"
+                listener=showit
+            >
                 <div
                     form-label="Meat"
                     contentEditable=true
+                    name="meat"
                     style="background-color: white; height: 25px;"
                 >
                     This is a test
                 </div>
 
-                <select form-label="Cars" name="cars" id="cars">
+                <select
+                    form-label="Cars"
+                    name="cars"
+                    id="cars"
+                    style="outline: none; border: none;"
+                >
                     <option value="volvo">Volvo</option>
                     <option value="saab">Saab</option>
                     <option value="mercedes">Mercedes</option>
@@ -39,13 +49,26 @@
                     form-label="Content"
                     name="content"
                     style="height: 100%; width: 100%; outline: none; border: none;"
-                >
-                    edit me !
+                >edit me!
                 </textarea>
             </ui-form>
         </ui-frame>
+        <ui-button clickedsignal="doit">
+            Doit
+        </ui-button>
     </body>
 
     <script type="application/javascript">
+        function showit(topic, payload) {
+            var obj = this.values;
+
+            var msg = Object.keys(obj).map(
+                function(_key) {
+                    return [_key, obj[_key]].join(":");
+                }
+            ).join("\n");
+
+            console.log(msg);
+        }
     </script>
 </html>
