@@ -195,7 +195,10 @@ class uiForm extends uiPane {
         return Object.fromEntries(
             Object.keys(lookup).map(
                 function(_key) {
-                    return [_key, lookup[_key].innerHTML];
+                    var form_element = lookup[_key];
+                    var data_attribute = form_element.getAttribute("form-attribute") || "innerText";
+//                    return [_key, data_attribute]; // DEBUG
+                    return [_key, form_element[data_attribute]];
                 }
             )
         );

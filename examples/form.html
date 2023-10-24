@@ -3,6 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Custom Elements Form Demo</title>
+        <link rel="stylesheet" href="font-awesome.css">
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
     </head>
 
@@ -18,6 +19,31 @@
     ></ui-configuration>
 
     <body>
+        <ui-transient
+            relative=false
+            pad=true
+            normal_background="#f0f0f0"
+            height="300px"
+            width="530px"
+            subscribe="toggle_transient"
+            listener="transient_handler"
+            x="100px"
+            y="100px"
+            decorate=true
+        >
+            <ui-toolbar width=100% justify=right pad=true>
+                <ui-button clickedsignal="toggle_transient">
+                    <i class="fa fa-times fa-10" aria-hidden="true"></i>
+                </ui-button>
+           </ui-toolbar>
+
+            <div
+                subscribe="toggle_transient"
+                listener="data_update"
+            >
+            </div>
+        </ui-transient>
+
         <ui-frame>
             <ui-form
                 normal_background="#c0c0f0"
@@ -29,6 +55,7 @@
                     contentEditable=true
                     name="meat"
                     style="background-color: white; height: 25px;"
+                    form-attribute="innerText"
                 >
                     This is a test
                 </div>
@@ -38,6 +65,7 @@
                     name="cars"
                     id="cars"
                     style="outline: none; border: none;"
+                    form-attribute="value"
                 >
                     <option value="volvo">Volvo</option>
                     <option value="saab">Saab</option>
@@ -49,10 +77,12 @@
                     form-label="Content"
                     name="content"
                     style="height: 100%; width: 100%; outline: none; border: none;"
+                    form-attribute="value"
                 >edit me!
                 </textarea>
             </ui-form>
         </ui-frame>
+
         <ui-button clickedsignal="doit">
             Doit
         </ui-button>
@@ -64,11 +94,27 @@
 
             var msg = Object.keys(obj).map(
                 function(_key) {
-                    return [_key, obj[_key]].join(":");
+                    return [_key, obj[_key]].join(": ");
                 }
-            ).join("\n");
+            ).join("<br>");
 
-            console.log(msg);
+            pubsubMessageRouter.singleton.emit("toggle_transient", msg);
+        }
+
+        function transient_handler(topic, payload) {
+            if (topic == "toggle_transient") {
+                this.setAttribute(
+                    "show", (
+                        this.getAttribute("show") == "true" ?
+                        "false" :
+                        "true"
+                    )
+                );
+            }
+        }
+
+        function data_update(topic, payload) {
+            this.innerHTML = payload;
         }
     </script>
 </html>
