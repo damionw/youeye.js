@@ -24,7 +24,7 @@
             pad=true
             normal_background="#f0f0f0"
             height="300px"
-            width="530px"
+            width="500px"
             subscribe="toggle_transient"
             listener="transient_handler"
             x="100px"
@@ -33,13 +33,14 @@
         >
             <ui-toolbar width=100% justify=right pad=true>
                 <ui-button clickedsignal="toggle_transient">
-                    <i class="fa fa-times fa-10" aria-hidden="true"></i>
+                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
                 </ui-button>
-           </ui-toolbar>
+            </ui-toolbar>
 
             <div
                 subscribe="toggle_transient"
                 listener="data_update"
+                style="padding: 10px"
             >
             </div>
         </ui-transient>
