@@ -8,10 +8,10 @@
         <script type="application/javascript" language="javascript" src="tabulator.js"></script>
     </head>
 
-    <body onload="startup()">
+    <body onload="startup()" height=100% width=100%>
         <ui-configuration
             application_background="#fefefe"
-            application_foreground="black"
+            application_foreground="blue"
             highlight_background="#00a0fe"
             toolbar_height="40px"
             padding="4px"
@@ -19,8 +19,11 @@
 
         <ui-frame
             orientation="vertical"
+            height="200%"
+            width="100"
             pad=true
         >
+            Start it
             <div
                 id="table"
                 subscribe="fetch_data"
@@ -44,7 +47,7 @@
             if (tabulator == null) {
                 tabulator = div_element._tabulator= new Tabulator(
                     div_element, {
-                        data: payload, //assign data to table
+                        data: [], //assign data to table
                         layout:"fitDataStretch",
         //                 responsiveLayout: "collapse",
                         selectable: 1, //make 1 row selectable at a time

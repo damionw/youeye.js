@@ -15,7 +15,6 @@ ORDERED_COMPONENTS_LIST := \
 	src/ui-textfield.js \
 	src/ui-calendar.js \
 	src/ui-canvas.js \
-	src/ui-tabular.js \
 	src/ui-toolbar.js \
 	checkouts/pubber/build/static/pubber.js
 
