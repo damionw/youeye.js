@@ -22,7 +22,11 @@ ORDERED_COMPONENTS_LIST := \
 DEMO_DEPENDENCIES :=\
 	build/static/font-awesome.css \
 	build/static/Chart.js \
-	build/static/pureknob.js
+	build/static/pureknob.js \
+	build/static/quill.min.js \
+	build/static/quill.snow.css \
+	build/static/tabulator.css \
+	build/static/tabulator.js
 
 all: build/static/youeye.js
 
@@ -51,6 +55,23 @@ build/static/fontawesome-webfont.ttf: build/static
 build/static/Chart.js: | build/static
 	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/Chart.js/$(CHARTS_VERSION)/chart.min.js -o $@
 
+
+# See: https://quilljs.com/
+build/static/quill.min.js: checkouts/quill build/static
+	@cp $</$(notdir $@) $@
+
+# See: https://quilljs.com/
+build/static/quill.snow.css: checkouts/quill build/static
+	@cp $</$(notdir $@) $@
+
+# See: https://tabulator.info/
+build/static/tabulator.js: build/static
+	@wget --quiet -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js
+
+# See: https://tabulator.info/
+build/static/tabulator.css: build/static
+	@wget --quiet -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css
+
 # See: https://github.com/andrepxx/pure-knob
 build/static/pureknob.js: checkouts/pureknob | build/static
 	@install $</$(notdir $@) $@
@@ -69,6 +90,9 @@ checkouts/pubber: | checkouts
 
 checkouts/pureknob: | checkouts
 	@(cd "$@" >/dev/null 2>&1 && git pull) || git clone https://github.com/andrepxx/pure-knob $@
+
+checkouts/quill: checkouts
+	@(cd "$<" && wget --quiet -nc -nd -nH -O - https://github.com/quilljs/quill/releases/download/v0.20.1/quill.tar.gz | tar xfz -)
 
 build/static build/bin checkouts:
 	@install -d $@

@@ -3,10 +3,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>YouEyeJS Tabular Demo</title>
+        <link rel="stylesheet" href="tabulator.css">
         <script type="application/javascript" language="javascript" src="youeye.js"></script>
+        <script type="application/javascript" language="javascript" src="tabulator.js"></script>
     </head>
 
-    <body>
+    <body onload="startup()">
         <ui-configuration
             application_background="#fefefe"
             application_foreground="black"
@@ -19,31 +21,69 @@
             orientation="vertical"
             pad=true
         >
-            <ui-tabular
+            <div
+                id="table"
                 subscribe="fetch_data"
                 listener="tabular_event"
-                data='{
-                    "columns": ["a", "b", "c", "d", "e"],
-                    "values": [
-                        [1,2,3,4,5],
-                        [1,2,3,4,5],
-                        [1,2,3,4,5],
-                        [1,2,3,4,5],
-                        [1,2,3,4,5],
-                        [1,2,3,4,5],
-                        [1,2,3,4,5]
-                    ]
-                }'
             >
-            </ui-tabular>
+            </div>
         </ui-frame>
     </body>
 
     <script type="application/javascript">
         function tabular_event(topic, payload) {
-            if (topic == "fetch_data") {
-                this.setAttribute("data", payload);
+            var div_element = document.getElementById("table");
+            var tabulator = div_element._tabulator;
+            tabulator.replaceData(payload);
+        }
+
+        function startup() {
+            var div_element = document.getElementById("table");
+            var tabulator = div_element._tabulator;
+
+            if (tabulator == null) {
+                tabulator = div_element._tabulator= new Tabulator(
+                    div_element, {
+                        data: payload, //assign data to table
+                        layout:"fitDataStretch",
+        //                 responsiveLayout: "collapse",
+                        selectable: 1, //make 1 row selectable at a time
+
+                        columns:[ //Define Table Columns
+                            {title:"Name", field:"from"},
+                            {title:"Phone", field:"phone", hozAlign:"left"}
+                        ]
+                    }
+                );
+
+                tabulator.on(
+                    "rowSelected", // "rowSelectionChanged",
+
+                    function(row){
+                        self.emit("row_selected", row.getData());
+                    }
+                );
             }
+
+            setTimeout(
+                () => {
+                    pubsubMessageRouter.singleton.emit(
+                        "fetch_data",
+                        [
+                            {
+                                "Name": "Me",
+                                "Phone": "123-4567"
+                            },
+                            {
+                                "Name": "You",
+                                "Phone": "999-9999"
+                            }
+                        ]
+                    );
+                },
+
+                2000
+            );
         }
     </script>
 </html>
