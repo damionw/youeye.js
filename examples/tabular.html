@@ -8,7 +8,7 @@
         <script type="application/javascript" language="javascript" src="tabulator.js"></script>
     </head>
 
-    <body onload="startup()" height=100% width=100%>
+    <body onload="startup()">
         <ui-configuration
             application_background="#fefefe"
             application_foreground="blue"
@@ -19,17 +19,24 @@
 
         <ui-frame
             orientation="vertical"
-            height="200%"
-            width="100"
             pad=true
         >
-            Start it
-            <div
-                id="table"
-                subscribe="fetch_data"
-                listener="tabular_event"
+            <ui-pane
+                normal_background=#f0f0fe
+                shadow_depth=5px
+                border_radius=8px
+                pad=true
+                height=500px
+                width=100%
             >
-            </div>
+                Start it
+                <div
+                    id="table"
+                    subscribe="fetch_data"
+                    listener="tabular_event"
+                >
+                </div>
+            </ui-pane>
         </ui-frame>
     </body>
 
@@ -47,12 +54,14 @@
             if (tabulator == null) {
                 tabulator = div_element._tabulator= new Tabulator(
                     div_element, {
-                        data: [], //assign data to table
+                        data: [
+                        ], //assign data to table
+
                         layout:"fitDataStretch",
         //                 responsiveLayout: "collapse",
                         selectable: 1, //make 1 row selectable at a time
 
-                        columns:[ //Define Table Columns
+                        columns: [ //Define Table Columns
                             {title:"Name", field:"from"},
                             {title:"Phone", field:"phone", hozAlign:"left"}
                         ]
@@ -63,7 +72,7 @@
                     "rowSelected", // "rowSelectionChanged",
 
                     function(row){
-                        self.emit("row_selected", row.getData());
+                        pubsubMessageRouter.singleton..emit("row_selected", row.getData());
                     }
                 );
             }
