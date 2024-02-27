@@ -19,6 +19,8 @@
 
         <ui-frame
             orientation="vertical"
+            subscribe="row_selected"
+            listener="tabular_event"
             pad=true
         >
             <ui-pane
@@ -30,7 +32,6 @@
                 width=90%
             >
                 <div
-                    style="width: 100%; height: 100%"
                     id="table"
                     subscribe="fetch_data"
                     listener="tabular_event"
@@ -42,9 +43,17 @@
 
     <script type="application/javascript">
         function tabular_event(topic, payload) {
-            var div_element = document.getElementById("table");
-            var tabulator = div_element._tabulator;
-            tabulator.replaceData(payload);
+            switch (topic) {
+                case "fetch_data":
+                    var div_element = document.getElementById("table");
+                    var tabulator = div_element._tabulator;
+                    tabulator.replaceData(payload);
+                    break;
+
+                case "row_selected":
+                    console.log(payload);
+                    break;
+            }
         }
 
         function startup() {
@@ -57,7 +66,7 @@
                         data: [
                         ], //assign data to table
 
-                        layout: "fitDataStretch",
+                        layout: "fitDataStretch", //"fitDataStretch"
         //                 responsiveLayout: "collapse",
                         selectable: 1, //make 1 row selectable at a time
 
@@ -71,8 +80,11 @@
                 tabulator.on(
                     "rowSelected", // "rowSelectionChanged",
 
-                    function(row){
-                        pubsubMessageRouter.singleton.emit("row_selected", row.getData());
+                    function(row_object){
+                        pubsubMessageRouter.singleton.emit(
+                            "row_selected",
+                            row_object.getData()
+                        );
                     }
                 );
             }
@@ -85,6 +97,10 @@
                             {
                                 "name": "Me",
                                 "phone": "123-4567"
+                            },
+                            {
+                                "name": "Them",
+                                "phone": "234-7777"
                             },
                             {
                                 "name": "You",
