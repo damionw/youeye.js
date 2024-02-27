@@ -27,10 +27,10 @@
                 border_radius=8px
                 pad=true
                 height=500px
-                width=100%
+                width=90%
             >
-                Start it
                 <div
+                    style="width: 100%; height: 100%"
                     id="table"
                     subscribe="fetch_data"
                     listener="tabular_event"
@@ -52,18 +52,18 @@
             var tabulator = div_element._tabulator;
 
             if (tabulator == null) {
-                tabulator = div_element._tabulator= new Tabulator(
+                tabulator = div_element._tabulator = new Tabulator(
                     div_element, {
                         data: [
                         ], //assign data to table
 
-                        layout:"fitDataStretch",
+                        layout: "fitDataStretch",
         //                 responsiveLayout: "collapse",
                         selectable: 1, //make 1 row selectable at a time
 
                         columns: [ //Define Table Columns
-                            {title:"Name", field:"from"},
-                            {title:"Phone", field:"phone", hozAlign:"left"}
+                            {title:"Name", field: "name"},
+                            {title:"Phone", field: "phone", hozAlign:"left"}
                         ]
                     }
                 );
@@ -72,7 +72,7 @@
                     "rowSelected", // "rowSelectionChanged",
 
                     function(row){
-                        pubsubMessageRouter.singleton..emit("row_selected", row.getData());
+                        pubsubMessageRouter.singleton.emit("row_selected", row.getData());
                     }
                 );
             }
@@ -83,12 +83,12 @@
                         "fetch_data",
                         [
                             {
-                                "Name": "Me",
-                                "Phone": "123-4567"
+                                "name": "Me",
+                                "phone": "123-4567"
                             },
                             {
-                                "Name": "You",
-                                "Phone": "999-9999"
+                                "name": "You",
+                                "phone": "999-9999"
                             }
                         ]
                     );
