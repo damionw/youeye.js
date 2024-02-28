@@ -16,6 +16,7 @@ class uiConfiguration extends uiBase {
             "selected_background": "yellow",
             "highlight_foreground": "white",
             "highlight_background": "green",
+            "outline_foreground": null,
             "editor_background": "#f5f5f5",
             "editor_foreground": "#000010",
             "application_typeface": "Arial",

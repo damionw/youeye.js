@@ -11,6 +11,7 @@ class uiButton extends uiBase {
             {}, uiBase.defaultAttributes, {
                 "normal_foreground": "inherit",
                 "normal_background": "inherit",
+                "outline_foreground": null,
                 "disabled_foreground": "default",
                 "disabled_background": "default",
                 "highlight": 48,
@@ -139,7 +140,7 @@ class uiButton extends uiBase {
             tooltip.style.top = "30px"; // this.configuration.toolbar_height;
             tooltip.style.width = "auto";
             tooltip.style.backgroundColor = "rgba(255,255,255,0.65)";
-            tooltip.style.color = "green";
+            tooltip.style.color = this.getConfigAttribute("highlight_background");
             tooltip.style.zIndex = 1;
         }
 
@@ -147,6 +148,14 @@ class uiButton extends uiBase {
             window.getComputedStyle(this).backgroundColor,
             parseInt(this.getAttribute("highlight"))
         );
+
+        const outline_foreground = this.getConfigAttribute("outline_foreground");
+
+        if (outline_foreground != "null") {
+            this.style.borderStyle = "solid";
+            this.style.borderWidth = "2px";
+            this.style.borderColor = outline_foreground;
+        }
 
         uiBase.prototype.mouseoverCallback.call(this, ev);
     }
@@ -156,6 +165,7 @@ class uiButton extends uiBase {
         this.attributeChangedCallback("normal_foreground");
         this.tooltip.style.display = "none";
         this.style.cursor = "default";
+        this.style.border = "initial";
 
         uiBase.prototype.mouseoutCallback.call(this, ev);
     }

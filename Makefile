@@ -1,5 +1,6 @@
 .PHONY: clean demo_support
 
+TABULATOR_MODE := bootstrap5
 FONTAWESOME_VERSION := 4.7.0
 CHARTS_VERSION := 3.8.2
 
@@ -69,7 +70,7 @@ build/static/tabulator.js: build/static
 
 # See: https://tabulator.info/
 build/static/tabulator.css: build/static
-	@wget --quiet -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css
+	@wget --quiet -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator$(if $(TABULATOR_MODE),_,)$(TABULATOR_MODE).min.css
 
 # See: https://github.com/andrepxx/pure-knob
 build/static/pureknob.js: checkouts/pureknob | build/static

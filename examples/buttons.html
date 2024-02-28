@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>YouEyeJS Button Demo</title>
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+    </head>
+
+    <body>
+        <ui-configuration
+            application_background="#f2f2ff"
+            application_foreground="black"
+            highlight_background="#f5f5ff"
+            highlight_foreground="blue"
+            button_height="50px"
+            padding="10px"
+        ></ui-configuration>
+
+        <ui-frame orientation="vertical" pad=true>
+            <ui-frame orientation="horizontal" height="200px" pad=true>
+                <ui-pane normal_background="#d0d0df" normal_foreground="purple">
+                    This is empty
+                </ui-pane>
+            </ui-frame>
+
+            <ui-frame orientation="horizontal" pad=true>
+                <ui-button
+                    normal_foreground=black
+                    outline_foreground=blue
+                >
+                    Press Me
+                </ui-button>
+                <ui-button
+                    normal_foreground=orange
+                >
+                    ...Or Me
+                </ui-button>
+            </ui-frame>
+        </ui-frame>
+    </body>
+</html>
