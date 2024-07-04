@@ -45,48 +45,70 @@
             </div>
         </ui-transient>
 
-        <ui-frame>
             <ui-form
                 normal_background="#c0c0f0"
                 subscribe="doit"
                 listener=showit
             >
+                <table>
+                <tr>
+                <td>
+                <div>
+                    Meat
+                </div>
+                </td>
+
+                <td>
                 <div
-                    form-label="Meat"
-                    contentEditable=true
-                    name="meat"
-                    style="background-color: white; height: 25px;"
+                    form-name="meat"
                     form-attribute="innerText"
+                    contentEditable=true
+                    style="background-color: white; height: 25px;"
                 >
                     This is a test
                 </div>
+                </td>
+                </tr>
 
+                <tr>
+                <td>
+                <div>
+                    Cars
+                </div>
+                </td>
+
+                <td>
                 <select
-                    form-label="Cars"
-                    name="cars"
+                    form-name="cars"
+                    form-attribute="value"
                     id="cars"
                     style="outline: none; border: none;"
-                    form-attribute="value"
                 >
                     <option value="volvo">Volvo</option>
                     <option value="saab">Saab</option>
                     <option value="mercedes">Mercedes</option>
                     <option value="audi">Audi</option>
                 </select>
+                </td>
+                </tr>
 
+                <tr>
+                <td>
+                <div>
+                    Content
+                </div>
+                </td>
+
+                <td>
                 <textarea
-                    form-label="Content"
-                    name="content"
-                    style="height: 100%; width: 100%; outline: none; border: none;"
+                    form-name="content"
                     form-attribute="value"
+                    style="height: 100%; width: 100%; outline: none; border: none;"
                 >edit me!
                 </textarea>
+                </td>
+                </tr>
             </ui-form>
-        </ui-frame>
-
-        <ui-button clickedsignal="doit">
-            Doit
-        </ui-button>
     </body>
 
     <script type="application/javascript">
