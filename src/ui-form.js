@@ -22,7 +22,6 @@ class uiForm extends uiPane {
     //=========================================================
     constructor() {
         super();
-
         this._fields = {};
     }
 
@@ -32,34 +31,60 @@ class uiForm extends uiPane {
     elementsChanged(newElements) {
         var lookup = this._fields;
 
-        for (var i=0; i < newElements.length; ++i) {
-            var form_element = newElements[i];
+        function get_children(element) {
+            var results = [];
 
+            for (const child_element of element.children || []) {
+                if (child_element.getAttribute == null) {
+                    continue;
+                }
+
+                if (child_element.children == null) {
+                    continue;
+                }
+
+                if (child_element.tagName == null) {
+                    continue;
+                }
+
+                if (child_element.tagName == "UI-FORM") {
+                    continue;
+                }
+
+                results.push(child_element);
+
+                for (const inner_element of get_children(child_element)) {
+                    results.push(inner_element);
+                }
+            }
+
+            return results;
+        }
+
+        for (const form_element of get_children(this)) {
             if (form_element.getAttribute == null) {
                 continue;
             }
 
-            var element_name = form_element.getAttribute("form-name");
+            const element_name = form_element.getAttribute("form-name");
 
             if (element_name == null) {
                 continue;
             }
 
-            var element_value = form_element.getAttribute("form-attribute") || "innerText";
+            const element_getter = new String(
+                form_element.getAttribute("form-attribute") || "innerText"
+            );
 
-            var definition = lookup[element_name] || {};
+            this._fields[element_name] = {
+                get_name() {
+                    return element_name;
+                },
 
-            console.log("Adding " + element_name); // DEBUG
-
-            definition["get_name"] = function() {
-                return element_name;
-            }
-
-            definition["get_value"] = function() {
-                return form_element.getAttribute(element_value);
-            }
-
-            lookup[element_name] = definition;
+                get_value() {
+                    return form_element[element_getter];
+                }
+            };
         }
     }
 
@@ -92,19 +117,21 @@ class uiForm extends uiPane {
     //                   Object attributes
     //=========================================================
     get value() {
-        var lookup = this._field_lookup;
+        const self = this;
 
-        if (lookup == null) {
+        if (self._fields == null) {
             return {};
         }
 
         return Object.fromEntries(
-            Object.keys(lookup).map(
+            Object.keys(self._fields).map(
                 function(_key) {
-                    var form_element = lookup[_key];
-                    var data_attribute = form_element.getAttribute("form-attribute") || "innerText";
-//                    return [_key, data_attribute]; // DEBUG
-                    return [_key, form_element[data_attribute]];
+                    return [
+                        _key, {
+                            "name": self._fields[_key].get_name(),
+                            "value": self._fields[_key].get_value()
+                        }
+                    ];
                 }
             )
         );

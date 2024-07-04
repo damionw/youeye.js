@@ -19,125 +19,87 @@
     ></ui-configuration>
 
     <body>
-        <ui-transient
-            relative=false
-            pad=true
-            normal_background="#f0f0f0"
-            height="300px"
-            width="500px"
-            subscribe="toggle_transient"
-            listener="transient_handler"
-            x="100px"
-            y="100px"
-            decorate=true
-        >
-            <ui-toolbar width=100% justify=right pad=true>
-                <ui-button clickedsignal="toggle_transient">
-                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
-                </ui-button>
-            </ui-toolbar>
-
-            <div
-                subscribe="toggle_transient"
-                listener="data_update"
-                style="padding: 10px"
-            >
-            </div>
-        </ui-transient>
-
+        <ui-frame orientation="vertical" pad=false>
             <ui-form
                 normal_background="#c0c0f0"
-                subscribe="doit"
-                listener=showit
+                subscribe="display_form_values"
+                listener=show_values
             >
                 <table>
-                <tr>
-                <td>
-                <div>
-                    Meat
-                </div>
-                </td>
+                    <tr>
+                    <td>
+                    <div>
+                        Meat
+                    </div>
+                    </td>
 
-                <td>
-                <div
-                    form-name="meat"
-                    form-attribute="innerText"
-                    contentEditable=true
-                    style="background-color: white; height: 25px;"
-                >
-                    This is a test
-                </div>
-                </td>
-                </tr>
+                    <td>
+                    <div
+                        form-name="meat"
+                        form-attribute="innerText"
+                        contentEditable=true
+                        style="background-color: white; height: 25px;"
+                    >
+                        This is a test
+                    </div>
+                    </td>
+                    </tr>
 
-                <tr>
-                <td>
-                <div>
-                    Cars
-                </div>
-                </td>
+                    <tr>
+                    <td>
+                    <div>
+                        Cars
+                    </div>
+                    </td>
 
-                <td>
-                <select
-                    form-name="cars"
-                    form-attribute="value"
-                    id="cars"
-                    style="outline: none; border: none;"
-                >
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select>
-                </td>
-                </tr>
+                    <td>
+                    <select
+                        form-name="cars"
+                        form-attribute="value"
+                        id="cars"
+                        style="outline: none; border: none;"
+                    >
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="mercedes">Mercedes</option>
+                        <option value="audi">Audi</option>
+                    </select>
+                    </td>
+                    </tr>
 
-                <tr>
-                <td>
-                <div>
-                    Content
-                </div>
-                </td>
+                    <tr>
+                    <td>
+                    <div>
+                        Content
+                    </div>
+                    </td>
 
-                <td>
-                <textarea
-                    form-name="content"
-                    form-attribute="value"
-                    style="height: 100%; width: 100%; outline: none; border: none;"
-                >edit me!
-                </textarea>
-                </td>
-                </tr>
+                    <td>
+                    <textarea
+                        form-name="content"
+                        form-attribute="value"
+                        style="height: 200px; width: 400px; outline: none; border: none;"
+                    >edit me!
+                    </textarea>
+                    </td>
+                    </tr>
+                </table>
             </ui-form>
+
+            <ui-button
+                clickedsignal="display_form_values"
+            >
+                Go
+            </ui-button>
+        </ui-frame>
     </body>
 
     <script type="application/javascript">
-        function showit(topic, payload) {
-            var obj = this.values;
+        function show_values(topic, payload) {
+            var obj = this.value;
 
-            var msg = Object.keys(obj).map(
-                function(_key) {
-                    return [_key, obj[_key]].join(": ");
-                }
-            ).join("<br>");
-
-            pubsubMessageRouter.singleton.emit("toggle_transient", msg);
-        }
-
-        function transient_handler(topic, payload) {
-            if (topic == "toggle_transient") {
-                this.setAttribute(
-                    "show", (
-                        this.getAttribute("show") == "true" ?
-                        "false" :
-                        "true"
-                    )
-                );
-            }
-        }
-
-        function data_update(topic, payload) {
-            this.innerHTML = payload;
+            alert(JSON.stringify(obj, null, 4));
+            console.log(JSON.stringify(obj, null, 4));
         }
     </script>
 </html>
