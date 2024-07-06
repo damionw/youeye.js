@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Dialog Demo</title>
+        <link rel="stylesheet" href="font-awesome.css">
+        <script type="application/javascript" language="javascript" src="youeye.js"></script>
+    </head>
+
+    <body>
+        <ui-configuration
+            application_background="#b0b0b0"
+            application_foreground="black"
+            toolbar_height=45px
+            padding="10px"
+        ></ui-configuration>
+
+        <ui-frame orientation="vertical" pad=false>
+            <ui-toolbar normal_background="#00c0ff">
+                <ui-toolbar width=100% normal_foreground=white justify=left pad=false>
+                    <ui-button clickedsignal="toggle_dialog_visibility">
+                        <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
+                    </ui-button>
+                </ui-toolbar>
+            </ui-toolbar>
+
+            <ui-frame orientation="vertical" pad=true>
+                <ui-pane
+                    normal_background="#00f0f1"
+                    normal_foreground="yellow"
+                >
+                    Here we are
+                </ui-pane>
+            </ui-frame>
+
+            <div
+                subscribe="toggle_dialog_visibility,suppress_dialog_visibility"
+                listener=dialog_event_handler
+                style="display: None; width: 30%; height: 40%; position: fixed; left: 25%; top: 50%;"
+            >
+                <ui-pane
+                    normal_background="#fef0f0"
+                    shadow_depth=5
+                    border_radius=5
+                >
+                    <ui-frame
+                        orientation="vertical"
+                        pad=true
+                    >
+                        <div style="height: 100%">
+                            What is it
+                        </div>
+
+                        <ui-button
+                            clickedsignal="suppress_dialog_visibility"
+                            height=20px
+                        >
+                            Ok
+                        </ui-button>
+                    </ui-frame>
+                </ui-pane>
+            </div>
+        </ui-frame>
+    </body>
+    
+    <script>
+        function dialog_event_handler(topic, payload) {
+            var visible = (this.style.display != "none");
+            const off = "none";
+            const on = "inline";
+
+            if (topic == "suppress_dialog_visibility") {
+                this.style.display = off;
+            }
+            else if (topic == "express_dialog_visibility") {
+                this.style.display = on;
+            }
+            else if (topic == "toggle_dialog_visibility") {
+                this.style.display = (
+                    visible ? off : on
+                );
+            }
+        }
+    </script>
+</html>

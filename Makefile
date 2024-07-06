@@ -55,7 +55,6 @@ build/static/fontawesome-webfont.ttf: build/static
 build/static/Chart.js: | build/static
 	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/Chart.js/$(CHARTS_VERSION)/chart.min.js -o $@
 
-
 # See: https://quilljs.com/
 build/static/quill.min.js: checkouts/quill build/static
 	@cp $</$(notdir $@) $@
