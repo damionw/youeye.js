@@ -22,138 +22,69 @@ class uiForm extends uiPane {
     //=========================================================
     constructor() {
         super();
-
-        var shadow = this.attachShadow({mode: 'open'});
-
-        var table_pane = this._table_pane = document.createElement('table');
-        var lookup = this._field_lookup = {};
-
-        var column_group = document.createElement('colgroup');
-        var left_column = document.createElement('col');
-        var right_column = document.createElement('col');
-
-        left_column.style.width = "20%";
-        left_column.style.backgroundColor = "inherit";
-        left_column.style.padding = "5px";
-        left_column.style.borderStyle = "none";
-        left_column.style.border = "none";
-
-        right_column.style.width = "100%";
-        right_column.style.backgroundColor = "white";
-        right_column.style.padding = "5px";
-        right_column.style.borderStyle = "none";
-        right_column.style.border = "none";
-
-        table_pane.style.width = "100%";
-        table_pane.style.height = "100%";
-        table_pane.style.backgroundColor = "inherit";
-        table_pane.style.color = "inherit";
-        table_pane.style.borderStyle = "none";
-        table_pane.style.border = "none";
-        table_pane.style.borderSpacing = "5px";
-
-        column_group.appendChild(left_column);
-        column_group.appendChild(right_column);
-        table_pane.appendChild(column_group);
-        shadow.appendChild(table_pane);
+        this._fields = {};
     }
 
     //=========================================================
     //                         Events
     //=========================================================
     elementsChanged(newElements) {
-        var padding_value = this.configuration.getAttribute("padding");
-        var shadow_depth = this.configuration.getAttribute("shadow_depth");
-        var border_radius = this.configuration.getAttribute("border_radius");
-        var foreground_color = this.getConfigAttribute("normal_foreground", "application_foreground");
-        var background_color = this.getConfigAttribute("normal_background", "application_background");
-        var font_family = this.configuration.getAttribute("application_typeface");
-        var font_size = this.configuration.getAttribute("application_typesize");
+        var lookup = this._fields;
 
-        var mytable = this._table_pane;
-        var lookup = this._field_lookup;
+        function get_children(element) {
+            var results = [];
 
-        for (var i=0; i < newElements.length; ++i) {
-            var form_element = newElements[i];
+            for (const child_element of element.children || []) {
+                if (child_element.getAttribute == null) {
+                    continue;
+                }
 
+                if (child_element.children == null) {
+                    continue;
+                }
+
+                if (child_element.tagName == null) {
+                    continue;
+                }
+
+                if (child_element.tagName == "UI-FORM") {
+                    continue;
+                }
+
+                results.push(child_element);
+
+                for (const inner_element of get_children(child_element)) {
+                    results.push(inner_element);
+                }
+            }
+
+            return results;
+        }
+
+        for (const form_element of get_children(this)) {
             if (form_element.getAttribute == null) {
                 continue;
             }
 
-            var labeltext = form_element.getAttribute("form-label");
+            const element_name = form_element.getAttribute("form-name");
 
-            if (labeltext == null || labeltext == "") {
+            if (element_name == null) {
                 continue;
             }
 
-            var entry_name = form_element.getAttribute("name");
-
-            if (entry_name != null) {
-                lookup[entry_name] = form_element;
-            }
-
-            var new_row = mytable.insertRow(-1);
-            var left_cell =  new_row.insertCell(0);
-            var right_cell =  new_row.insertCell(1);
-            var label_element = document.createElement('div');
-
-            label_element.innerHTML = labeltext;
-
-            left_cell.style.verticalAlign = "top";
-            left_cell.style.color = foreground_color;
-            left_cell.style.backgroundColor = "inherit";
-            left_cell.style.cursor = "inherit";
-            left_cell.style.boxSizing = "border-box";
-            left_cell.style.padding = "5px";
-            left_cell.style.margin = "2px";
-            left_cell.style.fontFamily = font_family;
-            left_cell.style.fontSize = font_size;
-            left_cell.style.paddingLeft = padding_value;
-            left_cell.style.paddingRight = padding_value;
-            left_cell.style.justifyContent = "center";
-
-            right_cell.style.verticalAlign = "top";
-            right_cell.style.borderRadius = border_radius;
-            right_cell.style.color = foreground_color;
-            right_cell.style.backgroundColor = "inherit";
-            right_cell.style.fontFamily = font_family;
-            right_cell.style.fontSize = font_size;
-            right_cell.style.paddingLeft = padding_value;
-            right_cell.style.paddingRight = padding_value;
-            right_cell.style.cursor = "inherit";
-            right_cell.style.boxSizing = "border-box";
-            right_cell.style.padding = "5px";
-            right_cell.style.margin = "2px";
-
-            form_element.style.boxShadow = "5px 5px " + shadow_depth + " " + this.alterRGB(
-                background_color,
-                -64
+            const element_getter = new String(
+                form_element.getAttribute("form-attribute") || "innerText"
             );
 
-            new_row.style.height = form_element.style.height;
+            this._fields[element_name] = {
+                get_name() {
+                    return element_name;
+                },
 
-            left_cell.appendChild(label_element);
-            right_cell.appendChild(form_element);
-        }
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name == "width") {
-            this.style.width = this.getAttribute(name);
-        }
-        else if (name == "height") {
-            this.style.height = this.getAttribute(name);
-        }
-        else if (name == "normal_background") {
-            this.style.backgroundColor = this.getConfigAttribute(name, "application_background");
-            this._table_pane.style.backgroundColor = "inherit";
-        }
-        else if (name == "normal_foreground") {
-            this.style.color = this.getConfigAttribute(name, "application_foreground");
-            this._table_pane.style.foregroundColor = "inherit";
-        }
-        else {
-            uiBase.prototype.attributeChangedCallback.call(this, name, oldValue, newValue);
+                get_value() {
+                    return form_element[element_getter];
+                }
+            };
         }
     }
 
@@ -185,20 +116,22 @@ class uiForm extends uiPane {
     //=========================================================
     //                   Object attributes
     //=========================================================
-    get values() {
-        var lookup = this._field_lookup;
+    get value() {
+        const self = this;
 
-        if (lookup == null) {
+        if (self._fields == null) {
             return {};
         }
 
         return Object.fromEntries(
-            Object.keys(lookup).map(
+            Object.keys(self._fields).map(
                 function(_key) {
-                    var form_element = lookup[_key];
-                    var data_attribute = form_element.getAttribute("form-attribute") || "innerText";
-//                    return [_key, data_attribute]; // DEBUG
-                    return [_key, form_element[data_attribute]];
+                    return [
+                        _key, {
+                            "name": self._fields[_key].get_name(),
+                            "value": self._fields[_key].get_value()
+                        }
+                    ];
                 }
             )
         );
