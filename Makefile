@@ -1,7 +1,8 @@
 .PHONY: clean demo_support
 
 TABULATOR_MODE := bootstrap5
-FONTAWESOME_VERSION := 4.7.0
+# FONTAWESOME_VERSION := 4.7.0
+FONTAWESOME_VERSION := 6.4.2
 CHARTS_VERSION := 3.8.2
 
 ORDERED_COMPONENTS_LIST := \
@@ -28,6 +29,8 @@ DEMO_DEPENDENCIES :=\
 	build/static/tabulator.css \
 	build/static/tabulator.js
 
+FONTAWESOME_URL := https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)
+
 all: build/static/youeye.js
 
 auto: build/bin/monitored_runner
@@ -39,17 +42,23 @@ demo_support: all $(DEMO_DEPENDENCIES)
 build/static/youeye.js: src/*.js build/static checkouts/pubber/build/static/pubber.js
 	@(echo '"use strict"'";\n"; for name in $(ORDERED_COMPONENTS_LIST); do cat $${name}; echo '\n'; done) > $@
 
-build/static/font-awesome.css: build/static build/static/fontawesome-webfont.eot build/static/fontawesome-webfont.woff2 build/static/fontawesome-webfont.ttf
-	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)/css/font-awesome.min.css | sed -e 's/\.\.\/fonts//g' -e "s|url('/|url('|g" > $@
+build/static/font-awesome.css: build/static/all.min.css
+	@sed -e 's/url/\nurl/g' < $< | \
+	grep '^url' | \
+	sed -e 's/[\)][\ ]*.*$$//g' \
+		-e "s/^url[\(][\']*//g" \
+		-e 's/[\?].*$$//g' \
+		-e "s|^\.\.\/|$(FONTAWESOME_URL)/|g" | \
+ 		while read url; do wget --quiet $$url -O $(dir $@)/$$(basename $$url); done
 
-build/static/fontawesome-webfont.eot: build/static
-	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)/fonts/fontawesome-webfont.eot -o $@
+	@sed -e "s|\(url[\(][\']*\)\.\.\/webfonts\/\([^\/)]*\)\([\']*[\)]\)|\1\2\3|g" \
+		< $< \
+		> $@
 
-build/static/fontawesome-webfont.woff2: build/static
-	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)/fonts/fontawesome-webfont.woff2 -o $@
+	-@rm $<
 
-build/static/fontawesome-webfont.ttf: build/static
-	@curl -q -s https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)/fonts/fontawesome-webfont.ttf -o $@
+build/static/all.min.css: build/static
+	curl -q -s $(FONTAWESOME_URL)/css/all.min.css -o $@
 
 # See: https://www.chartjs.org/docs/latest/getting-started/
 build/static/Chart.js: | build/static

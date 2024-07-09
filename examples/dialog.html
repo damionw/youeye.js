@@ -19,7 +19,7 @@
             <ui-toolbar normal_background="#00c0ff">
                 <ui-toolbar width=100% normal_foreground=white justify=left pad=false>
                     <ui-button clickedsignal="toggle_dialog_visibility">
-                        <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
+                        <i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i>
                     </ui-button>
                 </ui-toolbar>
             </ui-toolbar>
@@ -40,13 +40,19 @@
             >
                 <ui-pane
                     normal_background="#fef0f0"
-                    shadow_depth=5
-                    border_radius=5
+                    shadow_depth=7
+                    border_radius=10
                 >
                     <ui-frame
                         orientation="vertical"
                         pad=true
                     >
+                        <ui-toolbar width=100% normal_foreground=green justify=right pad=false>
+                            <ui-button clickedsignal="suppress_dialog_visibility">
+                                <i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i>
+                            </ui-button>
+                        </ui-toolbar>
+
                         <div style="height: 100%">
                             What is it
                         </div>
