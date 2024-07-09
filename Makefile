@@ -31,6 +31,8 @@ DEMO_DEPENDENCIES :=\
 
 FONTAWESOME_URL := https://cdnjs.cloudflare.com/ajax/libs/font-awesome/$(FONTAWESOME_VERSION)
 
+WGET_OPTIONS := --no-check-certificate --quiet
+
 all: build/static/youeye.js
 
 auto: build/bin/monitored_runner
@@ -49,7 +51,7 @@ build/static/font-awesome.css: build/static/all.min.css
 		-e "s/^url[\(][\']*//g" \
 		-e 's/[\?].*$$//g' \
 		-e "s|^\.\.\/|$(FONTAWESOME_URL)/|g" | \
- 		while read url; do wget --quiet $$url -O $(dir $@)/$$(basename $$url); done
+ 		while read url; do wget $(WGET_OPTIONS) $$url -O $(dir $@)/$$(basename $$url); done
 
 	@sed -e "s|\(url[\(][\']*\)\.\.\/webfonts\/\([^\/)]*\)\([\']*[\)]\)|\1\2\3|g" \
 		< $< \
@@ -74,11 +76,11 @@ build/static/quill.snow.css: checkouts/quill build/static
 
 # See: https://tabulator.info/
 build/static/tabulator.js: build/static
-	@wget --quiet -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js
+	@wget $(WGET_OPTIONS) -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js
 
 # See: https://tabulator.info/
 build/static/tabulator.css: build/static
-	@wget --quiet -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator$(if $(TABULATOR_MODE),_,)$(TABULATOR_MODE).min.css
+	@wget $(WGET_OPTIONS) -nd -nH -O $@ https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator$(if $(TABULATOR_MODE),_,)$(TABULATOR_MODE).min.css
 
 # See: https://github.com/andrepxx/pure-knob
 build/static/pureknob.js: checkouts/pureknob | build/static
@@ -100,7 +102,7 @@ checkouts/pureknob: | checkouts
 	@(cd "$@" >/dev/null 2>&1 && git pull) || git clone https://github.com/andrepxx/pure-knob $@
 
 checkouts/quill: checkouts
-	@(cd "$<" && wget --quiet -nc -nd -nH -O - https://github.com/quilljs/quill/releases/download/v0.20.1/quill.tar.gz | tar xfz -)
+	@(cd "$<" && wget $(WGET_OPTIONS) -nc -nd -nH -O - https://github.com/quilljs/quill/releases/download/v0.20.1/quill.tar.gz | tar xfz -)
 
 build/static build/bin checkouts:
 	@install -d $@
