@@ -58,7 +58,7 @@ build/static/font-awesome.css: build/static/all.min.css
 	-@rm $<
 
 build/static/all.min.css: build/static
-	curl -q -s $(FONTAWESOME_URL)/css/all.min.css -o $@
+	@curl -q -s $(FONTAWESOME_URL)/css/all.min.css -o $@
 
 # See: https://www.chartjs.org/docs/latest/getting-started/
 build/static/Chart.js: | build/static
